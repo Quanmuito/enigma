@@ -1,0 +1,122 @@
+{
+    "extends": [
+        "react-app",
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:react-hooks/recommended",
+        "plugin:jsx-a11y/recommended",
+        "plugin:import/errors",
+        "plugin:import/warnings",
+        "plugin:import/typescript"
+    ],
+    "plugins": [
+        "react"
+    ],
+    "rules": {
+        "arrow-parens": 1,
+        "arrow-spacing": 1,
+        "block-spacing": 1,
+        "comma-dangle": [
+            1,
+            {
+                "arrays": "always-multiline",
+                "objects": "always-multiline"
+            }
+        ],
+        "comma-spacing": [
+            1,
+            {
+                "before": false,
+                "after": true
+            }
+        ],
+        "default-case": 1,
+        "eol-last": 1,
+        "indent": [
+            1,
+            4,
+            {
+                "SwitchCase": 1
+            }
+        ],
+        "jsx-quotes": [
+            1,
+            "prefer-double"
+        ],
+        "linebreak-style": [
+            0
+        ],
+        "object-curly-spacing": [
+            1,
+            "always"
+        ],
+        "semi": 1,
+        "no-trailing-spaces": [
+            1
+        ],
+        "no-unused-vars": 0,
+        "react/jsx-curly-spacing": [
+            1,
+            {
+                "when": "always",
+                "children": true,
+                "allowMultiline": true,
+                "spacing": {
+                    "objectLiterals": "always"
+                }
+            }
+        ],
+        "react/destructuring-assignment": [
+            2,
+            "always"
+        ],
+        "react/jsx-indent": [
+            1,
+            4,
+            {
+                "checkAttributes": true,
+                "indentLogicalExpressions": true
+            }
+        ],
+        "react/jsx-indent-props": [
+            1,
+            4
+        ],
+        "react/jsx-tag-spacing": [
+            1,
+            {
+                "beforeSelfClosing": "always"
+            }
+        ],
+        "react/jsx-wrap-multilines": [
+            1,
+            {
+                "declaration": "parens-new-line",
+                "assignment": "parens-new-line",
+                "return": "parens-new-line"
+            }
+        ],
+        "jsx-a11y/no-onchange": [
+            0
+        ]
+    },
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "paths": [
+                    "."
+                ]
+            },
+            "webpack": {
+                "config": "webpack.config.js"
+            }
+        }
+    },
+    "globals": {
+        "Style": "writable",
+        "JSX": "writable",
+        "ErrorState": "writable",
+        "Id": "writable",
+        "IdAndName": "writable"
+    }
+}

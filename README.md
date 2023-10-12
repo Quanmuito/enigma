@@ -1,46 +1,29 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Ring setting and shifting rule.
+```
+A|0     +4     ->    E|4     =>    B|1     +4     ->    F|5
+B|1     +9     ->    K|10    =>    C|2     +9     ->    L|11
+C|2     +10    ->    M|12    =>    D|3     +10    ->    N|13
+D|3     +2     ->    F|5     =>    E|4     +2     ->    G|6
+E|4     +7     ->    L|11    =>    F|5     +7     ->    M|12
+F|5     +1     ->    G|6     =>    G|6     +1     ->    H|7
+G|6     +23    ->    D|3     =>    H|7     +23    ->    E|30->4
+H|7     +9     ->    Q|16    =>    I|8     +9     ->    R|17
+I|8     +13    ->    V|21    =>    J|9     +13    ->    V|21
+J|9     +16    ->    Z|25    =>    K|10    +16    ->    A|26->0
+K|10    +3     ->    N|13    =>    L|11    +3     ->    O|14
+L|11    +8     ->    T|19    =>    M|12    +8     ->    U|20
+M|12    +2     ->    O|14    =>    N|13    +2     ->    P|15
+N|13    +9     ->    W|22    =>    O|14    +9     ->    X|23
+O|14    +10    ->    Y|24    =>    P|15    +10    ->    Z|25
+P|15    +18    ->    H|7     =>    Q|16    +18    ->    I|8
+Q|16    +7     ->    X|23    =>    R|17    +7     ->    Y|24
+R|17    +3     ->    U|20    =>    S|18    +3     ->    V|21
+S|18    +0     ->    S|18    =>    T|19    +0     ->    T|19
+T|19    +22    ->    P|15    =>    U|20    +22    ->    Q|42->16
+U|20    +6     ->    A|0     =>    V|21    +6     ->    B|27->1
+V|21    +13    ->    I|8     =>    W|22    +13    ->    J|35->10
+W|22    +5     ->    B|1     =>    X|23    +5     ->    C|28->2
+X|23    +20    ->    R|17    =>    Y|24    +20    ->    S|44->18
+Y|24    +4     ->    C|2     =>    Z|25    +4     ->    D|29->3
+Z|25    +10    ->    J|9     =>    A|0     +10    ->    K|10
+```
