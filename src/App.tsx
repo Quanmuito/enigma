@@ -189,15 +189,15 @@ function App() {
         initialSetting(
             {
                 gear1: {
-                    ring: 'C',
-                    start: 'A',
+                    ring: 'F',
+                    start: 'C',
                 },
                 gear2: {
-                    ring: 'A',
-                    start: 'A',
+                    ring: 'E',
+                    start: 'B',
                 },
                 gear3: {
-                    ring: 'A',
+                    ring: 'D',
                     start: 'A',
                 },
             }
@@ -205,17 +205,13 @@ function App() {
 
         plug('M', 'T');
 
-        let message = 'EFGHIJKLMNOPQRSTUVWXYZ';
+        let message = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        let message2 = 'DXXVPJRXZHGKHQLKKCNBFFJBIJ';
         let encrypted = '';
         for (let i = 0; i < message.length; i++) {
             encrypted += encrypt(message.charAt(i));
         }
         console.log(encrypted);
-        // OEQACMFJPCSPTTPVKFUDBKSMGE
-        console.log(gear1);
-        console.log(gear2);
-        console.log(gear3);
-        console.log(rotor);
     };
 
     return (
