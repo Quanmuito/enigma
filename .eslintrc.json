@@ -104,11 +104,8 @@
         "import/resolver": {
             "node": {
                 "paths": [
-                    "."
+                    "src"
                 ]
-            },
-            "webpack": {
-                "config": "webpack.config.js"
             }
         }
     },
