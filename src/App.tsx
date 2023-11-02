@@ -1,53 +1,17 @@
 import React, { useState } from 'react';
 import { EnigmaI } from 'data/machines';
-import { Rotor } from 'types';
+import { Rotor, Gear, Plugboard, StringSettings } from 'types';
+import { adjustRing, plug } from 'engineSetup';
+import { getPlugboardSignal } from 'engine';
+import { validatePlugboardSettingsInput } from 'validation';
 
 function App() {
-    const NUMBER_OF_CHARACTERS = 26;
     const keyboard: string[] = EnigmaI.keyboard.split('');
-    const gear_1: string[] = 'BDFHJLCPRTXVZNYEIWGAKMUSQO'.split('');
+    const gear_1: string[] = 'EKMFLGDQVZNTOWYHXUSPAIBRCJ'.split('');
     const gear_2: string[] = 'AJDKSIRUXBLHWTMCQGZNPYFVOE'.split('');
-    const gear_3: string[] = 'EKMFLGDQVZNTOWYHXUSPAIBRCJ'.split('');
+    const gear_3: string[] = 'BDFHJLCPRTXVZNYEIWGAKMUSQO'.split('');
     const gear_reflector: string[] = 'YRUHQSLDPXNGOKMIEBFZCWVJAT'.split('');
 
-    type Plugboard = {
-        entry: string[],
-        output: string[],
-    }
-    const [plugboard, setPlugboard] = useState<Plugboard>(
-        {
-            entry: JSON.parse(JSON.stringify(keyboard)),
-            output: JSON.parse(JSON.stringify(keyboard)),
-        }
-    );
-    const plug = (plugboard: Plugboard, letterPair: string): void => {
-        let letterArray = letterPair.split('');
-        let letter_1: string = letterArray[0];
-        let letter_2: string = letterArray[1];
-
-        let pos_1 = plugboard.entry.indexOf(letter_1);
-        let pos_2 = plugboard.entry.indexOf(letter_2);
-
-        plugboard.output[pos_1] = letter_2;
-        plugboard.output[pos_2] = letter_1;
-
-        setPlugboard(plugboard);
-    };
-    const getPlugboardSignal = (signal: number, isBackward: boolean = false): number => {
-        if (isBackward) {
-            let letter = plugboard.output[signal];
-            return plugboard.entry.indexOf(letter);
-        }
-
-        let letter = plugboard.entry[signal];
-        return plugboard.output.indexOf(letter);
-    };
-
-    type Gear = {
-        original: string[],
-        shuffled: string[],
-        notch: string,
-    }
     type GearSettings = {
         ring: string,
         start: string,
@@ -60,7 +24,7 @@ function App() {
     const gear1: Gear = {
         original: [...keyboard],
         shuffled: [...gear_1],
-        notch: 'V',
+        notch: 'Q',
     };
     const gear2: Gear = {
         original: [...keyboard],
@@ -70,7 +34,7 @@ function App() {
     const gear3: Gear = {
         original: [...keyboard],
         shuffled: [...gear_3],
-        notch: 'Q',
+        notch: 'V',
     };
     const reflector: Gear = {
         original: [...keyboard],
@@ -116,24 +80,7 @@ function App() {
 
         setRotor({ ...rotor });
     };
-    const adjustRing = (gear: Gear, ringPosition: number): Gear => {
-        let i = 0;
-        while (i < ringPosition) {
-            /** Shift the letter in `shuffled` up by 1. Eg: A -> B, E -> F */
-            gear.shuffled = gear.shuffled.map((letter: string) => {
-                let letterPos = gear.original.indexOf(letter);
-                let shiftedLetterPos = letterPos + 1;
-                return gear.original[(NUMBER_OF_CHARACTERS + shiftedLetterPos) % NUMBER_OF_CHARACTERS];
-            });
-            /** Rotate backward */
-            let shuffledLastLetter = gear.shuffled[NUMBER_OF_CHARACTERS - 1];
-            gear.shuffled.pop();
-            gear.shuffled.unshift(shuffledLastLetter);
-            i++;
-        }
 
-        return gear;
-    };
     const rotateGear = (gear: Gear, rounds: number = 1): Gear => {
         let i = 0;
         while (i < rounds) {
@@ -160,62 +107,64 @@ function App() {
         return gear.original.indexOf(letter);
     };
     const getRotorSignal = (signal: number): number => {
-        let g1Signal = getGearSignal(rotor.gear1, signal);
-        let g2Signal = getGearSignal(rotor.gear2, g1Signal);
-        let g3Signal = getGearSignal(rotor.gear3, g2Signal);
-        let refSignal = getGearSignal(rotor.reflector, g3Signal);
-        let g3BSignal = getGearSignal(rotor.gear3, refSignal, true);
-        let g2BSignal = getGearSignal(rotor.gear2, g3BSignal, true);
-        let g1BSignal = getGearSignal(rotor.gear1, g2BSignal, true);
-        return g1BSignal;
+        let g3Signal = getGearSignal(rotor.gear3, signal);
+        let g2Signal = getGearSignal(rotor.gear2, g3Signal);
+        let g1Signal = getGearSignal(rotor.gear1, g2Signal);
+        let refSignal = getGearSignal(rotor.reflector, g1Signal);
+        let g1BSignal = getGearSignal(rotor.gear1, refSignal, true);
+        let g2BSignal = getGearSignal(rotor.gear2, g1BSignal, true);
+        let g3BSignal = getGearSignal(rotor.gear3, g2BSignal, true);
+        return g3BSignal;
     };
 
     const encrypt = (letter: string): string => {
         if (
             rotor.gear2.original[0] === rotor.gear2.notch ||
-            (rotor.gear1.original[0] === rotor.gear1.notch && rotor.gear2.original[0] === rotor.gear2.notch)
+            (rotor.gear3.original[0] === rotor.gear3.notch && rotor.gear2.original[0] === rotor.gear2.notch)
         ) {
             rotateGear(rotor.gear1);
             rotateGear(rotor.gear2);
             rotateGear(rotor.gear3);
         }
         else if (
-            rotor.gear1.original[0] === rotor.gear1.notch
+            rotor.gear3.original[0] === rotor.gear3.notch
         ) {
-            rotateGear(rotor.gear1);
             rotateGear(rotor.gear2);
+            rotateGear(rotor.gear3);
         }
         else {
-            rotateGear(rotor.gear1);
+            rotateGear(rotor.gear3);
         }
 
         let kbSignal = keyboard.indexOf(letter);
-        let pbSignal = getPlugboardSignal(kbSignal);
+        let pbSignal = getPlugboardSignal(plugboard, kbSignal);
         let rotorSignal = getRotorSignal(pbSignal);
-        let pbBSignal = getPlugboardSignal(rotorSignal, true);
+        let pbBSignal = getPlugboardSignal(plugboard, rotorSignal, true);
         let outputLetter = keyboard[pbBSignal];
         return outputLetter;
     };
 
     const run = (): void => {
+        /** Plugboard initial setting */
+        let letterPairs = plugboardSettings.settings.split(' ');
+        setPlugboard(plug(plugboard, letterPairs));
+
         initialSetting(
             {
                 gear1: {
-                    ring: 'F',
-                    start: 'C',
+                    ring: 'D',
+                    start: 'A',
                 },
                 gear2: {
                     ring: 'E',
                     start: 'B',
                 },
                 gear3: {
-                    ring: 'D',
-                    start: 'A',
+                    ring: 'F',
+                    start: 'C',
                 },
             }
         );
-
-        plug(plugboard, 'MT');
 
         let message = 'DXXVPJRXZHGKHQLKKCNBFFJBIJ';
         let message2 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -224,41 +173,38 @@ function App() {
             encrypted += encrypt(message.charAt(i));
         }
         console.log(encrypted);
-        console.log(message);
         console.log(message2);
     };
 
-    type PlugboardSettings = {
-        settings: string
-        valid: boolean
-    }
-    const [plugboardSettings, setPlugboardSettings] = useState<PlugboardSettings>(
+    const [plugboardSettings, setPlugboardSettings] = useState<StringSettings>(
+        {
+            settings: 'MT',
+            valid: true,
+        }
+    );
+    const changePlugboardSettings = (event: React.ChangeEvent<HTMLInputElement>) => {
+        let input = event.target.value.toUpperCase();
+        setPlugboardSettings({ settings: input, valid: validatePlugboardSettingsInput(input) });
+    };
+
+    const [ringSettings, setRingSettings] = useState<StringSettings>(
         {
             settings: '',
             valid: true,
         }
     );
-    const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const changeRingSettings = (event: React.ChangeEvent<HTMLInputElement>) => {
         let input = event.target.value.toUpperCase();
-        setPlugboardSettings({ settings: input, valid: validateInput(input) });
+        setRingSettings({ settings: input, valid: (input.length === 0) || (input.length === 3) });
     };
-    const validateInput = (input: string): boolean => {
-        if (input === '') {
-            return true;
-        }
 
-        let inputArray = input.trim().split(' ');
-        if (inputArray.length < 1) {
-            return false;
+
+    const [plugboard, setPlugboard] = useState<Plugboard>(
+        {
+            entry: JSON.parse(JSON.stringify(keyboard)),
+            output: JSON.parse(JSON.stringify(keyboard)),
         }
-        for (let i = 0; i < inputArray.length; i++) {
-            let element = inputArray[i];
-            if (element.length !== 2) {
-                return false;
-            }
-        }
-        return true;
-    };
+    );
 
     return (
         <div className="App">
@@ -267,25 +213,65 @@ function App() {
                     className="form-label"
                     htmlFor="plugboardSettings"
                 >
-                    Plugboard Settings
+                    Plugboard settings
                 </label>
                 <input
                     className={ 'form-control ' + (plugboardSettings.valid ? '' : 'is-invalid') }
                     type="text"
                     id="plugboardSettings"
-                    onChange={ onChange }
+                    onChange={ changePlugboardSettings }
                     value={ plugboardSettings.settings }
                 />
                 <div id="plugboardSettings" className="invalid-feedback">
                     Invaid plugboard settings. Example: AO HI MU SN WX ZO
                 </div>
             </div>
+
             <div className="mb-3">
-                <label className="form-label" htmlFor="rotor1">Rotor 1 setting</label>
+                <label
+                    className="form-label"
+                    htmlFor="ringSettings"
+                >
+                    Ring settings
+                </label>
+                <input
+                    className={ 'form-control ' + (ringSettings.valid ? '' : 'is-invalid') }
+                    type="text"
+                    id="ringSettings"
+                    onChange={ changeRingSettings }
+                    value={ ringSettings.settings }
+                />
+                <div id="ringSettings" className="invalid-feedback">
+                    Invaid ring settings. Example: ABC or DHK, etc
+                </div>
+            </div>
+
+            <div className="mb-3">
+                <label className="form-label" htmlFor="rotor1">Rotor 1 settings</label>
                 <select className="form-select" id="rotor1" >
                     <option defaultValue={ '' }>Select rotor for position 1</option>
                     {
-                        EnigmaI.rotors.map((rotor: Rotor) => <option key={ rotor.name } value={ rotor.wiring }>{ rotor.name }</option>)
+                        EnigmaI.rotors.map((rotor, index) => <option key={ rotor.name } value={ index }>{ rotor.name }</option>)
+                    }
+                </select>
+            </div>
+
+            <div className="mb-3">
+                <label className="form-label" htmlFor="rotor2">Rotor 2 settings</label>
+                <select className="form-select" id="rotor2" >
+                    <option defaultValue={ '' }>Select rotor for position 2</option>
+                    {
+                        EnigmaI.rotors.map((rotor, index) => <option key={ rotor.name } value={ index }>{ rotor.name }</option>)
+                    }
+                </select>
+            </div>
+
+            <div className="mb-3">
+                <label className="form-label" htmlFor="rotor3">Rotor 3 settings</label>
+                <select className="form-select" id="rotor3" >
+                    <option defaultValue={ '' }>Select rotor for position 3</option>
+                    {
+                        EnigmaI.rotors.map((rotor, index) => <option key={ rotor.name } value={ index }>{ rotor.name }</option>)
                     }
                 </select>
             </div>
