@@ -1,34 +1,46 @@
 import React, { useState } from 'react';
+import { EnigmaI } from 'data/machines';
+import { Rotor } from 'types';
 
 function App() {
     const NUMBER_OF_CHARACTERS = 26;
-    const keyboard: string[] = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    const keyboard: string[] = EnigmaI.keyboard.split('');
     const gear_1: string[] = 'BDFHJLCPRTXVZNYEIWGAKMUSQO'.split('');
     const gear_2: string[] = 'AJDKSIRUXBLHWTMCQGZNPYFVOE'.split('');
     const gear_3: string[] = 'EKMFLGDQVZNTOWYHXUSPAIBRCJ'.split('');
     const gear_reflector: string[] = 'YRUHQSLDPXNGOKMIEBFZCWVJAT'.split('');
 
-    const [plugboard, setplugboard] = useState(
+    type Plugboard = {
+        entry: string[],
+        output: string[],
+    }
+    const [plugboard, setPlugboard] = useState<Plugboard>(
         {
-            original: [...keyboard],
-            shuffled: [...keyboard],
+            entry: JSON.parse(JSON.stringify(keyboard)),
+            output: JSON.parse(JSON.stringify(keyboard)),
         }
     );
-    const plug = (letter_1: string, letter_2: string): void => {
-        let pos_1 = plugboard.original.indexOf(letter_1);
-        let pos_2 = plugboard.original.indexOf(letter_2);
-        plugboard.shuffled[pos_1] = letter_2;
-        plugboard.shuffled[pos_2] = letter_1;
-        setplugboard(plugboard);
+    const plug = (plugboard: Plugboard, letterPair: string): void => {
+        let letterArray = letterPair.split('');
+        let letter_1: string = letterArray[0];
+        let letter_2: string = letterArray[1];
+
+        let pos_1 = plugboard.entry.indexOf(letter_1);
+        let pos_2 = plugboard.entry.indexOf(letter_2);
+
+        plugboard.output[pos_1] = letter_2;
+        plugboard.output[pos_2] = letter_1;
+
+        setPlugboard(plugboard);
     };
     const getPlugboardSignal = (signal: number, isBackward: boolean = false): number => {
         if (isBackward) {
-            let letter = plugboard.shuffled[signal];
-            return plugboard.original.indexOf(letter);
+            let letter = plugboard.output[signal];
+            return plugboard.entry.indexOf(letter);
         }
 
-        let letter = plugboard.original[signal];
-        return plugboard.shuffled.indexOf(letter);
+        let letter = plugboard.entry[signal];
+        return plugboard.output.indexOf(letter);
     };
 
     type Gear = {
@@ -203,10 +215,10 @@ function App() {
             }
         );
 
-        plug('M', 'T');
+        plug(plugboard, 'MT');
 
-        let message = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        let message2 = 'DXXVPJRXZHGKHQLKKCNBFFJBIJ';
+        let message = 'DXXVPJRXZHGKHQLKKCNBFFJBIJ';
+        let message2 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         let encrypted = '';
         for (let i = 0; i < message.length; i++) {
             encrypted += encrypt(message.charAt(i));
@@ -214,8 +226,68 @@ function App() {
         console.log(encrypted);
     };
 
+    type PlugboardSettings = {
+        settings: string
+        valid: boolean
+    }
+    const [plugboardSettings, setPlugboardSettings] = useState<PlugboardSettings>(
+        {
+            settings: '',
+            valid: true,
+        }
+    );
+    const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        let input = event.target.value.toUpperCase();
+        setPlugboardSettings({ settings: input, valid: validateInput(input) });
+    };
+    const validateInput = (input: string): boolean => {
+        if (input === '') {
+            return true;
+        }
+
+        let inputArray = input.trim().split(' ');
+        if (inputArray.length < 1) {
+            return false;
+        }
+        for (let i = 0; i < inputArray.length; i++) {
+            let element = inputArray[i];
+            if (element.length !== 2) {
+                return false;
+            }
+        }
+        return true;
+    };
+
     return (
         <div className="App">
+            <div className="mb-3">
+                <label
+                    className="form-label"
+                    htmlFor="plugboardSettings"
+                >
+                    Plugboard Settings
+                </label>
+                <input
+                    className={ 'form-control ' + (plugboardSettings.valid ? '' : 'is-invalid') }
+                    type="text"
+                    id="plugboardSettings"
+                    onChange={ onChange }
+                    value={ plugboardSettings.settings }
+                />
+                <div id="plugboardSettings" className="invalid-feedback">
+                    Invaid plugboard settings. Example: AO HI MU SN WX ZO
+                </div>
+            </div>
+            <div className="mb-3">
+                <label className="form-label" htmlFor="rotor1">Rotor 1 setting</label>
+                <select className="form-select" id="rotor1" >
+                    <option defaultValue={ '' }>Select rotor for position 1</option>
+                    {
+                        EnigmaI.rotors.map((rotor: Rotor) => <option key={ rotor.name } value={ rotor.wiring }>{ rotor.name }</option>)
+                    }
+                </select>
+            </div>
+            <br />{ plugboardSettings.settings }<br />
             <button onClick={ run }>Run</button>
         </div>
     );
