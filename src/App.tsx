@@ -224,6 +224,8 @@ function App() {
             encrypted += encrypt(message.charAt(i));
         }
         console.log(encrypted);
+        console.log(message);
+        console.log(message2);
     };
 
     type PlugboardSettings = {
