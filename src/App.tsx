@@ -147,148 +147,181 @@ function App() {
     };
 
     return (
-        <div className="App">
-            <div className="row" id="motor-settings">
-                <div className="col">
-                    <label className="form-label" htmlFor="reflector">Reflector</label>
-                    <select
-                        className="form-select"
-                        id="reflector"
-                        value={ referenceMotor.reflector.name }
-                        onChange={ (event) => changeMotorSettings(0, event) }
-                    >
-                        {
-                            EnigmaI.reflectors.map(
-                                (reflector) => <option key={ reflector.name } value={ reflector.name }>{ reflector.name }</option>
-                            )
-                        }
-                    </select>
+        <div className="App bg-light-subtle">
+            <div className="container" style={ { marginTop: '5%' } }>
+                <h1 className="text-center">Enigma I simulator</h1>
+                <p className="text-center"><span className="text-muted">version 1.0</span></p>
+
+                <div className="panel panel-default" style={ { marginTop: '5%' } }>
+                    <div className="row">
+                        <div className="col">
+                            <div className="row" id="motor-settings">
+                                <div className="col">
+                                    <label className="form-label" htmlFor="reflector">Reflector</label>
+                                    <select
+                                        className="form-select"
+                                        id="reflector"
+                                        value={ referenceMotor.reflector.name }
+                                        onChange={ (event) => changeMotorSettings(0, event) }
+                                    >
+                                        {
+                                            EnigmaI.reflectors.map(
+                                                (reflector) => <option key={ reflector.name } value={ reflector.name }>{ reflector.name }</option>
+                                            )
+                                        }
+                                    </select>
+                                </div>
+                                <div className="col">
+                                    <label className="form-label" htmlFor="rotor1">Rotor 1</label>
+                                    <select
+                                        className="form-select"
+                                        id="rotor1"
+                                        value={ referenceMotor.rotor1.name }
+                                        onChange={ (event) => changeMotorSettings(1, event) }
+                                    >
+                                        {
+                                            EnigmaI.rotors.map(
+                                                (rotor) => <option key={ rotor.name } value={ rotor.name }>{ rotor.name }</option>
+                                            )
+                                        }
+                                    </select>
+                                </div>
+                                <div className="col">
+                                    <label className="form-label" htmlFor="rotor2">Rotor 2</label>
+                                    <select
+                                        className="form-select"
+                                        id="rotor2"
+                                        value={ referenceMotor.rotor2.name }
+                                        onChange={ (event) => changeMotorSettings(2, event) }
+                                    >
+                                        {
+                                            EnigmaI.rotors.map(
+                                                (rotor) => <option key={ rotor.name } value={ rotor.name }>{ rotor.name }</option>
+                                            )
+                                        }
+                                    </select>
+                                </div>
+                                <div className="col">
+                                    <label className="form-label" htmlFor="rotor3">Rotor 3</label>
+                                    <select
+                                        className="form-select"
+                                        id="rotor3"
+                                        value={ referenceMotor.rotor3.name }
+                                        onChange={ (event) => changeMotorSettings(3, event) }
+                                    >
+                                        {
+                                            EnigmaI.rotors.map(
+                                                (rotor) => <option key={ rotor.name } value={ rotor.name }>{ rotor.name }</option>
+                                            )
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <br />
+
+                            <div className="row">
+                                <label
+                                    className="form-label"
+                                    htmlFor="ringSettings"
+                                >
+                                    Ring settings
+                                </label>
+                                <input
+                                    className={ 'form-control ' + (rotorSettings.ringSettingsValid ? '' : 'is-invalid') }
+                                    type="text"
+                                    id="ringSettings"
+                                    onChange={ (event)  => changeRotorSettings(TYPE_RING, event) }
+                                    value={ rotorSettings.ringSettings }
+                                />
+                                <div className="form-text" id="basic-addon4">Example: ABC, DHK, QMT, etc.</div>
+                                <div className="invalid-feedback">{ rotorSettings.ringError }</div>
+                            </div>
+
+                            <br />
+
+                            <div className="row">
+                                <label
+                                    className="form-label"
+                                    htmlFor="plugboardSettings"
+                                >
+                                    Plugboard settings
+                                </label>
+                                <input
+                                    className={ 'form-control ' + (plugboard.valid ? '' : 'is-invalid') }
+                                    type="text"
+                                    id="plugboardSettings"
+                                    onChange={ changePlugboardSettings }
+                                    value={ plugboard.settings }
+                                />
+                                <div className="form-text" id="basic-addon4">Example: AO HI MU SN WX ZQ</div>
+                                <div className="invalid-feedback">{ plugboard.error }</div>
+                            </div>
+
+                            <br />
+
+                            <div className="row">
+                                <label
+                                    className="form-label"
+                                    htmlFor="startSettings"
+                                >
+                                    Start position settings
+                                </label>
+                                <input
+                                    className={ 'form-control ' + (rotorSettings.startSettingsValid ? '' : 'is-invalid') }
+                                    type="text"
+                                    id="startSettings"
+                                    onChange={ (event)  => changeRotorSettings(TYPE_START, event) }
+                                    value={ rotorSettings.startSettings }
+                                />
+                                <div className="form-text" id="basic-addon4">Example: ABC, DHK, QMT, etc.</div>
+                                <div className="invalid-feedback">{ rotorSettings.startError }</div>
+                            </div>
+
+                            <br />
+                        </div>
+                        <div className="col-md-6">
+                            <div className="row">
+                                <label
+                                    className="form-label"
+                                    htmlFor="message"
+                                >
+                                    Input your message
+                                </label>
+                                <input
+                                    className={ 'form-control ' + (message.valid ? '' : 'is-invalid') }
+                                    type="text"
+                                    id="message"
+                                    onChange={ changeMessage }
+                                    value={ message.entry }
+                                />
+                                <div className="invalid-feedback">{ message.error }</div>
+                            </div>
+                            <br /><br />
+                            <div className="container text-center">
+                                <div className="row justify-content-center">
+                                    <div className="col-4 p-3 bg-body-secondary rounded-5">
+                                        <h1>{ displayMotor.rotor1.entry[0] }</h1>
+                                    </div>
+                                    <div className="col-4 p-3 bg-dark-subtle rounded-5">
+                                        <h1>{ displayMotor.rotor2.entry[0] }</h1>
+                                    </div>
+                                    <div className="col-4 p-3 bg-body-secondary rounded-5">
+                                        <h1>{ displayMotor.rotor3.entry[0] }</h1>
+                                    </div>
+                                </div>
+                                <br /><br />
+                                MESSAGE: <br />
+                                <h2>{ message.entry }</h2>
+                                <br /><br />
+                                OUTPUT: <br />
+                                <h2>{ message.output }</h2>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className="col">
-                    <label className="form-label" htmlFor="rotor1">Rotor 1</label>
-                    <select
-                        className="form-select"
-                        id="rotor1"
-                        value={ referenceMotor.rotor1.name }
-                        onChange={ (event) => changeMotorSettings(1, event) }
-                    >
-                        {
-                            EnigmaI.rotors.map(
-                                (rotor) => <option key={ rotor.name } value={ rotor.name }>{ rotor.name }</option>
-                            )
-                        }
-                    </select>
-                </div>
-                <div className="col">
-                    <label className="form-label" htmlFor="rotor2">Rotor 2</label>
-                    <select
-                        className="form-select"
-                        id="rotor2"
-                        value={ referenceMotor.rotor2.name }
-                        onChange={ (event) => changeMotorSettings(2, event) }
-                    >
-                        {
-                            EnigmaI.rotors.map(
-                                (rotor) => <option key={ rotor.name } value={ rotor.name }>{ rotor.name }</option>
-                            )
-                        }
-                    </select>
-                </div>
-                <div className="col">
-                    <label className="form-label" htmlFor="rotor3">Rotor 3</label>
-                    <select
-                        className="form-select"
-                        id="rotor3"
-                        value={ referenceMotor.rotor3.name }
-                        onChange={ (event) => changeMotorSettings(3, event) }
-                    >
-                        {
-                            EnigmaI.rotors.map(
-                                (rotor) => <option key={ rotor.name } value={ rotor.name }>{ rotor.name }</option>
-                            )
-                        }
-                    </select>
-                </div>
             </div>
-
-            <div className="row">
-                <label
-                    className="form-label"
-                    htmlFor="ringSettings"
-                >
-                    Ring settings
-                </label>
-                <input
-                    className={ 'form-control ' + (rotorSettings.ringSettingsValid ? '' : 'is-invalid') }
-                    type="text"
-                    id="ringSettings"
-                    onChange={ (event)  => changeRotorSettings(TYPE_RING, event) }
-                    value={ rotorSettings.ringSettings }
-                />
-                <div className="form-text" id="basic-addon4">Example: ABC, DHK, QMT, etc.</div>
-                <div className="invalid-feedback">{ rotorSettings.ringError }</div>
-            </div>
-
-            <div className="row">
-                <label
-                    className="form-label"
-                    htmlFor="plugboardSettings"
-                >
-                    Plugboard settings
-                </label>
-                <input
-                    className={ 'form-control ' + (plugboard.valid ? '' : 'is-invalid') }
-                    type="text"
-                    id="plugboardSettings"
-                    onChange={ changePlugboardSettings }
-                    value={ plugboard.settings }
-                />
-                <div className="form-text" id="basic-addon4">Example: AO HI MU SN WX ZQ</div>
-                <div className="invalid-feedback">{ plugboard.error }</div>
-            </div>
-
-            <div className="row">
-                <label
-                    className="form-label"
-                    htmlFor="startSettings"
-                >
-                    Start position settings
-                </label>
-                <input
-                    className={ 'form-control ' + (rotorSettings.startSettingsValid ? '' : 'is-invalid') }
-                    type="text"
-                    id="startSettings"
-                    onChange={ (event)  => changeRotorSettings(TYPE_START, event) }
-                    value={ rotorSettings.startSettings }
-                />
-                <div className="form-text" id="basic-addon4">Example: ABC, DHK, QMT, etc.</div>
-                <div className="invalid-feedback">{ rotorSettings.startError }</div>
-            </div>
-
-            <div className="row">
-                <label
-                    className="form-label"
-                    htmlFor="message"
-                >
-                    Input your message
-                </label>
-                <input
-                    className={ 'form-control ' + (message.valid ? '' : 'is-invalid') }
-                    type="text"
-                    id="message"
-                    onChange={ changeMessage }
-                    value={ message.entry }
-                />
-                <div className="invalid-feedback">{ message.error }</div>
-            </div>
-
-            <button type="button" className="btn btn-primary">{ displayMotor.rotor1.entry[0] }</button>
-            <button type="button" className="btn btn-primary">{ displayMotor.rotor2.entry[0] }</button>
-            <button type="button" className="btn btn-primary">{ displayMotor.rotor3.entry[0] }</button>
-            <br /><br /><br />
-            MESSAGE: { message.entry }
-            <br /><br /><br />
-            OUTPUT: { message.output }
+            <div className="text-center">{ 'QuanMuiTo@' + new Date().getFullYear() }</div>
         </div>
     );
 }
