@@ -1,56 +1,63 @@
-import { DEFAULT_KEYBOARD } from 'global';
+import {
+    isEmpty,
+    isEncryptable,
+    isSupportedCharacter
+} from 'global';
 
-export const validatePlugboardSettingsInput = (input: string): boolean => {
-    if (input === '') {
-        return true;
-    }
+export const validatePlugboardSettingsInput = (input: string): string => {
+    if (!isEmpty(input)) {
+        input.trim();
 
-    let inputArray = input.trim().split(' ');
-    if (inputArray.length === 0) {
-        return false;
-    }
-    for (let i = 0; i < inputArray.length; i++) {
-        let letterPair = inputArray[i];
-
-        /** Letter pair should always have 2 letters */
-        if (letterPair.length !== 2) {
-            return false;
+        let invalidChar = getInvalidCharacter(input);
+        if (invalidChar.length > 0) {
+            return 'Contain not supported character(s): ' + invalidChar.join(' ');
         }
 
-        let letters = letterPair.split('');
-        if (!validateLetter(letters[0]) || !validateLetter(letters[1])) {
-            return false;
+        let duplicateChar = getDuplicatedCharacter(input);
+        if (duplicateChar.length > 0) {
+            return 'A character cannot be swapped twice: ' + duplicateChar.join(' ');
+        }
+
+        if (!input.split(' ').every((pair) => isEmpty(pair) || pair.length === 2)) {
+            return 'A letter pair should have 2 characters';
         }
     }
-    return true;
+    return '';
 };
 
-export const validateRotorSettingsInput = (input: string): boolean => {
-    if ((input.length === 3)) {
-        let letters = input.split('');
-        if (validateLetter(letters[0]) && validateLetter(letters[1]) && validateLetter(letters[2])) {
-            return true;
-        }
+export const validateRotorSettingsInput = (input: string): string => {
+    let invalidChar = getInvalidCharacter(input);
+    if (invalidChar.length > 0) {
+        return 'Contain not supported character(s): ' + invalidChar.join(' ');
     }
-    return false;
+
+    if (input.length !== 3) {
+        return 'Invalid setting. Should contain 3 characters.';
+    }
+
+    return '';
 };
 
-export const validateMessage = (input: string): boolean => {
-    if (input === '') {
-        return true;
+export const validateMessage = (input: string): string => {
+    if (!isEmpty(input)) {
+        let invalidChar = getInvalidCharacter(input);
+        if (invalidChar.length > 0) {
+            return 'Contain not supported character(s): ' + invalidChar.join(' ');
+        }
     }
 
-    let letters = input.split('');
-    for (let i = 0; i < letters.length; i++) {
-        let letter = letters[i];
-        if (letter !== '' && !validateLetter(letter)) {
+    return '';
+};
+
+const getInvalidCharacter = (input: string): string[] => {
+    return input.split('').filter((char) => !isEmpty(char) && !isSupportedCharacter(char));
+};
+
+const getDuplicatedCharacter = (input: string): string[] => {
+    return input.split('').filter((char, index) => {
+        if (!isEncryptable(char)) {
             return false;
         }
-    }
-
-    return true;
-};
-
-export const validateLetter = (letter: string): boolean => {
-    return DEFAULT_KEYBOARD.includes(letter);
+        return input.indexOf(char) !== index;
+    });
 };

@@ -7,56 +7,55 @@ import {
     RotorSettings
 } from 'types';
 import {
-    getTodayRingState,
-    getTodayStartState,
-    getTodayMotorState,
+    getTodayReferenceMotorState,
+    getTodayRotorSettingsState,
+    getTodayAppliedMotorState,
     getTodayPlugboardState,
     getMotor,
     getRotorByName,
     getReflectorByName,
-    plug,
-    adjustRing,
-    rotateToLetter,
-    rotateOnNotch,
-    getPlugboardSignal,
-    getMotorSignal,
-    getRotor,
-    applyStartSettings,
-    applyRingSettings
+    getRotorSettings,
+    getPlugboard,
+    getEncryptedMessage,
+    getCurrentMotorState,
+    applyRotorSettings,
+    applyPlugboardSettings
 } from 'enigma';
 import {
     validateMessage,
     validateRotorSettingsInput,
     validatePlugboardSettingsInput
 } from 'validation';
-import { DEFAULT_KEYBOARD, TYPE_BOTH, TYPE_RING, TYPE_START } from 'global';
+import {
+    TYPE_BOTH,
+    TYPE_RING,
+    TYPE_START,
+    isEmpty
+} from 'global';
 
 function App() {
     /**
      * Control the state of reference motor.
      * This state get settings from #motor-settings to create a reference with factory default data
      */
-    const [referenceMotor, setReferenceMotor] = useState<Motor>(getTodayMotorState());
+    const [referenceMotor, setReferenceMotor] = useState<Motor>(getTodayReferenceMotorState());
 
     /**
      * Control the state of the motor that use to encrypt the message.
      * This state copy the value of `referenceMotor` then apply `rings` and `starts` settings.
      */
-    const [encryptMotor, setEncryptMotor] = useState<Motor>(getTodayMotorState());
+    const [encryptMotor, setEncryptMotor] = useState<Motor>(getTodayAppliedMotorState());
 
     /**
      * Control the state of the `encryptedMotor` after being used to encrypt the message
      */
-    const [displayMotor, setDisplayMotor] = useState<Motor>(getTodayMotorState());
+    const [displayMotor, setDisplayMotor] = useState<Motor>(getTodayAppliedMotorState());
 
-    /** Control ring settings for rotors */
-    const [ringSettings, setRingSettings] = useState<RotorSettings>(getTodayRingState());
+    /** Control the rotor settings */
+    const [rotorSettings, setRotorSettings] = useState<RotorSettings>(getTodayRotorSettingsState());
 
     /** Control state of plugboard */
     const [plugboard, setPlugboard] = useState<Plugboard>(getTodayPlugboardState());
-
-    /** Control start settings for rotors */
-    const [startSettings, setStartSettings] = useState<RotorSettings>(getTodayStartState());
 
     /** Control input message from user */
     const [message, setMessage] = useState<Message>(
@@ -64,28 +63,9 @@ function App() {
             entry: '',
             output: '',
             valid: true,
+            error: '',
         }
     );
-
-    const applySettings = (motor: Motor, type: string, input: string = ''): void => {
-        /** Apply `rings` and `starts` settings, then set to `encryptedMotor` and `displayMotor` */
-        switch (type) {
-            case TYPE_RING:
-                applyRingSettings(motor, input);
-                applyStartSettings(motor, startSettings.settings);
-                break;
-            case TYPE_START:
-                applyRingSettings(motor, ringSettings.settings);
-                applyStartSettings(motor, input);
-                break;
-            default:
-                applyRingSettings(motor, ringSettings.settings);
-                applyStartSettings(motor, startSettings.settings);
-                break;
-        }
-        setEncryptMotor(motor);
-        setDisplayMotor(motor);
-    };
 
     const changeMotorSettings = (number: number, event: React.ChangeEvent<HTMLSelectElement>): void => {
         let newMotor = getMotor(referenceMotor);
@@ -108,63 +88,62 @@ function App() {
             default:
                 break;
         }
-        setReferenceMotor(getMotor(newMotor));
-        applySettings(getMotor(newMotor), TYPE_BOTH);
+        setReferenceMotor(newMotor);
+
+        /** Apply rotor settings, then set to `encryptedMotor` and `displayMotor` */
+        let appliedMotor = applyRotorSettings(newMotor, getRotorSettings(rotorSettings), TYPE_BOTH);
+        setEncryptMotor(appliedMotor);
+        setDisplayMotor(appliedMotor);
     };
 
-    const changeRingSettings = (event: React.ChangeEvent<HTMLInputElement>): void => {
-        let input = event.target.value.toUpperCase();
-        let isValid = validateRotorSettingsInput(input);
-        if (isValid) {
-            applySettings(getMotor(referenceMotor), TYPE_RING, input);
+    const changeRotorSettings = (type: string, event: React.ChangeEvent<HTMLInputElement>): void => {
+        let input = event.target.value.toUpperCase().trim();
+        let error = validateRotorSettingsInput(input);
+
+        let newRotorSettings = getRotorSettings(rotorSettings);
+        switch (type) {
+            case TYPE_RING:
+                newRotorSettings = { ...newRotorSettings, ringSettings: input, ringSettingsValid: isEmpty(error), ringError: error };
+                break;
+            case TYPE_START:
+                newRotorSettings = { ...newRotorSettings, startSettings: input, startSettingsValid: isEmpty(error), startError: error };
+                break;
+            default:
+                break;
         }
-        setRingSettings({ settings: input, valid: isValid });
+        setRotorSettings(newRotorSettings);
+
+        if (isEmpty(error)) {
+            /** Apply rotor settings, then set to `encryptedMotor` and `displayMotor` */
+            let appliedMotor = applyRotorSettings(getMotor(referenceMotor), newRotorSettings, TYPE_BOTH);
+            setEncryptMotor(appliedMotor);
+            setDisplayMotor(appliedMotor);
+        }
     };
 
     const changePlugboardSettings = (event: React.ChangeEvent<HTMLInputElement>): void => {
-        let settingsInput = event.target.value.toUpperCase();
-        let isValid = validatePlugboardSettingsInput(settingsInput);
-        isValid
-            ? setPlugboard({ ...plugboard, settings: settingsInput, valid: isValid, output: plug(settingsInput) })
-            : setPlugboard({ ...plugboard, settings: settingsInput, valid: isValid });
-    };
-
-    const changeStartSettings = (event: React.ChangeEvent<HTMLInputElement>): void => {
         let input = event.target.value.toUpperCase();
-        let isValid = validateRotorSettingsInput(input);
-        if (isValid) {
-            applySettings(getMotor(referenceMotor), TYPE_START, input);
+        let error = validatePlugboardSettingsInput(input);
+
+        if (isEmpty(error)) {
+            let newPlugboard = applyPlugboardSettings(getPlugboard(plugboard), input);
+            setPlugboard({ ...newPlugboard, settings: input, valid: true, error: error });
+        } else {
+            setPlugboard({ ...plugboard, settings: input, valid: false, error: error });
         }
-        setStartSettings({ settings: input, valid: isValid });
     };
 
     const changeMessage = (event: React.ChangeEvent<HTMLInputElement>): void => {
         let entry = event.target.value.toUpperCase();
-        let isValid = validateMessage(entry);
-        if (isValid) {
-            let output = encrypt(getMotor(encryptMotor), entry);
-            setMessage({ ...message, entry: entry, output: output, valid: isValid });
+        let error = validateMessage(entry);
+
+        if (isEmpty(error)) {
+            let output = getEncryptedMessage(getMotor(encryptMotor), getPlugboard(plugboard), entry);
+            setMessage({ ...message, entry: entry, output: output, valid: true, error: error });
+            setDisplayMotor(getCurrentMotorState(getMotor(encryptMotor), entry));
         } else {
-            setMessage({ ...message, valid: isValid });
+            setMessage({ ...message, entry: entry, valid: false, error: error });
         }
-    };
-
-    const encrypt = (motor: Motor, entry: string): string => {
-        let letters = entry.split('');
-        let output = '';
-
-        letters.forEach((letter) => {
-            rotateOnNotch(motor);
-
-            let kbSignal = DEFAULT_KEYBOARD.indexOf(letter);
-            let pbSignal = getPlugboardSignal(plugboard, kbSignal);
-            let motorSignal = getMotorSignal(motor, pbSignal);
-            let pbBSignal = getPlugboardSignal(plugboard, motorSignal, true);
-            let outputLetter = DEFAULT_KEYBOARD[pbBSignal];
-            output = output + outputLetter;
-        });
-        setDisplayMotor(getMotor(motor));
-        return output;
     };
 
     return (
@@ -240,15 +219,14 @@ function App() {
                     Ring settings
                 </label>
                 <input
-                    className={ 'form-control ' + (ringSettings.valid ? '' : 'is-invalid') }
+                    className={ 'form-control ' + (rotorSettings.ringSettingsValid ? '' : 'is-invalid') }
                     type="text"
                     id="ringSettings"
-                    onChange={ changeRingSettings }
-                    value={ ringSettings.settings }
+                    onChange={ (event)  => changeRotorSettings(TYPE_RING, event) }
+                    value={ rotorSettings.ringSettings }
                 />
-                <div id="ringSettings" className="invalid-feedback">
-                    Invaid ring settings. Example: ABC, DHK, QMT, etc.
-                </div>
+                <div className="form-text" id="basic-addon4">Example: ABC, DHK, QMT, etc.</div>
+                <div className="invalid-feedback">{ rotorSettings.ringError }</div>
             </div>
 
             <div className="row">
@@ -265,9 +243,8 @@ function App() {
                     onChange={ changePlugboardSettings }
                     value={ plugboard.settings }
                 />
-                <div id="plugboardSettings" className="invalid-feedback">
-                    Invaid plugboard settings. Example: AO HI MU SN WX ZO
-                </div>
+                <div className="form-text" id="basic-addon4">Example: AO HI MU SN WX ZQ</div>
+                <div className="invalid-feedback">{ plugboard.error }</div>
             </div>
 
             <div className="row">
@@ -278,15 +255,14 @@ function App() {
                     Start position settings
                 </label>
                 <input
-                    className={ 'form-control ' + (startSettings.valid ? '' : 'is-invalid') }
+                    className={ 'form-control ' + (rotorSettings.startSettingsValid ? '' : 'is-invalid') }
                     type="text"
                     id="startSettings"
-                    onChange={ changeStartSettings }
-                    value={ startSettings.settings }
+                    onChange={ (event)  => changeRotorSettings(TYPE_START, event) }
+                    value={ rotorSettings.startSettings }
                 />
-                <div id="startSettings" className="invalid-feedback">
-                    Invaid start position settings. Example: ABC or DHK, etc
-                </div>
+                <div className="form-text" id="basic-addon4">Example: ABC, DHK, QMT, etc.</div>
+                <div className="invalid-feedback">{ rotorSettings.startError }</div>
             </div>
 
             <div className="row">
@@ -303,15 +279,12 @@ function App() {
                     onChange={ changeMessage }
                     value={ message.entry }
                 />
-                <div id="message" className="invalid-feedback">
-                    Invaid character.
-                </div>
+                <div className="invalid-feedback">{ message.error }</div>
             </div>
 
             <button type="button" className="btn btn-primary">{ displayMotor.rotor1.entry[0] }</button>
             <button type="button" className="btn btn-primary">{ displayMotor.rotor2.entry[0] }</button>
             <button type="button" className="btn btn-primary">{ displayMotor.rotor3.entry[0] }</button>
-            { /* <br /><button onClick={ run }>Run</button> */ }
             <br /><br /><br />
             MESSAGE: { message.entry }
             <br /><br /><br />
