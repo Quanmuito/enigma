@@ -1,4 +1,27 @@
-Ring setting and shifting rule.
+### Project: EnigmaI simulator
+##### Version: 1.0
+
+#### Description: 
+A simulator of `EnigmaI` machine with simple UI and default setting.
+
+#### Techstack: 
+React, Typescript, Docker
+
+This project was inspired by [Jared Owen](https://www.youtube.com/@JaredOwen) with the video [How did the Enigma Machine work?](https://www.youtube.com/watch?v=ybkkiGtJmkM).
+
+Thanks to Mike Koss with [Enigma Machine Simulator](https://mckoss.com/enigma-simulator-js/) so I can check my result.
+
+Information source:
+* [Enigma machine - Wikipedia](https://en.wikipedia.org/wiki/Enigma_machine)
+* [Enigma rotor details - Wikipedia](https://en.wikipedia.org/wiki/Enigma_rotor_details)
+* [Enigma wiring - Cryptomuseum](https://www.cryptomuseum.com/crypto/enigma/wiring.htm)
+* [How does the ring settings of enigma change wiring tables? - Stackexchange Forum](https://crypto.stackexchange.com/questions/29315/how-does-the-ring-settings-of-enigma-change-wiring-tables/48659#48659)
+
+And below is my visually exlaination on how ring setting and shifting work. 
+Each position on the alphabet ring has a ordinal number, start with `A|0` (in programming language today) all the way to `Z|25` (Column 1). 
+The wiring will add a defined number to the position respectively (Column 2) and make a "scrambled output", column 3 is the output of the `EnigmaI` - rotor `I` when the ring setting is set to `A`. 
+If the ring setting is set to `B`, we just simply move the ring up by 1 (Column 4), do the math and the output is `EnigmaI` - rotor `I` - ring `B`.
+
 ```
 A|0     +4     ->    E|4     =>    B|1     +4     ->    F|5
 B|1     +9     ->    K|10    =>    C|2     +9     ->    L|11
