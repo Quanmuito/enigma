@@ -1,3 +1,4 @@
+export const VERSION = '1.0.1';
 export const DEFAULT_KEYBOARD = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 export const NUMBERS = '1234567890';
 export const SPECIAL_CHARACTERS = '!@#$%^&*()-_=+[]{};:"|`~,./<>?';
