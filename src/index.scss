@@ -1,0 +1,52 @@
+$font-root: 14px;
+$font-med: 16px;
+$font-large: 18px;
+
+@mixin media-med {
+    @media screen and (min-width: 1023px) {
+        @content;
+    }
+}
+
+@mixin media-large {
+    @media screen and (min-width: 1599px) {
+        @content;
+    }
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: $font-root;
+}
+
+body {
+    min-height: 100vh;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#root,
+.App {
+    width: 100%;
+    height: 100%;
+}
+
+section {
+    min-height: 90vh;
+}
+
+@include media-med {
+    html {
+        font-size: $font-med;
+    }
+}
+
+@include media-large {
+    html {
+        font-size: $font-large;
+    }
+}
