@@ -1,9 +1,11 @@
 import {
-    Motor,
     Reflector,
     Rotor,
-    RotorSettings,
-    Plugboard
+    Plugboard,
+    Setting,
+    Machine,
+    AppState,
+    Message
 } from 'types';
 import {
     I,
@@ -15,11 +17,7 @@ import {
     DUMMYREFLECTOR
 } from 'data';
 import {
-    isEncryptable,
-    DEFAULT_KEYBOARD,
-    TYPE_BOTH,
-    TYPE_RING,
-    TYPE_START
+    DEFAULT_KEYBOARD, isEmpty, isEncryptable
 } from 'global';
 
 /** Take the letter in the first position of both `entry` and `output` array, put to the last position */
@@ -39,32 +37,38 @@ const rotate = (rotor: Rotor, rounds: number = 1): Rotor => {
 };
 
 const rotateToLetter = (rotor: Rotor, letter: string): Rotor => {
+    if (isEmpty(letter)) {
+        letter = 'A';
+    }
     let letterPosition = rotor.entry.indexOf(letter);
     return rotate(rotor, letterPosition);
 };
 
-const rotateOnNotch = (motor: Motor): Motor => {
+const rotateOnNotch = (machine: Machine): Machine => {
     if (
-        motor.rotor2.entry[0] === motor.rotor2.notch ||
-        (motor.rotor3.entry[0] === motor.rotor3.notch && motor.rotor2.entry[0] === motor.rotor2.notch)
+        machine.rotor2.entry[0] === machine.rotor2.notch ||
+        (machine.rotor3.entry[0] === machine.rotor3.notch && machine.rotor2.entry[0] === machine.rotor2.notch)
     ) {
-        rotate(motor.rotor1);
-        rotate(motor.rotor2);
-        rotate(motor.rotor3);
+        rotate(machine.rotor1);
+        rotate(machine.rotor2);
+        rotate(machine.rotor3);
     }
     else if (
-        motor.rotor3.entry[0] === motor.rotor3.notch
+        machine.rotor3.entry[0] === machine.rotor3.notch
     ) {
-        rotate(motor.rotor2);
-        rotate(motor.rotor3);
+        rotate(machine.rotor2);
+        rotate(machine.rotor3);
     }
     else {
-        rotate(motor.rotor3);
+        rotate(machine.rotor3);
     }
-    return motor;
+    return machine;
 };
 
 const adjustRing = (rotor: Rotor, letter: string): Rotor => {
+    if (isEmpty(letter)) {
+        letter = 'A';
+    }
     let letterPosition = rotor.entry.indexOf(letter);
     let i = 0;
     while (i < letterPosition) {
@@ -117,18 +121,21 @@ const getReflectorSignal = (reflector: Reflector, signal: number, isBackward: bo
     return reflector.entry.indexOf(letter);
 };
 
-const getMotorSignal = (motor: Motor, signal: number): number => {
-    let r3Signal = getRotorSignal(motor.rotor3, signal);
-    let r2Signal = getRotorSignal(motor.rotor2, r3Signal);
-    let r1Signal = getRotorSignal(motor.rotor1, r2Signal);
-    let refSignal = getReflectorSignal(motor.reflector, r1Signal);
-    let r1BSignal = getRotorSignal(motor.rotor1, refSignal, true);
-    let r2BSignal = getRotorSignal(motor.rotor2, r1BSignal, true);
-    let r3BSignal = getRotorSignal(motor.rotor3, r2BSignal, true);
-    return r3BSignal;
+const getSignal = (machine: Machine, signal: number): number => {
+    let pbSignal = getPlugboardSignal(machine.plugboard, signal);
+    let r3Signal = getRotorSignal(machine.rotor3, pbSignal);
+    let r2Signal = getRotorSignal(machine.rotor2, r3Signal);
+    let r1Signal = getRotorSignal(machine.rotor1, r2Signal);
+    let refSignal = getReflectorSignal(machine.reflector, r1Signal);
+    let r1BSignal = getRotorSignal(machine.rotor1, refSignal, true);
+    let r2BSignal = getRotorSignal(machine.rotor2, r1BSignal, true);
+    let r3BSignal = getRotorSignal(machine.rotor3, r2BSignal, true);
+    let pbBSignal = getPlugboardSignal(machine.plugboard, r3BSignal);
+
+    return pbBSignal;
 };
 
-export const getEncryptedMessage = (motor: Motor, plugboard: Plugboard, entry: string): string => {
+export const getEncryptedMessage = (machine: Machine, entry: string): string => {
     let letters = entry.split('');
     let output = '';
 
@@ -136,132 +143,113 @@ export const getEncryptedMessage = (motor: Motor, plugboard: Plugboard, entry: s
         if (!isEncryptable(char)) {
             output = output + char;
         } else {
-            rotateOnNotch(motor);
+            rotateOnNotch(machine);
 
             let kbSignal = DEFAULT_KEYBOARD.indexOf(char);
-            let pbSignal = getPlugboardSignal(plugboard, kbSignal);
-            let motorSignal = getMotorSignal(motor, pbSignal);
-            let pbBSignal = getPlugboardSignal(plugboard, motorSignal, true);
-            let outputLetter = DEFAULT_KEYBOARD[pbBSignal];
+            let signal = getSignal(machine, kbSignal);
+            let outputLetter = DEFAULT_KEYBOARD.charAt(signal);
             output = output + outputLetter;
         }
     });
     return output;
 };
 
-export const getCurrentMotorState = (motor: Motor, entry: string): Motor => {
-    entry.split('').forEach(() => rotateOnNotch(motor));
-    return motor;
+export const getDisplayMachineState = (machine: Machine, entry: string): Machine => {
+    entry.split('').forEach((char) => {
+        if (isEncryptable(char)) {
+            rotateOnNotch(machine);
+        }
+    });
+    return machine;
 };
 
-/** Initial default setup */
-export const applyRotorSettings = (motor: Motor, rotorSettings: RotorSettings, type: string): Motor => {
-    switch (type) {
-        case TYPE_RING:
-            adjustRing(motor.rotor1, rotorSettings.ringSettings[0]);
-            adjustRing(motor.rotor2, rotorSettings.ringSettings[1]);
-            adjustRing(motor.rotor3, rotorSettings.ringSettings[2]);
-            break;
-        case TYPE_START:
-            rotateToLetter(motor.rotor1, rotorSettings.startSettings[0]);
-            rotateToLetter(motor.rotor2, rotorSettings.startSettings[1]);
-            rotateToLetter(motor.rotor3, rotorSettings.startSettings[2]);
-            break;
-        default:
-            adjustRing(motor.rotor1, rotorSettings.ringSettings[0]);
-            adjustRing(motor.rotor2, rotorSettings.ringSettings[1]);
-            adjustRing(motor.rotor3, rotorSettings.ringSettings[2]);
-            rotateToLetter(motor.rotor1, rotorSettings.startSettings[0]);
-            rotateToLetter(motor.rotor2, rotorSettings.startSettings[1]);
-            rotateToLetter(motor.rotor3, rotorSettings.startSettings[2]);
-            break;
-    }
-    return motor;
+export const getTodayPlugboardState = (): Plugboard => {
+    return {
+        entry: DEFAULT_KEYBOARD.split(''),
+        output: DEFAULT_KEYBOARD.split(''),
+    };
 };
 
-/** Swap position of specified letter pairs. Example: "CJ KX AM" */
-export const applyPlugboardSettings = (plugboard: Plugboard, settings: string): Plugboard => {
-    settings.split(' ').forEach(
+const getTodayMachineState = (): Machine => {
+    return {
+        reflector: getClone<Reflector>(UKWB),
+        rotor1: getClone<Rotor>(I),
+        rotor2: getClone<Rotor>(II),
+        rotor3: getClone<Rotor>(III),
+        plugboard: getTodayPlugboardState(),
+    };
+};
+
+const getTodaySettingState = (): Setting => {
+    return {
+        ringSettings: 'AAA',
+        ringError: '',
+        plugboardSettings: '',
+        plugboardError: '',
+        startSettings: 'AAA',
+        startError: '',
+    };
+};
+
+const getTodayMessageState = (): Message => {
+    return {
+        entry: '',
+        output: '',
+        error: '',
+    };
+};
+
+export const getTodayAppState = (): AppState => {
+    let machine = getTodayMachineState();
+    let setting = getTodaySettingState();
+
+    return {
+        setting: setting,
+        referenceMachine: machine,
+        configuredMachine: getConfiguredMachine(setting, getClone<Machine>(machine)),
+        displayMachine: getConfiguredMachine(setting, getClone<Machine>(machine)),
+        message: getTodayMessageState(),
+    };
+};
+
+export const getConfiguredMachine = (setting: Setting, machine: Machine): Machine => {
+    adjustRing(machine.rotor1, setting.ringSettings.charAt(0));
+    adjustRing(machine.rotor2, setting.ringSettings.charAt(1));
+    adjustRing(machine.rotor3, setting.ringSettings.charAt(2));
+    rotateToLetter(machine.rotor1, setting.startSettings.charAt(0));
+    rotateToLetter(machine.rotor2, setting.startSettings.charAt(1));
+    rotateToLetter(machine.rotor3, setting.startSettings.charAt(2));
+
+    /** Swap position of specified letter pairs. Example: "CJ KX AM" */
+    setting.plugboardSettings.split(' ').forEach(
         (letterPair: string) => {
             let letter_1: string = letterPair[0];
             let letter_2: string = letterPair[1];
 
-            let pos_1 = plugboard.entry.indexOf(letter_1);
-            let pos_2 = plugboard.entry.indexOf(letter_2);
+            let pos_1 = machine.plugboard.entry.indexOf(letter_1);
+            let pos_2 = machine.plugboard.entry.indexOf(letter_2);
 
-            plugboard.output[pos_1] = letter_2;
-            plugboard.output[pos_2] = letter_1;
+            machine.plugboard.output[pos_1] = letter_2;
+            machine.plugboard.output[pos_2] = letter_1;
         }
     );
-    return plugboard;
-};
 
-export const getTodayReferenceMotorState = (): Motor => {
-    let motor = {
-        rotor1: getRotor(I),
-        rotor2: getRotor(II),
-        rotor3: getRotor(III),
-        reflector: getReflector(UKWB),
-    };
-    return getMotor(motor);
-};
-
-export const getTodayRotorSettingsState = (): RotorSettings => {
-    let rotorSettings = {
-        ringSettings: 'AAA',
-        ringError: '',
-        startSettings: 'AAA',
-        startError: '',
-    };
-    return getRotorSettings(rotorSettings);
-};
-
-export const getTodayAppliedMotorState = (): Motor => {
-    let motor = applyRotorSettings(
-        getTodayReferenceMotorState(),
-        getTodayRotorSettingsState(),
-        TYPE_BOTH
-    );
-    return getMotor(motor);
-};
-
-export const getTodayPlugboardState = (): Plugboard => {
-    let settings = '';
-    let plugboard = {
-        entry: DEFAULT_KEYBOARD.split(''),
-        output: DEFAULT_KEYBOARD.split(''),
-        settings: settings,
-        error: '',
-    };
-    applyPlugboardSettings(plugboard, settings);
-    return getPlugboard(plugboard);
+    return machine;
 };
 
 export const getRotorByName = (name: string): Rotor => {
     let rotor = EnigmaI.rotors.find((rotor) => rotor.name === name);
     let foundRotor = (rotor !== undefined) ? rotor : DUMMYROTOR;
-    return getRotor(foundRotor);
+    return getClone<Rotor>(foundRotor);
 };
 
 export const getReflectorByName = (name: string): Reflector => {
-    let reflector = EnigmaI.rotors.find((reflector) => reflector.name === name);
+    let reflector = EnigmaI.reflectors.find((reflector) => reflector.name === name);
     let foundReflector = (reflector !== undefined) ? reflector : DUMMYREFLECTOR;
-    return getReflector(foundReflector);
+    return getClone<Reflector>(foundReflector);
 };
 
 /** Deep cloning make sure the instance only copy the value istead of reference the default data */
-export const getPlugboard = (basedPlugboard: Plugboard): Plugboard => {
-    return JSON.parse(JSON.stringify(basedPlugboard)) as typeof basedPlugboard;
-};
-export const getRotor = (basedRotor: Rotor): Rotor => {
-    return JSON.parse(JSON.stringify(basedRotor)) as typeof basedRotor;
-};
-export const getReflector = (basedReflector: Reflector): Reflector => {
-    return JSON.parse(JSON.stringify(basedReflector)) as typeof basedReflector;
-};
-export const getMotor = (basedMotor: Motor): Motor => {
-    return JSON.parse(JSON.stringify(basedMotor)) as typeof basedMotor;
-};
-export const getRotorSettings = (basedRotorSettings: RotorSettings): RotorSettings => {
-    return JSON.parse(JSON.stringify(basedRotorSettings)) as typeof basedRotorSettings;
+export const getClone = <T>(based: T): T => {
+    return JSON.parse(JSON.stringify(based)) as typeof based;
 };

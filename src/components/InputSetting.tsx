@@ -1,5 +1,6 @@
 import React from 'react';
 import { capitalizeFirstLetter, isEmpty } from 'global';
+import { Action } from 'types';
 
 
 type InputSettingState = {
@@ -7,10 +8,11 @@ type InputSettingState = {
     value: string,
     error: string,
     example: string,
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+    type: string,
+    dispatch: React.Dispatch<Action>
 }
 
-export default function InputSetting({ id, value, error, example, onChange }: InputSettingState) {
+export default function InputSetting({ id, value, error, example, type, dispatch }: InputSettingState) {
     const label: string = id.split('-').map((word) => capitalizeFirstLetter(word)).join(' ');
 
     return (
@@ -25,7 +27,12 @@ export default function InputSetting({ id, value, error, example, onChange }: In
                 className={ 'form-control ' + (isEmpty(error) ? '' : 'is-invalid') }
                 type="text"
                 id={ id }
-                onChange={ onChange }
+                onChange={ (event) => dispatch({
+                    type: type,
+                    payload: {
+                        value: event.target.value,
+                    },
+                }) }
                 value={ value }
             />
             <div className="form-text" id="basic-addon4">{ example }</div>
