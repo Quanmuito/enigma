@@ -28,23 +28,19 @@ export type Plugboard = {
     entry: string[],
     output: string[],
     settings: string,
-    valid: boolean,
     error: string,
 }
 
 export type RotorSettings = {
     ringSettings: string,
-    ringSettingsValid: boolean,
     ringError: string,
     startSettings: string,
-    startSettingsValid: boolean,
     startError: string,
 }
 
 export type Message = {
     entry: string,
     output: string,
-    valid: boolean,
     error: string,
 }
 

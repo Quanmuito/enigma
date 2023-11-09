@@ -209,10 +209,8 @@ export const getTodayReferenceMotorState = (): Motor => {
 export const getTodayRotorSettingsState = (): RotorSettings => {
     let rotorSettings = {
         ringSettings: 'AAA',
-        ringSettingsValid: true,
         ringError: '',
         startSettings: 'AAA',
-        startSettingsValid: true,
         startError: '',
     };
     return getRotorSettings(rotorSettings);
@@ -233,7 +231,6 @@ export const getTodayPlugboardState = (): Plugboard => {
         entry: DEFAULT_KEYBOARD.split(''),
         output: DEFAULT_KEYBOARD.split(''),
         settings: settings,
-        valid: true,
         error: '',
     };
     applyPlugboardSettings(plugboard, settings);

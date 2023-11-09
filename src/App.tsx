@@ -62,7 +62,6 @@ function App() {
         {
             entry: '',
             output: '',
-            valid: true,
             error: '',
         }
     );
@@ -103,10 +102,10 @@ function App() {
         let newRotorSettings = getRotorSettings(rotorSettings);
         switch (type) {
             case TYPE_RING:
-                newRotorSettings = { ...newRotorSettings, ringSettings: input, ringSettingsValid: isEmpty(error), ringError: error };
+                newRotorSettings = { ...newRotorSettings, ringSettings: input, ringError: error };
                 break;
             case TYPE_START:
-                newRotorSettings = { ...newRotorSettings, startSettings: input, startSettingsValid: isEmpty(error), startError: error };
+                newRotorSettings = { ...newRotorSettings, startSettings: input, startError: error };
                 break;
             default:
                 break;
@@ -127,9 +126,9 @@ function App() {
 
         if (isEmpty(error)) {
             let newPlugboard = applyPlugboardSettings(getPlugboard(plugboard), input);
-            setPlugboard({ ...newPlugboard, settings: input, valid: true, error: error });
+            setPlugboard({ ...newPlugboard, settings: input, error: error });
         } else {
-            setPlugboard({ ...plugboard, settings: input, valid: false, error: error });
+            setPlugboard({ ...plugboard, settings: input, error: error });
         }
     };
 
@@ -139,10 +138,10 @@ function App() {
 
         if (isEmpty(error)) {
             let output = getEncryptedMessage(getMotor(encryptMotor), getPlugboard(plugboard), entry);
-            setMessage({ ...message, entry: entry, output: output, valid: true, error: error });
+            setMessage({ ...message, entry: entry, output: output, error: error });
             setDisplayMotor(getCurrentMotorState(getMotor(encryptMotor), entry));
         } else {
-            setMessage({ ...message, entry: entry, valid: false, error: error });
+            setMessage({ ...message, entry: entry, error: error });
         }
     };
 
@@ -228,7 +227,7 @@ function App() {
                                         Ring settings
                                     </label>
                                     <input
-                                        className={ 'form-control ' + (rotorSettings.ringSettingsValid ? '' : 'is-invalid') }
+                                        className={ 'form-control ' + (isEmpty(rotorSettings.ringError) ? '' : 'is-invalid') }
                                         type="text"
                                         id="ringSettings"
                                         onChange={ (event)  => changeRotorSettings(TYPE_RING, event) }
@@ -248,7 +247,7 @@ function App() {
                                         Plugboard settings
                                     </label>
                                     <input
-                                        className={ 'form-control ' + (plugboard.valid ? '' : 'is-invalid') }
+                                        className={ 'form-control ' + (isEmpty(plugboard.error) ? '' : 'is-invalid') }
                                         type="text"
                                         id="plugboardSettings"
                                         onChange={ changePlugboardSettings }
@@ -268,7 +267,7 @@ function App() {
                                         Start position settings
                                     </label>
                                     <input
-                                        className={ 'form-control ' + (rotorSettings.startSettingsValid ? '' : 'is-invalid') }
+                                        className={ 'form-control ' + (isEmpty(rotorSettings.startError) ? '' : 'is-invalid') }
                                         type="text"
                                         id="startSettings"
                                         onChange={ (event)  => changeRotorSettings(TYPE_START, event) }
@@ -289,7 +288,7 @@ function App() {
                                         Input your message
                                     </label>
                                     <input
-                                        className={ 'form-control ' + (message.valid ? '' : 'is-invalid') }
+                                        className={ 'form-control ' + (isEmpty(message.error) ? '' : 'is-invalid') }
                                         type="text"
                                         id="message"
                                         onChange={ changeMessage }
