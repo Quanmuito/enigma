@@ -1,16 +1,13 @@
 import React, { useReducer } from 'react';
+import { getTodayAppState } from 'enigma';
 import {
-    getTodayAppState
-} from 'enigma';
-import {
+    reducer,
     ACTION_MESSAGE,
     ACTION_PLUGBOARD_SETTINGS,
     ACTION_RING_SETTINGS,
-    ACTION_START_SETTINGS,
-    reducer
+    ACTION_START_SETTINGS
 } from 'reducer';
-import SelectMotor from 'components/SelectMotor';
-import InputSetting from 'components/InputSetting';
+import { SelectMotor, InputSetting } from 'components';
 import { isEmpty } from 'global';
 
 export default function App() {

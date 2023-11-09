@@ -10,8 +10,18 @@ type SelectRotorState = {
     dispatch: React.Dispatch<Action>,
 }
 
-export default function SelectMotor({ id, value, dispatch }: SelectRotorState) {
+export const SelectMotor = ({ id, value, dispatch }: SelectRotorState) => {
     const label: string = capitalizeFirstLetter(id).replace('-', ' ');
+    const onChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+        const action: Action = {
+            type: ACTION_MACHINE_SETTINGS,
+            payload: {
+                value: event.target.value,
+                id: id,
+            },
+        };
+        dispatch(action);
+    };
 
     return (
         <div className="col-lg-3 col-md-6">
@@ -20,24 +30,18 @@ export default function SelectMotor({ id, value, dispatch }: SelectRotorState) {
                 className="form-select"
                 id={ id }
                 value={ value }
-                onChange={ (event) => dispatch({
-                    type: ACTION_MACHINE_SETTINGS,
-                    payload: {
-                        value: event.target.value,
-                        id: id,
-                    },
-                }) }
+                onChange={ onChange }
             >
                 {
                     (id === 'reflector')
-                        ? EnigmaI.reflectors.map(
-                            (reflector) => <option key={ reflector.name } value={ reflector.name }>{ reflector.name }</option>
+                        ? EnigmaI.reflectors.map((reflector) =>
+                            <option key={ reflector.name } value={ reflector.name }>{ reflector.name }</option>
                         )
-                        : EnigmaI.rotors.map(
-                            (rotor) => <option key={ rotor.name } value={ rotor.name }>{ rotor.name }</option>
+                        : EnigmaI.rotors.map((rotor) =>
+                            <option key={ rotor.name } value={ rotor.name }>{ rotor.name }</option>
                         )
                 }
             </select>
         </div>
     );
-}
+};

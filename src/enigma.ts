@@ -16,9 +16,7 @@ import {
     DUMMYROTOR,
     DUMMYREFLECTOR
 } from 'data';
-import {
-    DEFAULT_KEYBOARD, isEmpty, isEncryptable
-} from 'global';
+import { KEYBOARD, isEmpty, isEncryptable } from 'global';
 
 /** Take the letter in the first position of both `entry` and `output` array, put to the last position */
 const rotate = (rotor: Rotor, rounds: number = 1): Rotor => {
@@ -135,38 +133,10 @@ const getSignal = (machine: Machine, signal: number): number => {
     return pbBSignal;
 };
 
-export const getEncryptedMessage = (machine: Machine, entry: string): string => {
-    let letters = entry.split('');
-    let output = '';
-
-    letters.forEach((char) => {
-        if (!isEncryptable(char)) {
-            output = output + char;
-        } else {
-            rotateOnNotch(machine);
-
-            let kbSignal = DEFAULT_KEYBOARD.indexOf(char);
-            let signal = getSignal(machine, kbSignal);
-            let outputLetter = DEFAULT_KEYBOARD.charAt(signal);
-            output = output + outputLetter;
-        }
-    });
-    return output;
-};
-
-export const getDisplayMachineState = (machine: Machine, entry: string): Machine => {
-    entry.split('').forEach((char) => {
-        if (isEncryptable(char)) {
-            rotateOnNotch(machine);
-        }
-    });
-    return machine;
-};
-
-export const getTodayPlugboardState = (): Plugboard => {
+const getTodayPlugboardState = (): Plugboard => {
     return {
-        entry: DEFAULT_KEYBOARD.split(''),
-        output: DEFAULT_KEYBOARD.split(''),
+        entry: KEYBOARD.split(''),
+        output: KEYBOARD.split(''),
     };
 };
 
@@ -234,6 +204,32 @@ export const getConfiguredMachine = (setting: Setting, machine: Machine): Machin
         }
     );
 
+    return machine;
+};
+
+export const getEncryptedMessage = (machine: Machine, entry: string): string => {
+    let output = '';
+    entry.split('').forEach((char) => {
+        if (!isEncryptable(char)) {
+            output = output + char;
+        } else {
+            rotateOnNotch(machine);
+
+            let kbSignal = KEYBOARD.indexOf(char);
+            let signal = getSignal(machine, kbSignal);
+            let outputLetter = KEYBOARD.charAt(signal);
+            output = output + outputLetter;
+        }
+    });
+    return output;
+};
+
+export const getDisplayMachineState = (machine: Machine, entry: string): Machine => {
+    entry.split('').forEach((char) => {
+        if (isEncryptable(char)) {
+            rotateOnNotch(machine);
+        }
+    });
     return machine;
 };
 
