@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { EnigmaI } from 'data';
 import {
     Message,
     Motor,
@@ -28,10 +27,10 @@ import {
 } from 'validation';
 import {
     TYPE_BOTH,
-    TYPE_RING,
-    TYPE_START,
     isEmpty
 } from 'global';
+import SelectMotor from 'components/SelectMotor';
+import InputSetting from 'components/InputSetting';
 
 function App() {
     /**
@@ -66,22 +65,23 @@ function App() {
         }
     );
 
-    const changeMotorSettings = (number: number, event: React.ChangeEvent<HTMLSelectElement>): void => {
+    const changeMotorSettings = (event: React.ChangeEvent<HTMLSelectElement>): void => {
         let newMotor = getMotor(referenceMotor);
 
         /** Apply change based on user selection */
         let name: string = event.target.value;
-        switch (number) {
-            case 0:
+        let id: string = event.target.id;
+        switch (id) {
+            case 'reflector':
                 newMotor.reflector = getReflectorByName(name);
                 break;
-            case 1:
+            case 'rotor-1':
                 newMotor.rotor1 = getRotorByName(name);
                 break;
-            case 2:
+            case 'rotor-2':
                 newMotor.rotor2 = getRotorByName(name);
                 break;
-            case 3:
+            case 'rotor-3':
                 newMotor.rotor3 = getRotorByName(name);
                 break;
             default:
@@ -95,16 +95,17 @@ function App() {
         setDisplayMotor(appliedMotor);
     };
 
-    const changeRotorSettings = (type: string, event: React.ChangeEvent<HTMLInputElement>): void => {
-        let input = event.target.value.toUpperCase().trim();
+    const changeRotorSettings = (event: React.ChangeEvent<HTMLInputElement>): void => {
+        let input: string = event.target.value.toUpperCase().trim();
         let error = validateRotorSettingsInput(input);
 
         let newRotorSettings = getRotorSettings(rotorSettings);
-        switch (type) {
-            case TYPE_RING:
+        let id: string = event.target.id;
+        switch (id) {
+            case 'ringSettings':
                 newRotorSettings = { ...newRotorSettings, ringSettings: input, ringError: error };
                 break;
-            case TYPE_START:
+            case 'startSettings':
                 newRotorSettings = { ...newRotorSettings, startSettings: input, startError: error };
                 break;
             default:
@@ -132,7 +133,7 @@ function App() {
         }
     };
 
-    const changeMessage = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const changeMessage = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
         let entry = event.target.value.toUpperCase();
         let error = validateMessage(entry);
 
@@ -147,168 +148,103 @@ function App() {
 
     return (
         <div className="App bg-light-subtle">
+            <header className="d-flex flex-column align-items-center justify-content-center">
+                <h1 >Enigma I simulator</h1>
+            </header>
             <section id="section-machine">
-                <div className="container" style={ { paddingTop: '5%' } }>
-                    <h1 className="text-center">Enigma I simulator</h1>
-
-                    <div className="panel panel-default" style={ { marginTop: '5%' } }>
-                        <div className="row">
-                            <div className="col">
-                                <div className="row" id="motor-settings">
-                                    <div className="col">
-                                        <label className="form-label" htmlFor="reflector">Reflector</label>
-                                        <select
-                                            className="form-select"
-                                            id="reflector"
-                                            value={ referenceMotor.reflector.name }
-                                            onChange={ (event) => changeMotorSettings(0, event) }
-                                        >
-                                            {
-                                                EnigmaI.reflectors.map(
-                                                    (reflector) => <option key={ reflector.name } value={ reflector.name }>{ reflector.name }</option>
-                                                )
-                                            }
-                                        </select>
-                                    </div>
-                                    <div className="col">
-                                        <label className="form-label" htmlFor="rotor1">Rotor 1</label>
-                                        <select
-                                            className="form-select"
-                                            id="rotor1"
-                                            value={ referenceMotor.rotor1.name }
-                                            onChange={ (event) => changeMotorSettings(1, event) }
-                                        >
-                                            {
-                                                EnigmaI.rotors.map(
-                                                    (rotor) => <option key={ rotor.name } value={ rotor.name }>{ rotor.name }</option>
-                                                )
-                                            }
-                                        </select>
-                                    </div>
-                                    <div className="col">
-                                        <label className="form-label" htmlFor="rotor2">Rotor 2</label>
-                                        <select
-                                            className="form-select"
-                                            id="rotor2"
-                                            value={ referenceMotor.rotor2.name }
-                                            onChange={ (event) => changeMotorSettings(2, event) }
-                                        >
-                                            {
-                                                EnigmaI.rotors.map(
-                                                    (rotor) => <option key={ rotor.name } value={ rotor.name }>{ rotor.name }</option>
-                                                )
-                                            }
-                                        </select>
-                                    </div>
-                                    <div className="col">
-                                        <label className="form-label" htmlFor="rotor3">Rotor 3</label>
-                                        <select
-                                            className="form-select"
-                                            id="rotor3"
-                                            value={ referenceMotor.rotor3.name }
-                                            onChange={ (event) => changeMotorSettings(3, event) }
-                                        >
-                                            {
-                                                EnigmaI.rotors.map(
-                                                    (rotor) => <option key={ rotor.name } value={ rotor.name }>{ rotor.name }</option>
-                                                )
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <br />
-
-                                <div className="row">
-                                    <label
-                                        className="form-label"
-                                        htmlFor="ringSettings"
-                                    >
-                                        Ring settings
-                                    </label>
-                                    <input
-                                        className={ 'form-control ' + (isEmpty(rotorSettings.ringError) ? '' : 'is-invalid') }
-                                        type="text"
-                                        id="ringSettings"
-                                        onChange={ (event)  => changeRotorSettings(TYPE_RING, event) }
-                                        value={ rotorSettings.ringSettings }
-                                    />
-                                    <div className="form-text" id="basic-addon4">Example: ABC, DHK, QMT, etc.</div>
-                                    <div className="invalid-feedback">{ rotorSettings.ringError }</div>
-                                </div>
-
-                                <br />
-
-                                <div className="row">
-                                    <label
-                                        className="form-label"
-                                        htmlFor="plugboardSettings"
-                                    >
-                                        Plugboard settings
-                                    </label>
-                                    <input
-                                        className={ 'form-control ' + (isEmpty(plugboard.error) ? '' : 'is-invalid') }
-                                        type="text"
-                                        id="plugboardSettings"
-                                        onChange={ changePlugboardSettings }
-                                        value={ plugboard.settings }
-                                    />
-                                    <div className="form-text" id="basic-addon4">Example: AO HI MU SN WX ZQ</div>
-                                    <div className="invalid-feedback">{ plugboard.error }</div>
-                                </div>
-
-                                <br />
-
-                                <div className="row">
-                                    <label
-                                        className="form-label"
-                                        htmlFor="startSettings"
-                                    >
-                                        Start position settings
-                                    </label>
-                                    <input
-                                        className={ 'form-control ' + (isEmpty(rotorSettings.startError) ? '' : 'is-invalid') }
-                                        type="text"
-                                        id="startSettings"
-                                        onChange={ (event)  => changeRotorSettings(TYPE_START, event) }
-                                        value={ rotorSettings.startSettings }
-                                    />
-                                    <div className="form-text" id="basic-addon4">Example: ABC, DHK, QMT, etc.</div>
-                                    <div className="invalid-feedback">{ rotorSettings.startError }</div>
-                                </div>
-
-                                <br />
+                <div className="container" style={ { marginTop: '5%' } }>
+                    <div className="row">
+                        <div className="col-sm-6">
+                            <div className="row" id="motor-settings">
+                                <SelectMotor
+                                    id="reflector"
+                                    value={ referenceMotor.reflector.name }
+                                    onChange={ changeMotorSettings }
+                                />
+                                <SelectMotor
+                                    id="rotor-1"
+                                    value={ referenceMotor.rotor1.name }
+                                    onChange={ changeMotorSettings }
+                                />
+                                <SelectMotor
+                                    id="rotor-2"
+                                    value={ referenceMotor.rotor2.name }
+                                    onChange={ changeMotorSettings }
+                                />
+                                <SelectMotor
+                                    id="rotor-3"
+                                    value={ referenceMotor.rotor3.name }
+                                    onChange={ changeMotorSettings }
+                                />
                             </div>
-                            <div className="col">
-                                <div className="row">
-                                    <label
-                                        className="form-label"
-                                        htmlFor="message"
-                                    >
-                                        Input your message
-                                    </label>
-                                    <input
-                                        className={ 'form-control ' + (isEmpty(message.error) ? '' : 'is-invalid') }
-                                        type="text"
-                                        id="message"
-                                        onChange={ changeMessage }
-                                        value={ message.entry }
-                                    />
-                                    <div className="invalid-feedback">{ message.error }</div>
-                                </div>
-                                <br /><br />
-                                <div className="container text-center">
-                                    <div className="row justify-content-center">
-                                        <div className="col-4 p-3 bg-body-secondary rounded-5">
-                                            <h1>{ displayMotor.rotor1.entry[0] }</h1>
-                                        </div>
-                                        <div className="col-4 p-3 bg-dark-subtle rounded-5">
-                                            <h1>{ displayMotor.rotor2.entry[0] }</h1>
-                                        </div>
-                                        <div className="col-4 p-3 bg-body-secondary rounded-5">
-                                            <h1>{ displayMotor.rotor3.entry[0] }</h1>
-                                        </div>
+
+                            <br />
+                            <InputSetting
+                                id={ 'ring-settings' }
+                                value={ rotorSettings.ringSettings }
+                                error={ rotorSettings.ringError }
+                                example={ 'Example: ABC, DHK, QMT, etc.' }
+                                onChange={ changeRotorSettings }
+                            />
+
+                            <br />
+                            <div className="row">
+                                <label
+                                    className="form-label"
+                                    htmlFor="plugboardSettings"
+                                >
+                                    Plugboard settings
+                                </label>
+                                <input
+                                    className={ 'form-control ' + (isEmpty(plugboard.error) ? '' : 'is-invalid') }
+                                    type="text"
+                                    id="plugboardSettings"
+                                    onChange={ changePlugboardSettings }
+                                    value={ plugboard.settings }
+                                />
+                                <div className="form-text" id="basic-addon4">Example: AO HI MU SN WX ZQ</div>
+                                <div className="invalid-feedback">{ plugboard.error }</div>
+                            </div>
+
+                            <br />
+                            <InputSetting
+                                id={ 'start-settings' }
+                                value={ rotorSettings.startSettings }
+                                error={ rotorSettings.startError }
+                                example={ 'Example: ABC, DHK, QMT, etc.' }
+                                onChange={ changeRotorSettings }
+                            />
+                        </div>
+                        <div className="col-sm-6" style={ { padding: '0 5%' } }>
+                            <div style={ { overflowWrap: 'break-word' } }>
+                                <label
+                                    className="form-label"
+                                    htmlFor="message"
+                                >
+                                    Input your message
+                                </label>
+                                <textarea
+                                    className={ 'form-control ' + (isEmpty(message.error) ? '' : 'is-invalid') }
+                                    id="message"
+                                    onChange={ changeMessage }
+                                    value={ message.entry }
+                                />
+                                <div className="invalid-feedback">{ message.error }</div>
+                            </div>
+                            <br /><br />
+                            <div className="container text-center">
+                                <div className="row justify-content-center">
+                                    <div className="col-4 p-3 bg-body-secondary rounded-5">
+                                        <h1>{ displayMotor.rotor1.entry[0] }</h1>
                                     </div>
+                                    <div className="col-4 p-3 bg-dark-subtle rounded-5">
+                                        <h1>{ displayMotor.rotor2.entry[0] }</h1>
+                                    </div>
+                                    <div className="col-4 p-3 bg-body-secondary rounded-5">
+                                        <h1>{ displayMotor.rotor3.entry[0] }</h1>
+                                    </div>
+                                </div>
+                                <div className="row justify-content-center" style={ { overflowWrap: 'break-word' } }>
                                     <br /><br />
                                     MESSAGE: <br />
                                     <h2>{ message.entry }</h2>
@@ -321,8 +257,10 @@ function App() {
                     </div>
                 </div>
             </section>
-            <div className="text-center">{ 'QuanMuiTo@' + new Date().getFullYear() }</div>
-            <p className="text-center"><span className="text-muted">v1.0.1</span></p>
+            <footer className="d-flex flex-column align-items-center justify-content-center">
+                <h5>{ 'QuanMuiTo@' + new Date().getFullYear() }</h5>
+                <span className="text-muted">v1.0.1</span>
+            </footer>
         </div>
     );
 }

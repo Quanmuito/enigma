@@ -26,3 +26,7 @@ export const isSpecialCharacter = (char: string): boolean => {
 export const isSupportedCharacter = (char: string): boolean => {
     return SUPPORTED_CHARACTERS.includes(char);
 };
+
+export const capitalizeFirstLetter = (string: string): string => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+};
