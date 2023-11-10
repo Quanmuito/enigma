@@ -5,19 +5,6 @@ export type Rotor = {
     output: string[],
 }
 
-export type Motor = {
-    rotor1: Rotor,
-    rotor2: Rotor,
-    rotor3: Rotor,
-    reflector: Reflector,
-};
-
-export type Gear = {
-    original: string[],
-    shuffled: string[],
-    notch: string,
-}
-
 export type Reflector = {
     name: string,
     entry: string[],
@@ -27,25 +14,45 @@ export type Reflector = {
 export type Plugboard = {
     entry: string[],
     output: string[],
-    settings: string,
-    valid: boolean,
-    error: string,
 }
 
-export type RotorSettings = {
+export type Setting = {
     ringSettings: string,
-    ringSettingsValid: boolean,
     ringError: string,
+    plugboardSettings: string,
+    plugboardError: string,
     startSettings: string,
-    startSettingsValid: boolean,
     startError: string,
+}
+
+export type Machine = {
+    reflector: Reflector,
+    rotor1: Rotor,
+    rotor2: Rotor,
+    rotor3: Rotor,
+    plugboard: Plugboard,
 }
 
 export type Message = {
     entry: string,
     output: string,
-    valid: boolean,
     error: string,
+}
+
+export type AppState = {
+    setting: Setting,
+    referenceMachine: Machine,
+    configuredMachine: Machine,
+    displayMachine: Machine,
+    message: Message,
+}
+
+export type Action = {
+    type: string,
+    payload: {
+        value: string,
+        [index: string]: string
+    },
 }
 
 export type Enigma = {
