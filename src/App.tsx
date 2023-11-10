@@ -98,6 +98,15 @@ export default function App() {
                                             )
                                         }
                                     </select>
+                                    <span className="text-muted">
+                                        <a
+                                            href="https://www.101computing.net/wp/wp-content/uploads/enigma-code-book.png"
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
+                                            Daily setting sheet example
+                                        </a>
+                                    </span>
                                 </div>
                             </div>
                         </div>
