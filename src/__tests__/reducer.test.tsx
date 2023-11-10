@@ -1,4 +1,4 @@
-import { getReflectorByName, getRotorByName, getTodayAppState } from "enigma";
+import { getReflectorByName, getRotorByName, getAppStateByDate } from "enigma";
 import {
     ACTION_MACHINE_SETTINGS,
     ACTION_MESSAGE,
@@ -18,8 +18,8 @@ describe('Update state with invalid action type or id', () => {
             },
         };
 
-        let updatedState = reducer(getTodayAppState(), action);
-        expect(updatedState).toEqual(getTodayAppState());
+        let updatedState = reducer(getAppStateByDate(), action);
+        expect(updatedState).toEqual(getAppStateByDate());
     });
 
     test('Set reflector to %p', () => {
@@ -31,8 +31,8 @@ describe('Update state with invalid action type or id', () => {
             },
         };
 
-        let updatedState = reducer(getTodayAppState(), action);
-        expect(updatedState).toEqual(getTodayAppState());
+        let updatedState = reducer(getAppStateByDate(), action);
+        expect(updatedState).toEqual(getAppStateByDate());
     });
 });
 
@@ -54,7 +54,7 @@ describe('Update reflector', () => {
                 },
             };
 
-            let updatedState = reducer(getTodayAppState(), action);
+            let updatedState = reducer(getAppStateByDate(), action);
             expect(updatedState.referenceMachine.reflector).toEqual(getReflectorByName(result));
             expect(updatedState.configuredMachine.reflector).toEqual(getReflectorByName(result));
             expect(updatedState.displayMachine.reflector).toEqual(getReflectorByName(result));
@@ -82,7 +82,7 @@ describe('Update rotors', () => {
                 },
             };
 
-            let updatedState = reducer(getTodayAppState(), action);
+            let updatedState = reducer(getAppStateByDate(), action);
             expect(updatedState.referenceMachine.rotor1).toEqual(getRotorByName(result));
             expect(updatedState.configuredMachine.rotor1).toEqual(getRotorByName(result));
             expect(updatedState.displayMachine.rotor1).toEqual(getRotorByName(result));
@@ -100,7 +100,7 @@ describe('Update rotors', () => {
                 },
             };
 
-            let updatedState = reducer(getTodayAppState(), action);
+            let updatedState = reducer(getAppStateByDate(), action);
             expect(updatedState.referenceMachine.rotor2).toEqual(getRotorByName(rotor));
             expect(updatedState.configuredMachine.rotor2).toEqual(getRotorByName(rotor));
             expect(updatedState.displayMachine.rotor2).toEqual(getRotorByName(rotor));
@@ -118,7 +118,7 @@ describe('Update rotors', () => {
                 },
             };
 
-            let updatedState = reducer(getTodayAppState(), action);
+            let updatedState = reducer(getAppStateByDate(), action);
             expect(updatedState.referenceMachine.rotor3).toEqual(getRotorByName(rotor));
             expect(updatedState.configuredMachine.rotor3).toEqual(getRotorByName(rotor));
             expect(updatedState.displayMachine.rotor3).toEqual(getRotorByName(rotor));
@@ -146,7 +146,7 @@ describe('Update ring setting', () => {
                 },
             };
 
-            let updatedState = reducer(getTodayAppState(), action);
+            let updatedState = reducer(getAppStateByDate(), action);
             expect(updatedState.setting.ringSettings).toEqual(value);
             expect(updatedState.setting.ringError).toEqual(error);
         }
@@ -173,7 +173,7 @@ describe('Update start setting', () => {
                 },
             };
 
-            let updatedState = reducer(getTodayAppState(), action);
+            let updatedState = reducer(getAppStateByDate(), action);
             expect(updatedState.setting.startSettings).toEqual(value);
             expect(updatedState.setting.startError).toEqual(error);
         }
@@ -203,7 +203,7 @@ describe('Update plugboard setting', () => {
                 },
             };
 
-            let updatedState = reducer(getTodayAppState(), action);
+            let updatedState = reducer(getAppStateByDate(), action);
             expect(updatedState.setting.plugboardSettings).toEqual(value);
             expect(updatedState.setting.plugboardError).toEqual(error);
         }
@@ -228,7 +228,7 @@ describe('Update message input', () => {
                 },
             };
 
-            let updatedState = reducer(getTodayAppState(), action);
+            let updatedState = reducer(getAppStateByDate(), action);
             expect(updatedState.message.entry).toEqual(value);
             expect(updatedState.message.error).toEqual(error);
         }
@@ -244,7 +244,7 @@ describe('Test rotor rotate', () => {
     test.each(startAndResult)(
         'Set start position to %p and the start after input should be %p',
         (start, result) => {
-            let state = getTodayAppState();
+            let state = getAppStateByDate();
 
             let setStartAction = {
                 type: ACTION_START_SETTINGS,

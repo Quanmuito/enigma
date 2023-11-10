@@ -4,7 +4,8 @@ import {
     getDisplayMachineState,
     getEncryptedMessage,
     getReflectorByName,
-    getRotorByName
+    getRotorByName,
+    getAppStateByDate
 } from 'enigma';
 import { isEmpty } from 'global';
 import { AppState, Action, Machine } from 'types';
@@ -14,6 +15,7 @@ export const ACTION_MACHINE_SETTINGS = 'ACTION_MACHINE_SETTINGS';
 export const ACTION_RING_SETTINGS = 'ACTION_RING_SETTINGS';
 export const ACTION_START_SETTINGS = 'ACTION_START_SETTINGS';
 export const ACTION_PLUGBOARD_SETTINGS = 'ACTION_PLUGBOARD_SETTINGS';
+export const ACTION_DATE = 'ACTION_DATE';
 export const ACTION_MESSAGE = 'ACTION_MESSAGE';
 
 export const reducer = (state: AppState, action: Action): AppState => {
@@ -58,6 +60,12 @@ export const reducer = (state: AppState, action: Action): AppState => {
             state.setting.plugboardSettings = value;
             state.setting.plugboardError = error;
             break;
+        }
+
+        case ACTION_DATE: {
+            let date = parseInt(value);
+            state = getAppStateByDate(date);
+            return { ...state };
         }
 
         case ACTION_MESSAGE: {

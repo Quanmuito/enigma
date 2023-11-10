@@ -25,7 +25,7 @@ export const InputSetting = ({ id, value, error, example, type, dispatch }: Inpu
     };
 
     return (
-        <div className={ (type === ACTION_PLUGBOARD_SETTINGS) ? 'col' : 'col-md-6' }>
+        <div className="col-md-6">
             <label
                 className="form-label"
                 htmlFor={ id }

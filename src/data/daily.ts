@@ -2,6 +2,7 @@ import { I, II, III, IV, V } from 'data';
 import { DailySetting } from 'types';
 
 const DAY0: DailySetting = {
+    date: 0,
     rotors: [I, II, III],
     rings: 'AAA',
     starts: 'AAA',
@@ -9,6 +10,7 @@ const DAY0: DailySetting = {
 };
 
 const DAY1: DailySetting = {
+    date: 1,
     rotors: [V, II, I],
     rings: 'IHQ',
     starts: 'UJJ',
@@ -16,6 +18,7 @@ const DAY1: DailySetting = {
 };
 
 const DAY2: DailySetting = {
+    date: 2,
     rotors: [II, I, V],
     rings: 'NQC',
     starts: 'ZJR',
@@ -23,6 +26,7 @@ const DAY2: DailySetting = {
 };
 
 const DAY3: DailySetting = {
+    date: 3,
     rotors: [IV, II, III],
     rings: 'LIQ',
     starts: 'KTR',
@@ -30,6 +34,7 @@ const DAY3: DailySetting = {
 };
 
 const DAY4: DailySetting = {
+    date: 4,
     rotors: [IV, V, III],
     rings: 'WXE',
     starts: 'OFP',
@@ -37,6 +42,7 @@ const DAY4: DailySetting = {
 };
 
 const DAY5: DailySetting = {
+    date: 5,
     rotors: [V, I, III],
     rings: 'MHY',
     starts: 'XXJ',
@@ -44,6 +50,7 @@ const DAY5: DailySetting = {
 };
 
 const DAY6: DailySetting = {
+    date: 6,
     rotors: [V, I, III],
     rings: 'ETT',
     starts: 'HXA',
@@ -51,6 +58,7 @@ const DAY6: DailySetting = {
 };
 
 const DAY7: DailySetting = {
+    date: 7,
     rotors: [I, II, III],
     rings: 'WNM',
     starts: 'RAO',
@@ -58,6 +66,7 @@ const DAY7: DailySetting = {
 };
 
 const DAY8: DailySetting = {
+    date: 8,
     rotors: [V, IV, II],
     rings: 'GDJ',
     starts: 'PLE',
@@ -65,6 +74,7 @@ const DAY8: DailySetting = {
 };
 
 const DAY9: DailySetting = {
+    date: 9,
     rotors: [V, I, II],
     rings: 'UTC',
     starts: 'EQL',
@@ -72,6 +82,7 @@ const DAY9: DailySetting = {
 };
 
 const DAY10: DailySetting = {
+    date: 10,
     rotors: [I, V, II],
     rings: 'QKP',
     starts: 'MSW',
@@ -79,6 +90,7 @@ const DAY10: DailySetting = {
 };
 
 const DAY11: DailySetting = {
+    date: 11,
     rotors: [II, III, I],
     rings: 'BHN',
     starts: 'XIO',
@@ -86,6 +98,7 @@ const DAY11: DailySetting = {
 };
 
 const DAY12: DailySetting = {
+    date: 12,
     rotors: [III, II, II],
     rings: 'CKU',
     starts: 'VQN',
@@ -93,6 +106,7 @@ const DAY12: DailySetting = {
 };
 
 const DAY13: DailySetting = {
+    date: 13,
     rotors: [I, V, II],
     rings: 'AOK',
     starts: 'DMF',
@@ -100,6 +114,7 @@ const DAY13: DailySetting = {
 };
 
 const DAY14: DailySetting = {
+    date: 14,
     rotors: [II, V, IV],
     rings: 'EAP',
     starts: 'CCH',
@@ -107,6 +122,7 @@ const DAY14: DailySetting = {
 };
 
 const DAY15: DailySetting = {
+    date: 15,
     rotors: [I, II, IV],
     rings: 'BCG',
     starts: 'KFQ',
@@ -114,6 +130,7 @@ const DAY15: DailySetting = {
 };
 
 const DAY16: DailySetting = {
+    date: 16,
     rotors: [II, I, IV],
     rings: 'UBJ',
     starts: 'PJU',
@@ -121,6 +138,7 @@ const DAY16: DailySetting = {
 };
 
 const DAY17: DailySetting = {
+    date: 17,
     rotors: [II, IV, III],
     rings: 'HFZ',
     starts: 'GPZ',
@@ -128,6 +146,7 @@ const DAY17: DailySetting = {
 };
 
 const DAY18: DailySetting = {
+    date: 18,
     rotors: [IV, I, III],
     rings: 'NWL',
     starts: 'HSP',
@@ -135,6 +154,7 @@ const DAY18: DailySetting = {
 };
 
 const DAY19: DailySetting = {
+    date: 19,
     rotors: [IV, V, II],
     rings: 'LDQ',
     starts: 'IAH',
@@ -142,6 +162,7 @@ const DAY19: DailySetting = {
 };
 
 const DAY20: DailySetting = {
+    date: 20,
     rotors: [I, V, III],
     rings: 'XOM',
     starts: 'DKV',
@@ -149,6 +170,7 @@ const DAY20: DailySetting = {
 };
 
 const DAY21: DailySetting = {
+    date: 21,
     rotors: [II, V, III],
     rings: 'CTZ',
     starts: 'TQO',
@@ -156,6 +178,7 @@ const DAY21: DailySetting = {
 };
 
 const DAY22: DailySetting = {
+    date: 22,
     rotors: [IV, II, I],
     rings: 'TRK',
     starts: 'SFX',
@@ -163,6 +186,7 @@ const DAY22: DailySetting = {
 };
 
 const DAY23: DailySetting = {
+    date: 23,
     rotors: [II, V, IV],
     rings: 'RWQ',
     starts: 'IYM',
@@ -170,6 +194,7 @@ const DAY23: DailySetting = {
 };
 
 const DAY24: DailySetting = {
+    date: 24,
     rotors: [V, III, I],
     rings: 'UCO',
     starts: 'BDT',
@@ -177,6 +202,7 @@ const DAY24: DailySetting = {
 };
 
 const DAY25: DailySetting = {
+    date: 25,
     rotors: [V, III, I],
     rings: 'MFO',
     starts: 'ZBY',
@@ -184,6 +210,7 @@ const DAY25: DailySetting = {
 };
 
 const DAY26: DailySetting = {
+    date: 26,
     rotors: [IV, II, III],
     rings: 'ECW',
     starts: 'GUB',
@@ -191,6 +218,7 @@ const DAY26: DailySetting = {
 };
 
 const DAY27: DailySetting = {
+    date: 27,
     rotors: [III, I, IV],
     rings: 'ICC',
     starts: 'RXV',
@@ -198,6 +226,7 @@ const DAY27: DailySetting = {
 };
 
 const DAY28: DailySetting = {
+    date: 28,
     rotors: [IV, I, II],
     rings: 'DIL',
     starts: 'JJK',
@@ -205,6 +234,7 @@ const DAY28: DailySetting = {
 };
 
 const DAY29: DailySetting = {
+    date: 29,
     rotors: [IV, III, V],
     rings: 'JHS',
     starts: 'OTO',
@@ -212,6 +242,7 @@ const DAY29: DailySetting = {
 };
 
 const DAY30: DailySetting = {
+    date: 30,
     rotors: [V, III, II],
     rings: 'AKK',
     starts: 'FDV',
@@ -219,6 +250,7 @@ const DAY30: DailySetting = {
 };
 
 const DAY31: DailySetting = {
+    date: 31,
     rotors: [I, II, III],
     rings: 'TLM',
     starts: 'QMT',

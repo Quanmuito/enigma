@@ -120,7 +120,7 @@ const getSignal = (machine: Machine, signal: number): number => {
     return pbBSignal;
 };
 
-const getTodayReferenceMachineState = (setting: DailySetting): Machine => {
+const getReferenceMachineState = (setting: DailySetting): Machine => {
     return {
         reflector: getClone<Reflector>(UKWB),
         rotor1: getClone<Rotor>(setting.rotors[0]),
@@ -133,8 +133,9 @@ const getTodayReferenceMachineState = (setting: DailySetting): Machine => {
     };
 };
 
-const getTodaySettingState = (setting: DailySetting): Setting => {
+const getSettingState = (setting: DailySetting): Setting => {
     return {
+        date: setting.date,
         ringSettings: setting.rings,
         ringError: '',
         startSettings: setting.starts,
@@ -144,11 +145,11 @@ const getTodaySettingState = (setting: DailySetting): Setting => {
     };
 };
 
-export const getTodayAppState = (today: number = TODAY): AppState => {
+export const getAppStateByDate = (today: number = TODAY): AppState => {
     let dailySetting = DAILY_SETTINGS[today];
 
-    let machine = getTodayReferenceMachineState(dailySetting);
-    let setting = getTodaySettingState(dailySetting);
+    let machine = getReferenceMachineState(dailySetting);
+    let setting = getSettingState(dailySetting);
 
     return {
         setting: setting,

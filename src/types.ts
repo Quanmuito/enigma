@@ -17,6 +17,7 @@ export type Plugboard = {
 }
 
 export type Setting = {
+    date: number,
     ringSettings: string,
     ringError: string,
     startSettings: string,
@@ -65,6 +66,7 @@ export type Enigma = {
 }
 
 export type DailySetting = {
+    date: number,
     rotors: Rotor[],
     rings: string,
     starts: string,

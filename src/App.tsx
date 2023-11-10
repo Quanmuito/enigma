@@ -1,17 +1,19 @@
 import React, { useReducer } from 'react';
-import { getTodayAppState } from 'enigma';
+import { getAppStateByDate } from 'enigma';
 import {
     reducer,
     ACTION_MESSAGE,
     ACTION_PLUGBOARD_SETTINGS,
     ACTION_RING_SETTINGS,
-    ACTION_START_SETTINGS
+    ACTION_START_SETTINGS,
+    ACTION_DATE
 } from 'reducer';
 import { SelectMotor, InputSetting } from 'components';
 import { VERSION, isEmpty } from 'global';
+import { DAILY_SETTINGS } from 'data';
 
 export default function App() {
-    const [state, dispatch] = useReducer(reducer, getTodayAppState());
+    const [state, dispatch] = useReducer(reducer, getAppStateByDate());
 
     return (
         <div className="App bg-light-subtle">
@@ -67,14 +69,37 @@ export default function App() {
                             </div>
 
                             <br />
-                            <InputSetting
-                                id={ 'plugboard-settings' }
-                                value={ state.setting.plugboardSettings }
-                                error={ state.setting.plugboardError }
-                                example={ 'Example: AO HI MU SN WX ZQ' }
-                                type={ ACTION_PLUGBOARD_SETTINGS }
-                                dispatch={ dispatch }
-                            />
+                            <div className="row">
+                                <InputSetting
+                                    id={ 'plugboard-settings' }
+                                    value={ state.setting.plugboardSettings }
+                                    error={ state.setting.plugboardError }
+                                    example={ 'Example: AO HI MU SN WX ZQ' }
+                                    type={ ACTION_PLUGBOARD_SETTINGS }
+                                    dispatch={ dispatch }
+                                />
+
+                                <div className="col-md-6">
+                                    <label className="form-label" htmlFor="day">Date</label>
+                                    <select
+                                        className="form-select"
+                                        id="date"
+                                        value={ state.setting.date }
+                                        onChange={ (event) => dispatch({
+                                            type: ACTION_DATE,
+                                            payload: {
+                                                value: event.target.value,
+                                            },
+                                        }) }
+                                    >
+                                        {
+                                            DAILY_SETTINGS.map((setting) =>
+                                                <option key={ setting.date } value={ setting.date }>{ setting.date }</option>
+                                            )
+                                        }
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div className="col-sm-6" style={ { padding: '5%' } }>
                             <div style={ { overflowWrap: 'break-word' } }>
@@ -87,6 +112,7 @@ export default function App() {
                                 <textarea
                                     className={ 'form-control ' + (isEmpty(state.message.error) ? '' : 'is-invalid') }
                                     id="message"
+                                    autoFocus={ true }
                                     onChange={ (event) => dispatch({
                                         type: ACTION_MESSAGE,
                                         payload: {
