@@ -19,10 +19,10 @@ export type Plugboard = {
 export type Setting = {
     ringSettings: string,
     ringError: string,
-    plugboardSettings: string,
-    plugboardError: string,
     startSettings: string,
     startError: string,
+    plugboardSettings: string,
+    plugboardError: string,
 }
 
 export type Machine = {
@@ -63,3 +63,10 @@ export type Enigma = {
     rotors: Rotor[],
     reflectors: Reflector[]
 }
+
+export type DailySetting = {
+    rotors: Rotor[],
+    rings: string,
+    starts: string,
+    plugboard: string,
+};

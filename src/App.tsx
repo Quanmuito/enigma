@@ -19,10 +19,10 @@ export default function App() {
                 <h1 >Enigma I simulator</h1>
             </header>
             <section id="section-machine">
-                <div className="container" style={ { marginTop: '5%' } }>
+                <div className="container">
                     <div className="row">
-                        <div className="col-sm-6">
-                            <div className="row" id="motor-settings">
+                        <div className="col-sm-6" style={ { marginTop: '5%' } }>
+                            <div className="row">
                                 <SelectMotor
                                     id="reflector"
                                     value={ state.referenceMachine.reflector.name }
@@ -46,14 +46,25 @@ export default function App() {
                             </div>
 
                             <br />
-                            <InputSetting
-                                id={ 'ring-settings' }
-                                value={ state.setting.ringSettings }
-                                error={ state.setting.ringError }
-                                example={ 'Example: ABC, DHK, QMT, etc.' }
-                                type={ ACTION_RING_SETTINGS }
-                                dispatch={ dispatch }
-                            />
+                            <div className="row">
+                                <InputSetting
+                                    id={ 'ring-settings' }
+                                    value={ state.setting.ringSettings }
+                                    error={ state.setting.ringError }
+                                    example={ 'Example: ABC, DHK, QMT, etc.' }
+                                    type={ ACTION_RING_SETTINGS }
+                                    dispatch={ dispatch }
+                                />
+
+                                <InputSetting
+                                    id={ 'start-settings' }
+                                    value={ state.setting.startSettings }
+                                    error={ state.setting.startError }
+                                    example={ 'Example: ABC, DHK, QMT, etc.' }
+                                    type={ ACTION_START_SETTINGS }
+                                    dispatch={ dispatch }
+                                />
+                            </div>
 
                             <br />
                             <InputSetting
@@ -64,18 +75,8 @@ export default function App() {
                                 type={ ACTION_PLUGBOARD_SETTINGS }
                                 dispatch={ dispatch }
                             />
-
-                            <br />
-                            <InputSetting
-                                id={ 'start-settings' }
-                                value={ state.setting.startSettings }
-                                error={ state.setting.startError }
-                                example={ 'Example: ABC, DHK, QMT, etc.' }
-                                type={ ACTION_START_SETTINGS }
-                                dispatch={ dispatch }
-                            />
                         </div>
-                        <div className="col-sm-6" style={ { padding: '0 5%' } }>
+                        <div className="col-sm-6" style={ { padding: '5%' } }>
                             <div style={ { overflowWrap: 'break-word' } }>
                                 <label
                                     className="form-label"

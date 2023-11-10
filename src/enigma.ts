@@ -5,18 +5,16 @@ import {
     Setting,
     Machine,
     AppState,
-    Message
+    DailySetting
 } from 'types';
 import {
-    I,
-    II,
-    III,
     UKWB,
     EnigmaI,
     DUMMYROTOR,
-    DUMMYREFLECTOR
+    DUMMYREFLECTOR,
+    DAILY_SETTINGS
 } from 'data';
-import { KEYBOARD, isEncryptable } from 'global';
+import { KEYBOARD, TODAY, isEncryptable } from 'global';
 
 /** Take the letter in the first position of both `entry` and `output` array, put to the last position */
 const rotate = (rotor: Rotor, rounds: number = 1): Rotor => {
@@ -122,52 +120,46 @@ const getSignal = (machine: Machine, signal: number): number => {
     return pbBSignal;
 };
 
-const getTodayPlugboardState = (): Plugboard => {
-    return {
-        entry: KEYBOARD.split(''),
-        output: KEYBOARD.split(''),
-    };
-};
-
-const getTodayMachineState = (): Machine => {
+const getTodayReferenceMachineState = (setting: DailySetting): Machine => {
     return {
         reflector: getClone<Reflector>(UKWB),
-        rotor1: getClone<Rotor>(I),
-        rotor2: getClone<Rotor>(II),
-        rotor3: getClone<Rotor>(III),
-        plugboard: getTodayPlugboardState(),
+        rotor1: getClone<Rotor>(setting.rotors[0]),
+        rotor2: getClone<Rotor>(setting.rotors[1]),
+        rotor3: getClone<Rotor>(setting.rotors[2]),
+        plugboard: {
+            entry: KEYBOARD.split(''),
+            output: KEYBOARD.split(''),
+        },
     };
 };
 
-const getTodaySettingState = (): Setting => {
+const getTodaySettingState = (setting: DailySetting): Setting => {
     return {
-        ringSettings: 'AAA',
+        ringSettings: setting.rings,
         ringError: '',
-        plugboardSettings: '',
-        plugboardError: '',
-        startSettings: 'AAA',
+        startSettings: setting.starts,
         startError: '',
+        plugboardSettings: setting.plugboard,
+        plugboardError: '',
     };
 };
 
-const getTodayMessageState = (): Message => {
-    return {
-        entry: '',
-        output: '',
-        error: '',
-    };
-};
+export const getTodayAppState = (today: number = TODAY): AppState => {
+    let dailySetting = DAILY_SETTINGS[today];
 
-export const getTodayAppState = (): AppState => {
-    let machine = getTodayMachineState();
-    let setting = getTodaySettingState();
+    let machine = getTodayReferenceMachineState(dailySetting);
+    let setting = getTodaySettingState(dailySetting);
 
     return {
         setting: setting,
         referenceMachine: machine,
         configuredMachine: getConfiguredMachine(setting, getClone<Machine>(machine)),
         displayMachine: getConfiguredMachine(setting, getClone<Machine>(machine)),
-        message: getTodayMessageState(),
+        message: {
+            entry: '',
+            output: '',
+            error: '',
+        },
     };
 };
 
