@@ -1,17 +1,19 @@
 import React, { useReducer } from 'react';
-import { getTodayAppState } from 'enigma';
+import { getAppStateByDate } from 'enigma';
 import {
     reducer,
     ACTION_MESSAGE,
     ACTION_PLUGBOARD_SETTINGS,
     ACTION_RING_SETTINGS,
-    ACTION_START_SETTINGS
+    ACTION_START_SETTINGS,
+    ACTION_DATE
 } from 'reducer';
 import { SelectMotor, InputSetting } from 'components';
 import { VERSION, isEmpty } from 'global';
+import { DAILY_SETTINGS } from 'data';
 
 export default function App() {
-    const [state, dispatch] = useReducer(reducer, getTodayAppState());
+    const [state, dispatch] = useReducer(reducer, getAppStateByDate());
 
     return (
         <div className="App bg-light-subtle">
@@ -19,10 +21,10 @@ export default function App() {
                 <h1 >Enigma I simulator</h1>
             </header>
             <section id="section-machine">
-                <div className="container" style={ { marginTop: '5%' } }>
+                <div className="container">
                     <div className="row">
-                        <div className="col-sm-6">
-                            <div className="row" id="motor-settings">
+                        <div className="col-sm-6" style={ { marginTop: '5%' } }>
+                            <div className="row">
                                 <SelectMotor
                                     id="reflector"
                                     value={ state.referenceMachine.reflector.name }
@@ -46,36 +48,69 @@ export default function App() {
                             </div>
 
                             <br />
-                            <InputSetting
-                                id={ 'ring-settings' }
-                                value={ state.setting.ringSettings }
-                                error={ state.setting.ringError }
-                                example={ 'Example: ABC, DHK, QMT, etc.' }
-                                type={ ACTION_RING_SETTINGS }
-                                dispatch={ dispatch }
-                            />
+                            <div className="row">
+                                <InputSetting
+                                    id={ 'ring-settings' }
+                                    value={ state.setting.ringSettings }
+                                    error={ state.setting.ringError }
+                                    example={ 'Example: ABC, DHK, QMT, etc.' }
+                                    type={ ACTION_RING_SETTINGS }
+                                    dispatch={ dispatch }
+                                />
+
+                                <InputSetting
+                                    id={ 'start-settings' }
+                                    value={ state.setting.startSettings }
+                                    error={ state.setting.startError }
+                                    example={ 'Example: ABC, DHK, QMT, etc.' }
+                                    type={ ACTION_START_SETTINGS }
+                                    dispatch={ dispatch }
+                                />
+                            </div>
 
                             <br />
-                            <InputSetting
-                                id={ 'plugboard-settings' }
-                                value={ state.setting.plugboardSettings }
-                                error={ state.setting.plugboardError }
-                                example={ 'Example: AO HI MU SN WX ZQ' }
-                                type={ ACTION_PLUGBOARD_SETTINGS }
-                                dispatch={ dispatch }
-                            />
+                            <div className="row">
+                                <InputSetting
+                                    id={ 'plugboard-settings' }
+                                    value={ state.setting.plugboardSettings }
+                                    error={ state.setting.plugboardError }
+                                    example={ 'Example: AO HI MU SN WX ZQ' }
+                                    type={ ACTION_PLUGBOARD_SETTINGS }
+                                    dispatch={ dispatch }
+                                />
 
-                            <br />
-                            <InputSetting
-                                id={ 'start-settings' }
-                                value={ state.setting.startSettings }
-                                error={ state.setting.startError }
-                                example={ 'Example: ABC, DHK, QMT, etc.' }
-                                type={ ACTION_START_SETTINGS }
-                                dispatch={ dispatch }
-                            />
+                                <div className="col-md-6">
+                                    <label className="form-label" htmlFor="date">Date</label>
+                                    <select
+                                        className="form-select"
+                                        id="date"
+                                        value={ state.setting.date }
+                                        onChange={ (event) => dispatch({
+                                            type: ACTION_DATE,
+                                            payload: {
+                                                value: event.target.value,
+                                            },
+                                        }) }
+                                    >
+                                        {
+                                            DAILY_SETTINGS.map((setting) =>
+                                                <option key={ setting.date } value={ setting.date }>{ setting.date }</option>
+                                            )
+                                        }
+                                    </select>
+                                    <span className="text-muted">
+                                        <a
+                                            href="https://www.101computing.net/wp/wp-content/uploads/enigma-code-book.png"
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
+                                            Daily setting sheet example
+                                        </a>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                        <div className="col-sm-6" style={ { padding: '0 5%' } }>
+                        <div className="col-sm-6" style={ { padding: '5%' } }>
                             <div style={ { overflowWrap: 'break-word' } }>
                                 <label
                                     className="form-label"
@@ -86,6 +121,7 @@ export default function App() {
                                 <textarea
                                     className={ 'form-control ' + (isEmpty(state.message.error) ? '' : 'is-invalid') }
                                     id="message"
+                                    autoFocus={ true }
                                     onChange={ (event) => dispatch({
                                         type: ACTION_MESSAGE,
                                         payload: {

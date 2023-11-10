@@ -24,7 +24,7 @@ export const InputSetting = ({ id, value, error, example, type, dispatch }: Inpu
     };
 
     return (
-        <div className="row">
+        <div className="col-md-6">
             <label
                 className="form-label"
                 htmlFor={ id }
