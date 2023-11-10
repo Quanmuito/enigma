@@ -1,7 +1,6 @@
 import React from 'react';
 import { capitalizeFirstLetter, isEmpty } from 'global';
 import { Action } from 'types';
-import { ACTION_PLUGBOARD_SETTINGS } from 'reducer';
 
 type InputSettingState = {
     id: string,
