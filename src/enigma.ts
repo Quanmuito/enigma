@@ -16,7 +16,7 @@ import {
     DUMMYROTOR,
     DUMMYREFLECTOR
 } from 'data';
-import { KEYBOARD, isEmpty, isEncryptable } from 'global';
+import { KEYBOARD, isEncryptable } from 'global';
 
 /** Take the letter in the first position of both `entry` and `output` array, put to the last position */
 const rotate = (rotor: Rotor, rounds: number = 1): Rotor => {
