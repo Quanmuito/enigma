@@ -3,54 +3,70 @@ import {
     isEncryptable,
     isSupportedCharacter
 } from 'global';
+import { ACTION_MESSAGE, ACTION_PLUGBOARD_SETTINGS, ACTION_RING_SETTINGS, ACTION_START_SETTINGS } from 'reducer';
 
-export const validatePlugboardSettingsInput = (input: string): string => {
-    if (!isEmpty(input)) {
-        input.trim();
+export const validateSettingInput = (type: string, input: string): string => {
+    switch (type) {
+        case ACTION_PLUGBOARD_SETTINGS: {
+            if (isEmpty(input)) {
+                return '';
+            }
 
-        let invalidChar = getInvalidCharacter(input);
-        if (invalidChar.length > 0) {
-            return 'Contain not supported character(s): ' + invalidChar.join(' ');
+            input.trim();
+            let invalidChar = getInvalidCharacterForSetting(input);
+            if (invalidChar.length > 0) {
+                return 'Contain invalid character(s): ' + invalidChar.join(' ');
+            }
+
+            let duplicateChar = getDuplicatedCharacter(input);
+            if (duplicateChar.length > 0) {
+                return 'A character cannot be swapped twice: ' + duplicateChar.join(' ');
+            }
+
+            if (!input.split(' ').every((pair) => isEmpty(pair) || pair.length === 2)) {
+                return 'A letter pair should have 2 characters';
+            }
+
+            return '';
         }
 
-        let duplicateChar = getDuplicatedCharacter(input);
-        if (duplicateChar.length > 0) {
-            return 'A character cannot be swapped twice: ' + duplicateChar.join(' ');
+        case ACTION_RING_SETTINGS:
+        case ACTION_START_SETTINGS: {
+            input.trim();
+            let invalidChar = getInvalidCharacterForSetting(input);
+            if (invalidChar.length > 0) {
+                return 'Contain invalid character(s): ' + invalidChar.join(' ');
+            }
+
+            if (input.length !== 3) {
+                return 'Should contain 3 characters.';
+            }
+
+            return '';
         }
 
-        if (!input.split(' ').every((pair) => isEmpty(pair) || pair.length === 2)) {
-            return 'A letter pair should have 2 characters';
+        case ACTION_MESSAGE: {
+            if (!isEmpty(input)) {
+                let invalidChar = getInvalidCharacter(input);
+                if (invalidChar.length > 0) {
+                    return 'Contain not supported character(s): ' + invalidChar.join(' ');
+                }
+            }
+
+            return '';
         }
+
+        default:
+            return '';
     }
-    return '';
-};
-
-export const validateRotorSettingsInput = (input: string): string => {
-    let invalidChar = getInvalidCharacter(input);
-    if (invalidChar.length > 0) {
-        return 'Contain not supported character(s): ' + invalidChar.join(' ');
-    }
-
-    if (input.length !== 3) {
-        return 'Invalid setting. Should contain 3 characters.';
-    }
-
-    return '';
-};
-
-export const validateMessage = (input: string): string => {
-    if (!isEmpty(input)) {
-        let invalidChar = getInvalidCharacter(input);
-        if (invalidChar.length > 0) {
-            return 'Contain not supported character(s): ' + invalidChar.join(' ');
-        }
-    }
-
-    return '';
 };
 
 const getInvalidCharacter = (input: string): string[] => {
     return input.split('').filter((char) => !isEmpty(char) && !isSupportedCharacter(char));
+};
+
+const getInvalidCharacterForSetting = (input: string): string[] => {
+    return input.split('').filter((char) => !isEmpty(char) && !isEncryptable(char));
 };
 
 const getDuplicatedCharacter = (input: string): string[] => {
