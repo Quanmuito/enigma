@@ -64,8 +64,8 @@ export const reducer = (state: AppState, action: Action): AppState => {
 
         case ACTION_DATE: {
             let date = parseInt(value);
-            state = getAppStateByDate(date);
-            return { ...state };
+            let newState = getAppStateByDate(date);
+            return { ...newState };
         }
 
         case ACTION_MESSAGE: {

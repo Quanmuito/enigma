@@ -80,7 +80,7 @@ export default function App() {
                                 />
 
                                 <div className="col-md-6">
-                                    <label className="form-label" htmlFor="day">Date</label>
+                                    <label className="form-label" htmlFor="date">Date</label>
                                     <select
                                         className="form-select"
                                         id="date"
