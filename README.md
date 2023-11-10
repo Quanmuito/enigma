@@ -7,6 +7,16 @@ A simulator of `EnigmaI` machine with simple UI and default setting.
 #### Techstack: 
 React, Typescript, Docker
 
+### Test coverage
+
+File           | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+---------------|---------|----------|---------|---------|-------------------
+All files      |     100 |      100 |     100 |     100 |
+ App.tsx       |     100 |      100 |     100 |     100 |
+ enigma.ts     |     100 |      100 |     100 |     100 |
+ reducer.ts    |     100 |      100 |     100 |     100 |
+ validation.ts |     100 |      100 |     100 |     100 |
+
 This project was inspired by [Jared Owen](https://www.youtube.com/@JaredOwen) with the video [How did the Enigma Machine work?](https://www.youtube.com/watch?v=ybkkiGtJmkM).
 
 Thanks to Mike Koss with [Enigma Machine Simulator](https://mckoss.com/enigma-simulator-js/) so I can check my result.

@@ -43,7 +43,7 @@ export const reducer = (state: AppState, action: Action): AppState => {
         }
 
         case ACTION_RING_SETTINGS: {
-            state.setting.ringSettings = value;
+            state.setting.ringSettings = value.trim();
             state.setting.ringError = error;
             break;
         }
@@ -55,7 +55,7 @@ export const reducer = (state: AppState, action: Action): AppState => {
         }
 
         case ACTION_START_SETTINGS: {
-            state.setting.startSettings = value;
+            state.setting.startSettings = value.trim();
             state.setting.startError = error;
             break;
         }

@@ -35,9 +35,6 @@ const rotate = (rotor: Rotor, rounds: number = 1): Rotor => {
 };
 
 const rotateToLetter = (rotor: Rotor, letter: string): Rotor => {
-    if (isEmpty(letter)) {
-        letter = 'A';
-    }
     let letterPosition = rotor.entry.indexOf(letter);
     return rotate(rotor, letterPosition);
 };
@@ -64,9 +61,6 @@ const rotateOnNotch = (machine: Machine): Machine => {
 };
 
 const adjustRing = (rotor: Rotor, letter: string): Rotor => {
-    if (isEmpty(letter)) {
-        letter = 'A';
-    }
     let letterPosition = rotor.entry.indexOf(letter);
     let i = 0;
     while (i < letterPosition) {
@@ -109,12 +103,7 @@ const getRotorSignal = (rotor: Rotor, signal: number, isBackward: boolean = fals
     return rotor.entry.indexOf(letter);
 };
 
-const getReflectorSignal = (reflector: Reflector, signal: number, isBackward: boolean = false): number => {
-    if (isBackward) {
-        let letter = reflector.entry[signal];
-        return reflector.output.indexOf(letter);
-    }
-
+const getReflectorSignal = (reflector: Reflector, signal: number): number => {
     let letter = reflector.output[signal];
     return reflector.entry.indexOf(letter);
 };
@@ -128,7 +117,7 @@ const getSignal = (machine: Machine, signal: number): number => {
     let r1BSignal = getRotorSignal(machine.rotor1, refSignal, true);
     let r2BSignal = getRotorSignal(machine.rotor2, r1BSignal, true);
     let r3BSignal = getRotorSignal(machine.rotor3, r2BSignal, true);
-    let pbBSignal = getPlugboardSignal(machine.plugboard, r3BSignal);
+    let pbBSignal = getPlugboardSignal(machine.plugboard, r3BSignal, true);
 
     return pbBSignal;
 };

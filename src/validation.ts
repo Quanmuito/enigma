@@ -3,14 +3,9 @@ import {
     isEncryptable,
     isSupportedCharacter
 } from 'global';
-import { ACTION_PLUGBOARD_SETTINGS, ACTION_RING_SETTINGS, ACTION_START_SETTINGS } from 'reducer';
+import { ACTION_MESSAGE, ACTION_PLUGBOARD_SETTINGS, ACTION_RING_SETTINGS, ACTION_START_SETTINGS } from 'reducer';
 
 export const validateSettingInput = (type: string, input: string): string => {
-    let invalidChar = getInvalidCharacter(input);
-    if (invalidChar.length > 0) {
-        return 'Contain not supported character(s): ' + invalidChar.join(' ');
-    }
-
     switch (type) {
         case ACTION_PLUGBOARD_SETTINGS: {
             if (isEmpty(input)) {
@@ -18,9 +13,9 @@ export const validateSettingInput = (type: string, input: string): string => {
             }
 
             input.trim();
-            let invalidChar = getInvalidCharacter(input);
+            let invalidChar = getInvalidCharacterForSetting(input);
             if (invalidChar.length > 0) {
-                return 'Contain not supported character(s): ' + invalidChar.join(' ');
+                return 'Contain invalid character(s): ' + invalidChar.join(' ');
             }
 
             let duplicateChar = getDuplicatedCharacter(input);
@@ -38,13 +33,24 @@ export const validateSettingInput = (type: string, input: string): string => {
         case ACTION_RING_SETTINGS:
         case ACTION_START_SETTINGS: {
             input.trim();
-            let invalidChar = getInvalidCharacter(input);
+            let invalidChar = getInvalidCharacterForSetting(input);
             if (invalidChar.length > 0) {
-                return 'Contain not supported character(s): ' + invalidChar.join(' ');
+                return 'Contain invalid character(s): ' + invalidChar.join(' ');
             }
 
             if (input.length !== 3) {
-                return 'Invalid setting. Should contain 3 characters.';
+                return 'Should contain 3 characters.';
+            }
+
+            return '';
+        }
+
+        case ACTION_MESSAGE: {
+            if (!isEmpty(input)) {
+                let invalidChar = getInvalidCharacter(input);
+                if (invalidChar.length > 0) {
+                    return 'Contain not supported character(s): ' + invalidChar.join(' ');
+                }
             }
 
             return '';
@@ -55,19 +61,12 @@ export const validateSettingInput = (type: string, input: string): string => {
     }
 };
 
-export const validateMessage = (input: string): string => {
-    if (!isEmpty(input)) {
-        let invalidChar = getInvalidCharacter(input);
-        if (invalidChar.length > 0) {
-            return 'Contain not supported character(s): ' + invalidChar.join(' ');
-        }
-    }
-
-    return '';
-};
-
 const getInvalidCharacter = (input: string): string[] => {
     return input.split('').filter((char) => !isEmpty(char) && !isSupportedCharacter(char));
+};
+
+const getInvalidCharacterForSetting = (input: string): string[] => {
+    return input.split('').filter((char) => !isEmpty(char) && !isEncryptable(char));
 };
 
 const getDuplicatedCharacter = (input: string): string[] => {
