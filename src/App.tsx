@@ -8,7 +8,7 @@ import {
     ACTION_START_SETTINGS
 } from 'reducer';
 import { SelectMotor, InputSetting } from 'components';
-import { isEmpty } from 'global';
+import { VERSION, isEmpty } from 'global';
 
 export default function App() {
     const [state, dispatch] = useReducer(reducer, getTodayAppState());
@@ -124,7 +124,7 @@ export default function App() {
             </section>
             <footer className="d-flex flex-column align-items-center justify-content-center">
                 <h5>{ 'QuanMuiTo@' + new Date().getFullYear() }</h5>
-                <span className="text-muted">v1.0.1</span>
+                <span className="text-muted">{ VERSION }</span>
             </footer>
         </div>
     );
