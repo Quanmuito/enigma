@@ -8,6 +8,7 @@ A simulator of `EnigmaI` machine with simple UI and default setting.
 React, Typescript, Docker
 
 #### Test coverage
+- Run `yarn test` or `npm test` to run all tests and get coverage report
 
 File           | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
 ---------------|---------|----------|---------|---------|-------------------
