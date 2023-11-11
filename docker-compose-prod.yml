@@ -1,11 +1,11 @@
 version: '3.8'
 
 services:
-  app:
-    container_name: enigma-container
-    image: enigma-image
+  enigma-prod:
+    container_name: enigma-prod-container
     build:
       context: .
+      dockerfile: Dockerfile.prod
     ports:
       - ${NGINX_PORT}:80
       - ${NGINX_PORT_SECURE}:443

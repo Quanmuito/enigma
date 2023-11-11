@@ -1,0 +1,21 @@
+# Stage 1: Build the application base image with node
+FROM node:20.9.0-alpine3.17 as builder
+
+# Set the working directory in the container
+WORKDIR /app
+
+# add `/app/node_modules/.bin` to $PATH
+ENV PATH /app/node_modules/.bin:$PATH
+
+# Copy package.json and yarn.lock to the container
+COPY package.json .
+COPY yarn.lock .
+
+# Install app dependencies using Yarn
+RUN yarn install
+
+# Copy the rest of your application code to the container
+COPY . .
+
+# start app
+CMD ["yarn", "start"]
