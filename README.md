@@ -1,10 +1,10 @@
 ### Project: EnigmaI simulator
 ##### Version: 1.0
 
-#### Description: 
+#### Description:
 A simulator of `EnigmaI` machine with simple UI and default setting.
 
-#### Techstack: 
+#### Techstack:
 React, Typescript, Docker
 
 #### Test coverage
@@ -37,9 +37,10 @@ Clone this repository to your local machine.
 
 - In the project directory, change `.env.example` to `.env`.
 
-- You can run the project in either `develop` or `production` environment by copy either `docker-compose-dev.yml` or `docker-compose-prod.yml` to `docker-compose.yml`.:
-    - Develop envirionment: Anychange you made to the project will be apply after refresh the page.
-    - Production environment: The project will be built to static and running with nginx, mimic the production environment.
+- You can run the project in either `develop` or `production` environment:
+    - Develop envirionment: Copy `docker-compose-dev.yml` and `Dockerfile.dev` to `docker-compose.yml` and `Dockerfile`. Anychange you made to the project will be apply after refresh the page.
+
+    - Production environment: Copy `docker-compose-prod.yml` and `Dockerfile.prod` to `docker-compose.yml` and `Dockerfile`. The project will be built to static and running with nginx, mimic the production environment.
 
 - Open a terminal on the project directory.
 
@@ -55,7 +56,6 @@ Clone this repository to your local machine.
 - Access:
     - Develop envirionment: [my-enigma.local:3000/enigma](my-enigma.local/enigma)
     - Production environment: [my-enigma.local/enigma](my-enigma.local/enigma)
-    
 
 ### Deploy
 - Make a commit to `develop` to fix the version with message `RELEASE vx.x.x`.

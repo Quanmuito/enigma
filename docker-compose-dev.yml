@@ -5,7 +5,7 @@ services:
     container_name: enigma-dev-container
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     volumes:
       - .:/app
       - /app/node_modules
