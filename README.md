@@ -1,5 +1,5 @@
 ### Project: EnigmaI simulator
-##### Version: 1.0
+##### Version: 1.0.3
 
 #### Description:
 A simulator of `EnigmaI` machine with simple UI and default setting.
@@ -58,9 +58,12 @@ Clone this repository to your local machine.
     - Production environment: [my-enigma.local/enigma](my-enigma.local/enigma)
 
 ### Deploy
-- Make a commit to `develop` to fix the version with message `RELEASE vx.x.x`.
-
 - Make a pull request from `develop` and point to `master`, name the pull request `RELEASE vx.x.x`
+
+- Make a commit to `develop` to fix the version with message `RELEASE vx.x.x`.
+    - Version in `README.md`
+    - Version in `package.json`
+    - `VERSION` in `src/global.ts`
 
 - Merge pull request.
 
