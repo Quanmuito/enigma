@@ -98,6 +98,9 @@
         ],
         "jsx-a11y/no-onchange": [
             0
+        ],
+        "jsx-a11y/no-autofocus": [
+            0
         ]
     },
     "settings": {

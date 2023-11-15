@@ -1,8 +1,9 @@
-export const VERSION = '1.0.2';
+export const VERSION = '1.0.3';
 export const KEYBOARD = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 export const NUMBERS = '1234567890';
 export const SPECIAL_CHARACTERS = '!@#$%^&*()-_=+[]{};:\'\\"|`~,./<>?';
 export const SUPPORTED_CHARACTERS = KEYBOARD + NUMBERS + SPECIAL_CHARACTERS;
+export const TODAY = new Date().getDate();
 
 export const isEmpty = (string: string): boolean => {
     return (string === '') || (string === ' ');
