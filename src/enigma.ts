@@ -1,7 +1,6 @@
 import {
     Reflector,
     Rotor,
-    Plugboard,
     Setting,
     Machine,
     AppState,
@@ -15,6 +14,7 @@ import {
     DAILY_SETTINGS
 } from 'data';
 import { KEYBOARD, TODAY, isEncryptable } from 'global';
+import { run } from 'v2/enigma';
 
 /** Take the letter in the first position of both `entry` and `output` array, put to the last position */
 const rotate = (rotor: Rotor, rounds: number = 1): Rotor => {
@@ -77,47 +77,6 @@ const adjustRing = (rotor: Rotor, letter: string): Rotor => {
         i++;
     }
     return rotor;
-};
-
-/** Get the signal from plugboard */
-const getPlugboardSignal = (plugboard: Plugboard, signal: number, isBackward: boolean = false): number => {
-    if (isBackward) {
-        let letter = plugboard.output[signal];
-        return plugboard.entry.indexOf(letter);
-    }
-
-    let letter = plugboard.entry[signal];
-    return plugboard.output.indexOf(letter);
-};
-
-/** Ouput signal direction of rotor and reflector is opposite with plugboard */
-const getRotorSignal = (rotor: Rotor, signal: number, isBackward: boolean = false): number => {
-    if (isBackward) {
-        let letter = rotor.entry[signal];
-        return rotor.output.indexOf(letter);
-    }
-
-    let letter = rotor.output[signal];
-    return rotor.entry.indexOf(letter);
-};
-
-const getReflectorSignal = (reflector: Reflector, signal: number): number => {
-    let letter = reflector.output[signal];
-    return reflector.entry.indexOf(letter);
-};
-
-const getSignal = (machine: Machine, signal: number): number => {
-    let pbSignal = getPlugboardSignal(machine.plugboard, signal);
-    let r3Signal = getRotorSignal(machine.rotor3, pbSignal);
-    let r2Signal = getRotorSignal(machine.rotor2, r3Signal);
-    let r1Signal = getRotorSignal(machine.rotor1, r2Signal);
-    let refSignal = getReflectorSignal(machine.reflector, r1Signal);
-    let r1BSignal = getRotorSignal(machine.rotor1, refSignal, true);
-    let r2BSignal = getRotorSignal(machine.rotor2, r1BSignal, true);
-    let r3BSignal = getRotorSignal(machine.rotor3, r2BSignal, true);
-    let pbBSignal = getPlugboardSignal(machine.plugboard, r3BSignal, true);
-
-    return pbBSignal;
 };
 
 const getReferenceMachineState = (dailySetting: DailySetting): Machine => {
@@ -189,21 +148,16 @@ export const getConfiguredMachine = (setting: Setting, machine: Machine): Machin
     return machine;
 };
 
-export const getEncryptedMessage = (machine: Machine, entry: string): string => {
-    let output = '';
-    entry.split('').forEach((char) => {
-        if (!isEncryptable(char)) {
-            output = output + char;
-        } else {
-            rotateOnNotch(machine);
+export const getEncryptedMessage = (state: AppState, entry: string): string => {
+    const config = {
+        rotors: [state.referenceMachine.rotor1.name, state.referenceMachine.rotor2.name, state.referenceMachine.rotor3.name],
+        reflector: state.referenceMachine.reflector.name,
+        ring: state.setting.ringSettings,
+        start: state.setting.startSettings,
+        plugboard: state.setting.plugboardSettings,
+    };
 
-            let kbSignal = KEYBOARD.indexOf(char);
-            let signal = getSignal(machine, kbSignal);
-            let outputLetter = KEYBOARD.charAt(signal);
-            output = output + outputLetter;
-        }
-    });
-    return output;
+    return run(config, entry)[0];
 };
 
 export const getDisplayMachineState = (machine: Machine, entry: string): Machine => {

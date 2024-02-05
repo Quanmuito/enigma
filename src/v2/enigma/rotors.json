@@ -1,0 +1,27 @@
+[
+    {
+        "name": "I",
+        "notch": "Q",
+        "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ"
+    },
+    {
+        "name": "II",
+        "notch": "E",
+        "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE"
+    },
+    {
+        "name": "III",
+        "notch": "V",
+        "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO"
+    },
+    {
+        "name": "IV",
+        "notch": "J",
+        "wiring": "ESOVPZJAYQUIRHXLNFTGKDCMWB"
+    },
+    {
+        "name": "V",
+        "notch": "S",
+        "wiring": "VZBRGITYUPSDNHLXAWMJQOFECK"
+    }
+]

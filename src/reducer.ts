@@ -81,7 +81,7 @@ export const reducer = (state: AppState, action: Action): AppState => {
     if (isEmpty(error)) {
         state.configuredMachine = getConfiguredMachine(state.setting, getClone<Machine>(state.referenceMachine));
         state.displayMachine = getDisplayMachineState(getClone<Machine>(state.configuredMachine), state.message.entry);
-        state.message.output = getEncryptedMessage(getClone<Machine>(state.configuredMachine), state.message.entry);
+        state.message.output = getEncryptedMessage(getClone<AppState>(state), state.message.entry);
     }
 
     return { ...state };
