@@ -14,7 +14,6 @@ import {
     DAILY_SETTINGS
 } from 'data';
 import { KEYBOARD, TODAY, isEncryptable } from 'global';
-import { run } from 'v2/enigma';
 
 /** Take the letter in the first position of both `entry` and `output` array, put to the last position */
 const rotate = (rotor: Rotor, rounds: number = 1): Rotor => {
@@ -105,7 +104,7 @@ const getSettingState = (dailySetting: DailySetting): Setting => {
 };
 
 export const getAppStateByDate = (date: number = TODAY): AppState => {
-    let dailySetting = DAILY_SETTINGS[date];
+    let dailySetting = DAILY_SETTINGS[0];
 
     let machine = getReferenceMachineState(dailySetting);
     let setting = getSettingState(dailySetting);
@@ -157,7 +156,7 @@ export const getEncryptedMessage = (state: AppState, entry: string): string => {
         plugboard: state.setting.plugboardSettings,
     };
 
-    return run(config, entry)[0];
+    return '';
 };
 
 export const getDisplayMachineState = (machine: Machine, entry: string): Machine => {

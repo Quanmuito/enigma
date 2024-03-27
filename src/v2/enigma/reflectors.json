@@ -1,5 +1,9 @@
 [
     {
+        "name": "DEFAULT",
+        "wiring": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    },
+    {
         "name": "UKW-A",
         "wiring": "EJMZALYXVBWFCRQUONTSPIKHGD"
     },

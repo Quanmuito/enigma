@@ -11,14 +11,23 @@ import {
 import { SelectMotor, InputSetting } from 'components';
 import { VERSION, isEmpty } from 'global';
 import { DAILY_SETTINGS } from 'data';
+import { assemble, buildGenerator } from 'v2/enigma';
 
 export default function App() {
     const [state, dispatch] = useReducer(reducer, getAppStateByDate());
+    const machine = assemble({
+        rotors: [state.referenceMachine.rotor1.name, state.referenceMachine.rotor2.name, state.referenceMachine.rotor3.name],
+        reflector: state.referenceMachine.reflector.name,
+        ring: state.setting.ringSettings,
+        start: state.setting.startSettings,
+        plugboard: state.setting.plugboardSettings,
+    });
+    const generator = buildGenerator({ ...machine });
 
     return (
         <div className="App bg-light-subtle">
             <header className="d-flex flex-column align-items-center justify-content-center">
-                <h1 >Enigma I simulator</h1>
+                <h1>Enigma I simulator</h1>
             </header>
             <section id="section-machine">
                 <div className="container">
@@ -151,7 +160,7 @@ export default function App() {
                                     <h2>{ state.message.entry }</h2>
                                     <br /><br />
                                     OUTPUT: <br />
-                                    <h2>{ state.message.output }</h2>
+                                    <h2>{ generator(state.message.entry) }</h2>
                                 </div>
                             </div>
                         </div>

@@ -1,5 +1,10 @@
 [
     {
+        "name": "DEFAULT",
+        "notch": "A",
+        "wiring": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    },
+    {
         "name": "I",
         "notch": "Q",
         "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ"

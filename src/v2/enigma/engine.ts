@@ -1,246 +1,218 @@
 import { Config, Machine, Plugboard, Reflector, ReflectorData, Rotor, RotorData } from './types';
-import rotorData from './rotors.json';
-import reflectorData from './reflectors.json';
+import rotorDataList from './rotors.json';
+import reflectorDataList from './reflectors.json';
 
-export const DEFAULT_KEYBOARD = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const DEFAULT_KEYBOARD = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-export const getKeyboard = (): string[] =>  DEFAULT_KEYBOARD.split('');
+function getKeyboard(keyboard: string = DEFAULT_KEYBOARD): string[] {
+    return keyboard.split('');
+}
 
-export const getShiftedLetter = (letter: string, shift: number): string => {
-    const keyboard = getKeyboard();
-    const currentPosition = keyboard.indexOf(letter);
-    const newIndex = (currentPosition + shift) % keyboard.length;
-    return keyboard[newIndex];
-};
+function swapAt(point: number) {
+    return function _swapAt(array: string[]): string[] {
+        return [...array.slice(point), ...array.slice(0, point)];
+    };
+}
 
-export const rotate = (
-    ingang: string[],
-    engang: string[],
-    rounds: number = 1,
-    backward: boolean = false
-): [string[], string[]] => {
-    if (backward) {
-        const newIngang = ingang.slice(ingang.length - rounds, ingang.length).concat(ingang.slice(0, ingang.length - rounds));
-        const newEngang = engang.slice(engang.length - rounds, engang.length).concat(engang.slice(0, engang.length - rounds));
-        return [newIngang, newEngang];
+/** Explained in README.md/Shifted letters */
+function shiftLetter(step: number) {
+    return function _shiftLetter(letter: string): string {
+        const keyboard = getKeyboard();
+        const currentIndex = keyboard.indexOf(letter);
+        const newIndex = (currentIndex + step) % keyboard.length;
+        return keyboard[newIndex];
+    };
+}
+
+/** Explained in README.md/Rotate */
+function rotateRotor(rounds: number = 1) {
+    const adjustState = swapAt(rounds);
+
+    return function _rotateRotor(rotor: Rotor): Rotor {
+        return {
+            ...rotor,
+            ingang: adjustState(rotor.ingang),
+            engang: adjustState(rotor.engang),
+        };
+    };
+}
+
+function rotateMachine(machine: Machine) {
+    const rotor3OnNotch = machine.rotor3.ingang[0] === machine.rotor3.notch;
+    const rotor2OnNotch = machine.rotor2.ingang[0] === machine.rotor2.notch;
+
+    if (rotor2OnNotch && rotor3OnNotch) {
+        return {
+            ...machine,
+            rotor1: rotateRotor()(machine.rotor1),
+            rotor2: rotateRotor()(machine.rotor2),
+            rotor3: rotateRotor()(machine.rotor3),
+        };
+    }
+    else if (rotor3OnNotch) {
+        return {
+            ...machine,
+            rotor2: rotateRotor()(machine.rotor2),
+            rotor3: rotateRotor()(machine.rotor3),
+        };
+    }
+    else {
+        return {
+            ...machine,
+            rotor3: rotateRotor()(machine.rotor3),
+        };
+    }
+}
+
+function selectRotors(names: string[]): Rotor[] {
+    const list = rotorDataList as RotorData[]; // Load once
+
+    function getRotorByName(name: string): Rotor {
+        const rotorData = list.find((data) => data.name === name) ?? list[0];
+        return {
+            notch: rotorData.notch,
+            ingang: getKeyboard(),
+            engang: rotorData.wiring.split(''),
+        };
     }
 
-    const newIngang = ingang.slice(rounds, ingang.length).concat(ingang.slice(0, rounds));
-    const newEngang = engang.slice(rounds, engang.length).concat(engang.slice(0, rounds));
-    return [newIngang, newEngang];
-};
+    return names.map(getRotorByName);
+}
 
-export const adjustRing = (ingang: string[], engang: string[], shift: number): [string[], string[]] => {
-    const newIngang = ingang.map((letter) => getShiftedLetter(letter, shift));
-    const newEngang = engang.map((letter) => getShiftedLetter(letter, shift));
-    return rotate(newIngang, newEngang, shift, true);
-};
+function adjustRing(ringConfig: string) {
+    const rings = ringConfig.split('');
 
-export const adjustStart = (ingang: string[], engang: string[], shift: number): [string[], string[]] => (
-    rotate(ingang, engang, shift)
-);
+    return function _adjustRing(rotor: Rotor, index: number): Rotor {
+        const step = rotor.ingang.indexOf(rings[index]);
+        const shiftedEngang = rotor.engang.map(shiftLetter(step));
+        const cutPoint = shiftedEngang.length - step;
+        const newEngang = [...shiftedEngang.slice(cutPoint), ...shiftedEngang.slice(0, cutPoint)];
 
-export const getRotorByName = (name: string): RotorData => {
-    const rotorList = JSON.parse(JSON.stringify(rotorData)) as RotorData[];
-    const rotor = rotorList.find((data) => data.name === name);
-
-    const dummy: RotorData = {
-        name: 'DUMMY',
-        notch: 'A',
-        wiring: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+        return {
+            ...rotor,
+            engang: newEngang,
+        };
     };
+}
 
-    return rotor ? rotor : dummy;
-};
+function adjustStart(startConfig: string) {
+    const starts = startConfig.split('');
 
-export const getRotor = (name: string, ring: string, start: string): Rotor => {
-    const rotorData = getRotorByName(name);
-
-    const keyboard = getKeyboard();
-    const [ringIngang, ringEngang] = adjustRing(keyboard, rotorData.wiring.split(''), keyboard.indexOf(ring));
-    const [startIngang, startEngang] = adjustStart(ringIngang, ringEngang, keyboard.indexOf(start));
-
-    return {
-        notch: rotorData.notch,
-        ingang: startIngang,
-        engang: startEngang,
+    return function _adjustStart(rotor: Rotor, index: number): Rotor {
+        const step = rotor.ingang.indexOf(starts[index]);
+        return rotateRotor(step)(rotor);
     };
-};
+}
 
-export const getReflectorByName = (name: string) => {
-    const reflectorList = JSON.parse(JSON.stringify(reflectorData)) as ReflectorData[];
-    const reflector = reflectorList.find((data) => data.name === name);
+function getRotors(config: Config): Rotor[] {
+    return selectRotors(config.rotors)
+        .map(adjustRing(config.ring))
+        .map(adjustStart(config.start));
+}
 
-    const dummy: ReflectorData = {
-        name: 'DUMMY',
-        wiring: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-    };
-
-    return reflector ? reflector : dummy;
-};
-
-export const getReflector = (name: string): Reflector => {
-    const reflectorData = getReflectorByName(name);
+function getReflector(name: string): Reflector {
+    const list = reflectorDataList as ReflectorData[];
+    const reflectorData = list.find((data) => data.name === name) ?? list[0];
 
     return {
         ingang: getKeyboard(),
         engang: reflectorData.wiring.split(''),
     };
-};
+}
 
-export const getPlugboard = (config: string): Plugboard => {
-    const keyboard = getKeyboard();
-    const swaps = config.split(' ');
+function getPlugboard(plugboardConfig: string): Plugboard {
+    const letterPairs = plugboardConfig.split(' ');
 
-    const output = keyboard.map((letter) => {
-        const matchingSwap = swaps.find((pair) => pair.includes(letter));
+    function getSwappedLetter (letter: string): string {
+        const matchingSwap = letterPairs.find((pair) => pair.includes(letter));
         if (matchingSwap) {
             const otherLetter = matchingSwap.replace(letter, '');
             return otherLetter;
         }
         return letter;
-    });
+    }
 
     return {
         ingang: getKeyboard(),
-        engang: output,
+        engang: getKeyboard().map(getSwappedLetter),
     };
-};
+}
 
-export const getConfiguredMachine = (config: Config): Machine => ({
-    rotor1: getRotor(config.rotors[0], config.ring[0], config.start[0]),
-    rotor2: getRotor(config.rotors[1], config.ring[1], config.start[1]),
-    rotor3: getRotor(config.rotors[2], config.ring[2], config.start[2]),
-    reflector: getReflector(config.reflector),
-    plugboard: getPlugboard(config.plugboard),
-});
+type GetSignalFunction = (signal: number) => number;
+function getSignal(input: string[], output: string[]): GetSignalFunction {
+    return function _getSignal(signal: number): number {
+        return input.indexOf(output[signal]);
+    };
+}
 
-export const getRotatedMachine = (machine: Machine): Machine => {
-    if (
-        machine.rotor2.ingang[0] === machine.rotor2.notch ||
-        (machine.rotor3.ingang[0] === machine.rotor3.notch && machine.rotor2.ingang[0] === machine.rotor2.notch)
-    ) {
-        const [ingang1, engang1] = rotate(machine.rotor1.ingang, machine.rotor1.engang);
-        const [ingang2, engang2] = rotate(machine.rotor2.ingang, machine.rotor2.engang);
-        const [ingang3, engang3] = rotate(machine.rotor3.ingang, machine.rotor3.engang);
-        return {
-            ...machine,
-            rotor1: {
-                ...machine.rotor1,
-                ingang: ingang1,
-                engang: engang1,
-            },
-            rotor2: {
-                ...machine.rotor2,
-                ingang: ingang2,
-                engang: engang2,
-            },
-            rotor3: {
-                ...machine.rotor3,
-                ingang: ingang3,
-                engang: engang3,
-            },
-        };
-    }
-    else if (
-        machine.rotor3.ingang[0] === machine.rotor3.notch
-    ) {
-        const [ingang2, engang2] = rotate(machine.rotor2.ingang, machine.rotor2.engang);
-        const [ingang3, engang3] = rotate(machine.rotor3.ingang, machine.rotor3.engang);
-        return {
-            ...machine,
-            rotor2: {
-                ...machine.rotor2,
-                ingang: ingang2,
-                engang: engang2,
-            },
-            rotor3: {
-                ...machine.rotor3,
-                ingang: ingang3,
-                engang: engang3,
-            },
-        };
-    }
-    else {
-        const [ingang3, engang3] = rotate(machine.rotor3.ingang, machine.rotor3.engang);
-        return {
-            ...machine,
-            rotor3: {
-                ...machine.rotor3,
-                ingang: ingang3,
-                engang: engang3,
-            },
-        };
-    }
-};
+function rotorSignalBuilder(rotor: Rotor): GetSignalFunction[] {
+    const getRotorSignal: GetSignalFunction = getSignal(rotor.ingang, rotor.engang);
+    const getRotorReversedSignal: GetSignalFunction = getSignal(rotor.engang, rotor.ingang);
+    return [getRotorSignal, getRotorReversedSignal];
+}
 
-export const getSignal = (
-    ingang: string[],
-    engang: string[],
-    signal: number,
-    backward: boolean = false
-): number => (
-    backward
-        ? engang.indexOf(ingang[signal])
-        : ingang.indexOf(engang[signal])
-);
+function reflectorSignalBuilder(reflector: Reflector): GetSignalFunction[] {
+    const getReflectorSignal: GetSignalFunction = getSignal(reflector.ingang, reflector.engang);
+    return [getReflectorSignal];
+}
 
-export const getEncryptedLetter = (machine: Machine, letter: string): string => {
-    const { rotor1, rotor2, rotor3, reflector, plugboard } = machine;
-    const keyboard = getKeyboard();
-    /**
-     * Sequence of electrical signal travel route:
-     * 1. Keyboard
-     * 2. Plugboard input -> output
-     * 3. Rotor 3 output -> input
-     * 4. Rotor 2 output -> input
-     * 5. Rotor 1 output -> input
-     * 6. Reflector output -> input
-     * 7. Rotor 1 input -> output
-     * 8. Rotor 2 input -> output
-     * 9. Rotor 3 input -> output
-     * 10. Plugboard output -> input
-     * 11. Light bulbs
-     */
-    const kbSignal = keyboard.indexOf(letter);
-    const pbSignal = getSignal(plugboard.ingang, plugboard.engang, kbSignal, true);
-    const r3Signal = getSignal(rotor3.ingang, rotor3.engang, pbSignal);
-    const r2Signal = getSignal(rotor2.ingang, rotor2.engang, r3Signal);
-    const r1Signal = getSignal(rotor1.ingang, rotor1.engang, r2Signal);
-    const refSignal = getSignal(reflector.ingang, reflector.engang, r1Signal);
-    const r1SignalBack = getSignal(rotor1.ingang, rotor1.engang, refSignal, true);
-    const r2SignalBack = getSignal(rotor2.ingang, rotor2.engang, r1SignalBack, true);
-    const r3SignalBack = getSignal(rotor3.ingang, rotor3.engang, r2SignalBack, true);
-    const pbSignalBack = getSignal(plugboard.ingang, plugboard.engang, r3SignalBack, true);
+function plugboardSignalBuilder(plugboard: Plugboard): GetSignalFunction[] {
+    const getPlugboardSignal: GetSignalFunction = getSignal(plugboard.engang, plugboard.ingang);
+    const getPlugboardReversedSignal: GetSignalFunction = getSignal(plugboard.ingang, plugboard.engang);
+    return [getPlugboardSignal, getPlugboardReversedSignal];
+}
 
-    return keyboard[pbSignalBack];
-};
-
-/**
- * returns [
- *      encryptedMessage,
- *      rotor1 display letter,
- *      rotor2 display letter,
- *      rotor3 display letter,
- * ]
- */
-export const getEncryptedMessage = (machine: Machine, message: string): string[] => {
-    const output = message.split('').map((letter) => {
-        machine = { ...getRotatedMachine(machine) };
-        return getEncryptedLetter(machine, letter);
-    });
+function getSignalSequence(machine: Machine): GetSignalFunction[] {
+    const [getRotor1Signal, getRotor1ReversedSignal] = rotorSignalBuilder(machine.rotor1);
+    const [getRotor2Signal, getRotor2ReversedSignal] = rotorSignalBuilder(machine.rotor2);
+    const [getRotor3Signal, getRotor3ReversedSignal] = rotorSignalBuilder(machine.rotor3);
+    const [getReflectorSignal] = reflectorSignalBuilder(machine.reflector);
+    const [getPlugboardSignal, getPlugboardSignalReversed] = plugboardSignalBuilder(machine.plugboard);
 
     return [
-        output.join(''),
-        machine.rotor1.ingang[0],
-        machine.rotor2.ingang[0],
-        machine.rotor3.ingang[0],
+        getPlugboardSignal,
+        getRotor3Signal,
+        getRotor2Signal,
+        getRotor1Signal,
+        getReflectorSignal,
+        getRotor1ReversedSignal,
+        getRotor2ReversedSignal,
+        getRotor3ReversedSignal,
+        getPlugboardSignalReversed,
     ];
-};
+}
 
-export const run = (config: Config, message: string): string[] => {
-    const configuredMachine = getConfiguredMachine(config);
-    return getEncryptedMessage(configuredMachine, message);
-};
+export function assemble(config: Config): Machine {
+    const [rotor1, rotor2, rotor3] = getRotors(config);
 
+    return {
+        rotor1: rotor1,
+        rotor2: rotor2,
+        rotor3: rotor3,
+        reflector: getReflector(config.reflector),
+        plugboard: getPlugboard(config.plugboard),
+    };
+}
 
+export function buildGenerator(machine: Machine) {
+    const keyboard = getKeyboard();
+
+    function encryptLetter(letter: string): string {
+        machine = { ...rotateMachine(machine) };
+        const sequence = getSignalSequence(machine);
+
+        const inputSignal = keyboard.indexOf(letter);
+        const outputSignal = sequence.reduce(
+            function reducerFn(value, fn) {
+                return fn(value);
+            },
+            inputSignal
+        );
+        return keyboard[outputSignal];
+    }
+
+    return function generator(message: string): string {
+        const output = message.split('').map(encryptLetter);
+        return output.join('');
+    };
+}
