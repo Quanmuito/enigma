@@ -36,34 +36,28 @@ $font-large: 18px;
 }
 
 html {
+    min-width: 100%;
+    min-height: 100%;
     font-size: $font-root;
 }
 
 body {
-    min-width: 100vw;
-    min-height: 100vh;
     background: url("./background.jpg") no-repeat;
     background-position: center;
     background-size: cover;
 }
 
-#root {
-    min-width: 100vw;
-    min-height: 100vh;
-}
-
 .App {
-    min-width: 100vw;
-    min-height: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
 }
 
 .wrapper {
-    margin: 15px;
+    width: 100%;
+    min-height: 100vh;
     border: 2px solid rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     padding: 30px;
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(40px);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     display: flex;
     justify-content: center;
@@ -71,71 +65,61 @@ body {
     color: #fff;
 }
 
-.wrapper h1 {
-    font-size: 36px;
-    text-align: center;
-}
-
-.wrapper .input-box {
-    position: relative;
+section {
     width: 100%;
-    height: 50px;
-    margin: 30px 0;
 }
 
-input {
+.input-container {
+    height: 5vh;
+}
+
+.visual-container {
     width: 100%;
-    height: 100%;
-    background-color: transparent;
-    border: none;
-    outline: none;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    border-radius: 40px;
-    font-size: 16px;
-    color: #fff;
-    padding: 20px 45px 20px 20px;
+    display: flex;
+    justify-content: space-evenly;
+
+    .section {
+        width: 15%;
+
+        .name-container {
+            text-align: center;
+        }
+
+        .character-container {
+            width: 100%;
+            border: 1px solid white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+
+            .character-column {
+                width: 10%;
+                display: flex;
+                flex-direction: column;
+
+                span {
+                    text-align: center;
+                    line-height: 120%;
+                }
+            }
+        }
+    }
+
+    .forward-line {
+        position: absolute;
+        border-top: solid 2px red;
+        transform-origin: 0% 0%;
+        display: block;
+    }
+
+    .backward-line {
+        position: absolute;
+        border-top: solid 2px yellow;
+        transform-origin: 0% 0%;
+        display: block;
+    }
 }
 
-.input-box input::placeholder {
-    color: #fff;
-}
-
-.wrapper .btn {
-    width: 100%;
-    height: 45px;
-    background-color: #fff;
-    border: none;
-    outline: none;
-    border-radius: 40px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    font-size: 16px;
-    color: #333;
-    font-weight: 600;
-    transition: all 0.8s ease-out;
-}
-
-.wrapper .btn:hover {
-    background-color: #568b8c;
-    color: #fff;
-}
-
-.wrapper .register-link {
-    font-size: 14px;
-    text-align: center;
-    margin: 20px 0 15px;
-}
-
-.register-link p a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.register-link p a:hover {
-    text-decoration: underline;
-    color: #568b8c;
-}
 
 @include media-med {
     html {
@@ -147,26 +131,4 @@ input {
     html {
         font-size: $font-large;
     }
-}
-
-#new-points {
-    border: 1px solid black;
-    padding: 5px;
-    width: 200px;
-    text-align: center;
-}
-
-.dot {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background: blue;
-}
-
-#line {
-    position: absolute;
-    border-top: solid 1px red;
-    height: 1px;
-    max-height: 1px;
-    transform-origin: 0% 0%;
 }

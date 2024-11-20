@@ -4,7 +4,7 @@ import reflectorDataList from './reflectors.json';
 
 const DEFAULT_KEYBOARD = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-function getKeyboard(keyboard: string = DEFAULT_KEYBOARD): string[] {
+export function getKeyboard(keyboard: string = DEFAULT_KEYBOARD): string[] {
     return keyboard.split('');
 }
 
@@ -123,7 +123,7 @@ function getReflector(name: string): Reflector {
 function getPlugboard(plugboardConfig: string): Plugboard {
     const letterPairs = plugboardConfig.split(' ');
 
-    function getSwappedLetter (letter: string): string {
+    function getSwappedLetter(letter: string): string {
         const matchingSwap = letterPairs.find((pair) => pair.includes(letter));
         if (matchingSwap) {
             const otherLetter = matchingSwap.replace(letter, '');
@@ -198,6 +198,8 @@ export function buildGenerator(machine: Machine) {
     const keyboard = getKeyboard();
 
     function encryptLetter(letter: string): string {
+        if (letter === ' ') return ' ';
+
         machine = { ...rotateMachine(machine) };
         const sequence = getSignalSequence(machine);
 
@@ -211,8 +213,40 @@ export function buildGenerator(machine: Machine) {
         return keyboard[outputSignal];
     }
 
-    return function generator(message: string): string {
-        const output = message.split('').map(encryptLetter);
-        return output.join('');
+    const nodePositions: number[] = [];
+    function encryptLastLetter(letter: string): string {
+        machine = { ...rotateMachine(machine) };
+        const sequence = getSignalSequence(machine);
+
+        const inputSignal = keyboard.indexOf(letter);
+        nodePositions.push(inputSignal);
+        const outputSignal = sequence.reduce(
+            function reducerFn(value, fn) {
+                const sig = fn(value);
+                nodePositions.push(sig);
+                return sig;
+            },
+            inputSignal
+        );
+        nodePositions.push(outputSignal);
+        return keyboard[outputSignal];
+    }
+
+    return function generator(message: string): [string, Machine, number[]] {
+        const input = message.trim();
+        if (input.length === 0) {
+            return [input, machine, nodePositions];
+        }
+
+        if (input.length === 1) {
+            return [encryptLastLetter(input), machine, nodePositions];
+        }
+
+        const characters = input.split('');
+        characters.pop();
+        const encryptedCharacters = characters.map(encryptLetter);
+        const output = encryptedCharacters.join('') + encryptLastLetter(input.slice(-1));
+
+        return [output, machine, nodePositions];
     };
 }

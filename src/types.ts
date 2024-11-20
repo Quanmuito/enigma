@@ -1,20 +1,22 @@
+import { RefObject } from 'react';
+
 export type Rotor = {
     name: string,
     notch: string,
     entry: string[],
     output: string[],
-}
+};
 
 export type Reflector = {
     name: string,
     entry: string[],
     output: string[],
-}
+};
 
 export type Plugboard = {
     entry: string[],
     output: string[],
-}
+};
 
 export type Setting = {
     date: number,
@@ -24,7 +26,7 @@ export type Setting = {
     startError: string,
     plugboardSettings: string,
     plugboardError: string,
-}
+};
 
 export type Machine = {
     reflector: Reflector,
@@ -32,13 +34,13 @@ export type Machine = {
     rotor2: Rotor,
     rotor3: Rotor,
     plugboard: Plugboard,
-}
+};
 
 export type Message = {
     entry: string,
     output: string,
     error: string,
-}
+};
 
 export type AppState = {
     setting: Setting,
@@ -46,15 +48,15 @@ export type AppState = {
     configuredMachine: Machine,
     displayMachine: Machine,
     message: Message,
-}
+};
 
 export type Action = {
     type: string,
     payload: {
         value: string,
-        [index: string]: string
+        [index: string]: string;
     },
-}
+};
 
 export type Enigma = {
     name: string,
@@ -62,8 +64,8 @@ export type Enigma = {
     description: string,
     date: string,
     rotors: Rotor[],
-    reflectors: Reflector[]
-}
+    reflectors: Reflector[];
+};
 
 export type DailySetting = {
     date: number,
@@ -71,4 +73,9 @@ export type DailySetting = {
     rings: string,
     starts: string,
     plugboard: string,
+};
+
+export type NodeRefObjectType = {
+    id: number;
+    ref: RefObject<HTMLSpanElement>;
 };

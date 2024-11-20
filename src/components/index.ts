@@ -1,2 +1,1 @@
-export * from 'components/InputSetting';
-export * from 'components/SelectRotor';
+export * from './Form';

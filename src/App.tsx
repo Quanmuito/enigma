@@ -1,50 +1,21 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
+import Container from 'Container';
+import { assemble, Config } from 'v2/enigma';
 
 export default function App() {
-    const dotAStyle = {
-        top: '50px',
-        left: '10px',
+    const config: Config = {
+        rotors: ['I', 'II', 'III'],
+        reflector: 'UKW-B',
+        ring: 'AAA',
+        start: 'AAA',
+        plugboard: '',
     };
-
-    const dotBStyle = {
-        top: '100px',
-        left: '100px',
-    };
-
-    const dotARef = useRef<HTMLDivElement>(null);
-    const dotBRef = useRef<HTMLDivElement>(null);
-    const lineRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        if (dotARef.current && dotBRef.current && lineRef.current) {
-            const dotARect = dotARef.current.getBoundingClientRect();
-            const dotAPos = {
-                x: dotARect.left + 5,
-                y: dotARect.top + 5,
-            };
-            const dotBRect = dotBRef.current.getBoundingClientRect();
-            const dotBPos = {
-                x: dotBRect.left + 5,
-                y: dotBRect.top + 5,
-            };
-            const lineStyle = lineRef.current.style;
-
-            const width = Math.hypot(dotAPos.x - dotBPos.x, dotAPos.y - dotBPos.y);
-            const angle = ((Math.atan2(dotAPos.x - dotBPos.x, dotAPos.y - dotBPos.y) + (Math.PI / 2.0)) * 180 / Math.PI);
-            lineStyle.width = width + 'px';
-            lineStyle.left = dotAPos.x + 'px';
-            lineStyle.top = dotAPos.y + 'px';
-            lineStyle.transform = `rotate(${-angle}deg)`;
-            lineStyle.display = 'block';
-        }
-    }, []);
+    const configedMachine = assemble(config);
 
     return (
         <div className="App">
-            <div className="container">
-                <div ref={ dotARef } id="dotA" className="dot" style={ dotAStyle }></div>
-                <div ref={ dotBRef } id="dotB" className="dot" style={ dotBStyle }></div>
-                <div ref={ lineRef } id="line"></div>
+            <div className="wrapper">
+                <Container configedMachine={ configedMachine } />
             </div>
         </div>
     );
