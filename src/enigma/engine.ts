@@ -8,6 +8,7 @@ export function getKeyboard(keyboard: string = DEFAULT_KEYBOARD): string[] {
     return keyboard.split('');
 }
 
+/** Cut the array at 1 point then swap the position of the 2 new arrays */
 function swapAt(point: number) {
     return function _swapAt(array: string[]): string[] {
         return [...array.slice(point), ...array.slice(0, point)];
@@ -64,6 +65,7 @@ function rotateMachine(machine: Machine) {
     }
 }
 
+/** Get list of rotors from config */
 function selectRotors(names: string[]): Rotor[] {
     const list = rotorDataList as RotorData[]; // Load once
 
@@ -79,6 +81,7 @@ function selectRotors(names: string[]): Rotor[] {
     return names.map(getRotorByName);
 }
 
+/** Adjust ring position based on config */
 function adjustRing(ringConfig: string) {
     const rings = ringConfig.split('');
 
@@ -95,6 +98,7 @@ function adjustRing(ringConfig: string) {
     };
 }
 
+/** Adjust start position based on config */
 function adjustStart(startConfig: string) {
     const starts = startConfig.split('');
 
@@ -104,12 +108,14 @@ function adjustStart(startConfig: string) {
     };
 }
 
+/** Get list of rotors after configured */
 function getRotors(config: Config): Rotor[] {
     return selectRotors(config.rotors)
         .map(adjustRing(config.ring))
         .map(adjustStart(config.start));
 }
 
+/** Get reflector based on config */
 function getReflector(name: string): Reflector {
     const list = reflectorDataList as ReflectorData[];
     const reflectorData = list.find((data) => data.name === name) ?? list[0];
@@ -120,6 +126,7 @@ function getReflector(name: string): Reflector {
     };
 }
 
+/** Adjust plugboard based on config */
 function getPlugboard(plugboardConfig: string): Plugboard {
     const letterPairs = plugboardConfig.split(' ');
 
@@ -139,6 +146,8 @@ function getPlugboard(plugboardConfig: string): Plugboard {
 }
 
 type GetSignalFunction = (signal: number) => number;
+
+/** Get the output letter after scrambled */
 function getSignal(input: string[], output: string[]): GetSignalFunction {
     return function _getSignal(signal: number): number {
         return input.indexOf(output[signal]);
@@ -162,6 +171,7 @@ function plugboardSignalBuilder(plugboard: Plugboard): GetSignalFunction[] {
     return [getPlugboardSignal, getPlugboardReversedSignal];
 }
 
+/** Build the sequence to encrypt the letter */
 function getSignalSequence(machine: Machine): GetSignalFunction[] {
     const [getRotor1Signal, getRotor1ReversedSignal] = rotorSignalBuilder(machine.rotor1);
     const [getRotor2Signal, getRotor2ReversedSignal] = rotorSignalBuilder(machine.rotor2);
@@ -182,6 +192,7 @@ function getSignalSequence(machine: Machine): GetSignalFunction[] {
     ];
 }
 
+/** Get the configured machine */
 export function assemble(config: Config): Machine {
     const [rotor1, rotor2, rotor3] = getRotors(config);
 
@@ -194,11 +205,14 @@ export function assemble(config: Config): Machine {
     };
 }
 
+/** Build the generator which wait for user input and encrypt the message */
 export function buildGenerator(machine: Machine) {
     const keyboard = getKeyboard();
 
+    /** Get the output letter */
     function encryptLetter(letter: string): string {
         if (letter === ' ') return ' ';
+        if (!keyboard.includes(letter)) return letter;
 
         machine = { ...rotateMachine(machine) };
         const sequence = getSignalSequence(machine);
@@ -214,7 +228,11 @@ export function buildGenerator(machine: Machine) {
     }
 
     const nodePositions: number[] = [];
+
+    /** Get the output of each component when encrypt the last letter for the UI */
     function encryptLastLetter(letter: string): string {
+        if (!keyboard.includes(letter)) return letter;
+
         machine = { ...rotateMachine(machine) };
         const sequence = getSignalSequence(machine);
 
@@ -232,6 +250,12 @@ export function buildGenerator(machine: Machine) {
         return keyboard[outputSignal];
     }
 
+    /**
+     * Take the message and return:
+     * - output: the encrypted message
+     * - machine: the current state of the machine
+     * - nodePositions: output signal of each component when encrypt the last letter
+     */
     return function generator(message: string): [string, Machine, number[]] {
         const input = message.trim();
         if (input.length === 0) {

@@ -69,8 +69,16 @@ section {
     width: 100%;
 }
 
-.input-container {
-    height: 5vh;
+.output-container {
+    width: 80%;
+    min-height: 5vh;
+    margin-bottom: 1rem;
+    border: 1px solid white;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .visual-container {
@@ -98,8 +106,18 @@ section {
                 flex-direction: column;
 
                 span {
+                    border: 1px solid transparent;
                     text-align: center;
-                    line-height: 120%;
+                    line-height: 105%;
+                }
+
+                .top {
+                    color: black;
+                    background-color: white;
+                }
+
+                .notch {
+                    border: 1px dashed white;
                 }
             }
         }
@@ -117,6 +135,17 @@ section {
         border-top: solid 2px yellow;
         transform-origin: 0% 0%;
         display: block;
+    }
+}
+
+.input-container {
+    width: 80%;
+    margin-top: 1rem;
+
+    .input-box {
+        width: 100%;
+        min-height: 5vh;
+        overflow: scroll;
     }
 }
 

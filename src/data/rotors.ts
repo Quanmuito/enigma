@@ -1,5 +1,6 @@
 import { Rotor } from 'types';
-import { KEYBOARD } from 'global';
+
+const KEYBOARD = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 export const DUMMYROTOR: Rotor = {
     name: 'DUMMY',

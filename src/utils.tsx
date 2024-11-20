@@ -63,6 +63,7 @@ function calculateLineAttribute(leftEnd: EndCord, rightEnd: EndCord) {
 function getDistance(x: number, y: number): number {
     return Math.hypot(x, y);
 }
+
 function getAngle(x: number, y: number): number {
     return (Math.atan2(x, y) + (Math.PI / 2.0)) * 180 / Math.PI;
 }

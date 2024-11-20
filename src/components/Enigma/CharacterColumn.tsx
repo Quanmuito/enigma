@@ -1,5 +1,4 @@
-import React, { forwardRef, useImperativeHandle } from 'react';
-import Character from 'components/Enigma/Character';
+import React, { RefObject, forwardRef, useImperativeHandle } from 'react';
 import { NodeRefObjectType } from 'types';
 
 export type CharacterColumnRefObjectType = {
@@ -9,27 +8,31 @@ export type CharacterColumnRefObjectType = {
 type CharacterColumnPropsType = {
     name: string,
     characters: string[],
+    notch?: string
     refs: CharacterColumnRefObjectType,
 }
 const CharacterColumn = forwardRef<CharacterColumnRefObjectType, CharacterColumnPropsType>(
-    ({ name, characters, refs }, ref) => {
+    ({ name, characters, notch, refs }, ref) => {
         useImperativeHandle(ref, () => refs);
         const { node1, node2 } = refs;
 
+        function getRef(index: number): RefObject<HTMLSpanElement>|null {
+            if (index === node1.id) return node1.ref;
+            if (index === node2.id) return node2.ref;
+            return null;
+        }
+
         function renderCharacter(char: string, index: number) {
             const key: string = `${name}-${char}`;
-
-            if (index !== node1.id && index !== node2.id) {
-                return <Character key={ key } char={ char } />;
-            }
-
-            if (index === node1.id) {
-                return <Character key={ key } char={ char } ref={ node1.ref } />;
-            }
-
-            if (index === node2.id) {
-                return <Character key={ key } char={ char } ref={ node2.ref } />;
-            }
+            return (
+                <span
+                    key={ key }
+                    ref={ getRef(index) }
+                    className={ (char === notch ? 'notch' : '') + ((!!notch && index === 0) ? ' top' : '') }
+                >
+                    { char }
+                </span>
+            );
         }
 
         return (

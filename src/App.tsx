@@ -1,6 +1,6 @@
 import React from 'react';
 import Container from 'Container';
-import { assemble, Config } from 'v2/enigma';
+import { assemble, Config } from 'enigma';
 
 export default function App() {
     const config: Config = {

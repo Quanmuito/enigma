@@ -1,5 +1,6 @@
 import { Reflector } from 'types';
-import { KEYBOARD } from 'global';
+
+const KEYBOARD = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 export const DUMMYREFLECTOR: Reflector = {
     name: 'DUMMY',
