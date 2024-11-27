@@ -71,6 +71,12 @@ export default function Container({ configedMachine }: ContainerPropsType) {
                 { encryptedMessage }
             </section>
 
+            <section className="rotor-step-container">
+                <div className="rotor-step" id="rotor-step-1">{ rotor1.ingang[0] }</div>
+                <div className="rotor-step" id="rotor-step-2">{ rotor2.ingang[0] }</div>
+                <div className="rotor-step" id="rotor-step-3">{ rotor3.ingang[0] }</div>
+            </section>
+
             <section className="visual-container">
                 <Section name="reflector" leftColumn={ reflector.ingang } rightColumn={ reflector.engang } refs={ reflectorRefs } />
 

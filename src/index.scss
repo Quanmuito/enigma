@@ -88,6 +88,27 @@ body {
             flex-wrap: wrap;
         }
 
+        .rotor-step-container {
+            min-height: 5vh;
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+
+            .rotor-step {
+                width: 5rem;
+                height: 5vh;
+                border: 1px solid white;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                font-size: 2rem;
+                background-color: #ffffff20;
+            }
+        }
+
         .visual-container {
             width: 100%;
             display: flex;
@@ -103,7 +124,7 @@ body {
                 .character-container {
                     width: 100%;
                     border: 1px solid white;
-                    padding: 1rem;
+                    padding: 1rem 2rem;
                     display: flex;
                     justify-content: space-between;
 
