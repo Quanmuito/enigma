@@ -3,17 +3,38 @@ import CharacterColumn, { CharacterColumnRefObjectType } from 'components/Enigma
 import Section, { SectionRefsType } from 'components/Enigma/Section';
 import { buildGenerator, getKeyboard, Machine } from 'enigma';
 import useCharacterRef from 'hooks/useCharacterRef';
+import useLineRef from 'hooks/useLineRef';
 import { connect } from 'utils';
 
 type ContainerPropsType = {
     configedMachine: Machine
 }
 export default function Container({ configedMachine }: ContainerPropsType) {
-    const [message, setMessage] = useState<string>('A');
+    const [message, setMessage] = useState<string>('ENIGMA');
 
     const generator = buildGenerator(configedMachine);
     const [encryptedMessage, machine, nodePositions] = generator(message);
     const { reflector, rotor1, rotor2, rotor3, plugboard } = machine;
+
+    /**
+     * Signal output in nodePositions
+     * [
+     *      0: keyboard,
+     *      1: plugboard,
+     *      2: rotor3,
+     *      3: rotor2,
+     *      4: rotor1,
+     *      5: reflector,
+     *      6: rotor1,
+     *      7: rotor2,
+     *      8: rotor3,
+     *      9: plugboard
+     * ]
+     */
+    const keyboardRefs: CharacterColumnRefObjectType = {
+        node1: { id: nodePositions[0], ref: useRef<HTMLSpanElement>(null) },
+        node2: { id: nodePositions[9], ref: useRef<HTMLSpanElement>(null) },
+    };
 
     const reflectorRefs: SectionRefsType = useCharacterRef(nodePositions, [5, 4, 5, 5]);
     const rotor1Refs: SectionRefsType = useCharacterRef(nodePositions, [4, 3, 5, 6]);
@@ -21,25 +42,11 @@ export default function Container({ configedMachine }: ContainerPropsType) {
     const rotor3Refs: SectionRefsType = useCharacterRef(nodePositions, [2, 1, 7, 8]);
     const plugboardRefs: SectionRefsType = useCharacterRef(nodePositions, [1, 0, 8, 9]);
 
-    const keyboardRefs: CharacterColumnRefObjectType = {
-        node1: { id: nodePositions[0], ref: useRef<HTMLSpanElement>(null) },
-        node2: { id: nodePositions[9], ref: useRef<HTMLSpanElement>(null) },
-    };
-
-    const lineFwReflectorRotor1 = useRef<HTMLDivElement>(null);
-    const lineBwReflectorRotor1 = useRef<HTMLDivElement>(null);
-
-    const lineFwRotor1Rotor2 = useRef<HTMLDivElement>(null);
-    const lineBwRotor1Rotor2 = useRef<HTMLDivElement>(null);
-
-    const lineFwRotor2Rotor3 = useRef<HTMLDivElement>(null);
-    const lineBwRotor2Rotor3 = useRef<HTMLDivElement>(null);
-
-    const lineFwRotor3Plugboard = useRef<HTMLDivElement>(null);
-    const lineBwRotor3Plugboard = useRef<HTMLDivElement>(null);
-
-    const lineFwPlugboardKeyboard = useRef<HTMLDivElement>(null);
-    const lineBwPlugboardKeyboard = useRef<HTMLDivElement>(null);
+    const [lineFwReflectorRotor1, lineBwReflectorRotor1] = useLineRef();
+    const [lineFwRotor1Rotor2, lineBwRotor1Rotor2]  = useLineRef();
+    const [lineFwRotor2Rotor3, lineBwRotor2Rotor3] = useLineRef();
+    const [lineFwRotor3Plugboard, lineBwRotor3Plugboard] = useLineRef();
+    const [lineFwPlugboardKeyboard, lineBwPlugboardKeyboard] = useLineRef();
 
     useEffect(() => {
         connect(reflectorRefs.rNode1.ref, rotor1Refs.lNode1.ref, lineFwReflectorRotor1);
@@ -59,29 +66,34 @@ export default function Container({ configedMachine }: ContainerPropsType) {
     });
 
     return (
-        <div className="container d-flex flex-column justify-content-evenly align-items-center" style={ { height: '100%' } }>
+        <div className="container" style={ { height: '100%' } }>
             <section className="output-container">
                 { encryptedMessage }
             </section>
 
             <section className="visual-container">
                 <Section name="reflector" leftColumn={ reflector.ingang } rightColumn={ reflector.engang } refs={ reflectorRefs } />
+
                 <div id="lineFwReflectorRotor1" className="forward-line" ref={ lineFwReflectorRotor1 }></div>
                 <div id="lineBwReflectorRotor1" className="backward-line" ref={ lineBwReflectorRotor1 }></div>
 
                 <Section name="rotor1" leftColumn={ rotor1.ingang } rightColumn={ rotor1.engang } notch={ rotor1.notch } refs={ rotor1Refs } />
+
                 <div id="lineFwRotor1Rotor2" className="forward-line" ref={ lineFwRotor1Rotor2 }></div>
                 <div id="lineBwRotor1Rotor2" className="backward-line" ref={ lineBwRotor1Rotor2 }></div>
 
                 <Section name="rotor2" leftColumn={ rotor2.ingang } rightColumn={ rotor2.engang } notch={ rotor2.notch } refs={ rotor2Refs } />
+
                 <div id="lineFwRotor2Rotor3" className="forward-line" ref={ lineFwRotor2Rotor3 }></div>
                 <div id="lineBwRotor2Rotor3" className="backward-line" ref={ lineBwRotor2Rotor3 }></div>
 
                 <Section name="rotor3" leftColumn={ rotor3.ingang } rightColumn={ rotor3.engang } notch={ rotor3.notch } refs={ rotor3Refs } />
+
                 <div id="lineFwRotor3Plugboard" className="forward-line" ref={ lineFwRotor3Plugboard }></div>
                 <div id="lineBwRotor3Plugboard" className="backward-line" ref={ lineBwRotor3Plugboard }></div>
 
                 <Section name="plugboard" leftColumn={ plugboard.engang } rightColumn={ plugboard.ingang } refs={ plugboardRefs } />
+
                 <div id="lineFwPlugboardKeyboard" className="forward-line" ref={ lineFwPlugboardKeyboard }></div>
                 <div id="lineBwPlugboardKeyboard" className="backward-line" ref={ lineBwPlugboardKeyboard }></div>
 
@@ -96,7 +108,15 @@ export default function Container({ configedMachine }: ContainerPropsType) {
             </section>
 
             <section className="input-container">
-                <input type="text" id="input" className="input-box" value={ message } onChange={ (e) => setMessage(e.target.value.toUpperCase()) } />
+                <input
+                    type="text"
+                    id="input"
+                    className="input-box"
+                    value={ message }
+                    autoFocus
+                    autoComplete="off"
+                    onChange={ (e) => setMessage(e.target.value.toUpperCase()) }
+                />
             </section>
         </div>
     );

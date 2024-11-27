@@ -14,13 +14,13 @@ export function connect(
     lineRef: RefObject<HTMLDivElement>
 ) {
     if (leftCharRef.current !== null && rightCharRef.current !== null && lineRef.current !== null) {
-        const [leftEnd, rightEnd] = getEndCord(leftCharRef.current, rightCharRef.current);
+        const [leftEnd, rightEnd] = getEndsCord(leftCharRef.current, rightCharRef.current);
         const drawLine = calculateLineAttribute(leftEnd, rightEnd);
         drawLine(lineRef.current);
     }
 }
 
-function getEndCord(leftChar: HTMLSpanElement, rightChar: HTMLSpanElement): [EndCord, EndCord] {
+function getEndsCord(leftChar: HTMLSpanElement, rightChar: HTMLSpanElement): [EndCord, EndCord] {
     /** Get position of the left character */
     const leftCharRect = leftChar.getBoundingClientRect();
     const leftEnd: EndCord = {
@@ -40,7 +40,7 @@ function getEndCord(leftChar: HTMLSpanElement, rightChar: HTMLSpanElement): [End
 
 /**
  * Calculate attribute of the line
-*/
+ */
 function calculateLineAttribute(leftEnd: EndCord, rightEnd: EndCord) {
     const xDiff = leftEnd.x - rightEnd.x;
     const yDiff = leftEnd.y - rightEnd.y;

@@ -14,7 +14,7 @@ $font-large: 18px;
  * Padding
  * Rest of box
  * Content
-*/
+ */
 
 @mixin media-med {
     @media screen and (min-width: 1023px) {
@@ -48,10 +48,12 @@ body {
 }
 
 .App {
+    position: relative;
     background-color: rgba(0, 0, 0, 0.5);
 }
 
 .wrapper {
+    position: relative;
     width: 100%;
     min-height: 100vh;
     border: 2px solid rgba(255, 255, 255, 0.1);
@@ -63,89 +65,97 @@ body {
     justify-content: center;
     align-items: center;
     color: #fff;
-}
 
-section {
-    width: 100%;
-}
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
 
-.output-container {
-    width: 80%;
-    min-height: 5vh;
-    margin-bottom: 1rem;
-    border: 1px solid white;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.visual-container {
-    width: 100%;
-    display: flex;
-    justify-content: space-evenly;
-
-    .section {
-        width: 15%;
-
-        .name-container {
-            text-align: center;
+        section {
+            width: 100%;
         }
 
-        .character-container {
-            width: 100%;
+        .output-container {
+            width: 80%;
+            min-height: 5vh;
+            margin-bottom: 1rem;
             border: 1px solid white;
-            padding: 1rem;
             display: flex;
-            justify-content: space-between;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
 
-            .character-column {
-                width: 10%;
-                display: flex;
-                flex-direction: column;
+        .visual-container {
+            width: 100%;
+            display: flex;
+            justify-content: space-evenly;
 
-                span {
-                    border: 1px solid transparent;
+            .section {
+                width: 15%;
+
+                .name-container {
                     text-align: center;
-                    line-height: 105%;
                 }
 
-                .top {
-                    color: black;
-                    background-color: white;
-                }
+                .character-container {
+                    width: 100%;
+                    border: 1px solid white;
+                    padding: 1rem;
+                    display: flex;
+                    justify-content: space-between;
 
-                .notch {
-                    border: 1px dashed white;
+                    .character-column {
+                        width: 10%;
+                        display: flex;
+                        flex-direction: column;
+
+                        span {
+                            width: 1rem;
+                            border: 1px solid transparent;
+                            text-align: center;
+                            line-height: 105%;
+                        }
+
+                        .top {
+                            color: black;
+                            background-color: white;
+                        }
+
+                        .notch {
+                            border: 1px dashed white;
+                        }
+                    }
                 }
             }
+
+            .forward-line {
+                position: absolute;
+                border-top: solid 2px red;
+                transform-origin: 0% 0%;
+                display: block;
+            }
+
+            .backward-line {
+                position: absolute;
+                border-top: solid 2px yellow;
+                transform-origin: 0% 0%;
+                display: block;
+            }
         }
-    }
 
-    .forward-line {
-        position: absolute;
-        border-top: solid 2px red;
-        transform-origin: 0% 0%;
-        display: block;
-    }
+        .input-container {
+            width: 80%;
+            margin-top: 1rem;
 
-    .backward-line {
-        position: absolute;
-        border-top: solid 2px yellow;
-        transform-origin: 0% 0%;
-        display: block;
-    }
-}
-
-.input-container {
-    width: 80%;
-    margin-top: 1rem;
-
-    .input-box {
-        width: 100%;
-        min-height: 5vh;
-        overflow: scroll;
+            .input-box {
+                width: 100%;
+                min-height: 5vh;
+                text-align: center;
+            }
+        }
     }
 }
 
