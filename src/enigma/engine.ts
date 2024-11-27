@@ -208,9 +208,14 @@ export function assemble(config: Config): Machine {
 /** Build the generator which wait for user input and encrypt the message */
 export function buildGenerator(machine: Machine) {
     const keyboard = getKeyboard();
+    const nodePositions: number[] = [];
 
     /** Get the output letter */
-    function encryptLetter(letter: string): string {
+    function encryptLetter(letter: string, index: number, array: string[]): string {
+        function isLastItem(): boolean {
+            return index + 1 === array.length;
+        }
+
         if (letter === ' ') return ' ';
         if (!keyboard.includes(letter)) return letter;
 
@@ -218,35 +223,15 @@ export function buildGenerator(machine: Machine) {
         const sequence = getSignalSequence(machine);
 
         const inputSignal = keyboard.indexOf(letter);
-        const outputSignal = sequence.reduce(
-            function reducerFn(value, fn) {
-                return fn(value);
-            },
-            inputSignal
-        );
-        return keyboard[outputSignal];
-    }
-
-    const nodePositions: number[] = [];
-
-    /** Get the output of each component when encrypt the last letter for the UI */
-    function encryptLastLetter(letter: string): string {
-        if (!keyboard.includes(letter)) return letter;
-
-        machine = { ...rotateMachine(machine) };
-        const sequence = getSignalSequence(machine);
-
-        const inputSignal = keyboard.indexOf(letter);
-        nodePositions.push(inputSignal);
+        if (isLastItem()) nodePositions.push(inputSignal);
         const outputSignal = sequence.reduce(
             function reducerFn(value, fn) {
                 const sig = fn(value);
-                nodePositions.push(sig);
+                if (isLastItem()) nodePositions.push(sig);
                 return sig;
             },
             inputSignal
         );
-        nodePositions.push(outputSignal);
         return keyboard[outputSignal];
     }
 
@@ -262,14 +247,9 @@ export function buildGenerator(machine: Machine) {
             return [input, machine, nodePositions];
         }
 
-        if (input.length === 1) {
-            return [encryptLastLetter(input), machine, nodePositions];
-        }
-
         const characters = input.split('');
-        characters.pop();
         const encryptedCharacters = characters.map(encryptLetter);
-        const output = encryptedCharacters.join('') + encryptLastLetter(input.slice(-1));
+        const output = encryptedCharacters.join('');
 
         return [output, machine, nodePositions];
     };
