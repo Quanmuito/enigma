@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/enigma/static/css/main.355716ab.css",
-    "main.js": "/enigma/static/js/main.2d2daba3.js",
+    "main.js": "/enigma/static/js/main.43ce36ec.js",
     "index.html": "/enigma/index.html",
     "main.355716ab.css.map": "/enigma/static/css/main.355716ab.css.map",
-    "main.2d2daba3.js.map": "/enigma/static/js/main.2d2daba3.js.map"
+    "main.43ce36ec.js.map": "/enigma/static/js/main.43ce36ec.js.map"
   },
   "entrypoints": [
     "static/css/main.355716ab.css",
-    "static/js/main.2d2daba3.js"
+    "static/js/main.43ce36ec.js"
   ]
 }
