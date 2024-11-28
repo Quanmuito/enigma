@@ -1,6 +1,7 @@
-import { Config, Machine, Plugboard, Reflector, ReflectorData, Rotor, RotorData } from './types';
+import { Config, DailySettingData, Machine, Plugboard, Reflector, ReflectorData, Rotor, RotorData } from './types';
 import rotorDataList from './rotors.json';
 import reflectorDataList from './reflectors.json';
+import dailySettingsList from './dailySettings.json';
 
 const DEFAULT_KEYBOARD = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -252,5 +253,18 @@ export function buildGenerator(machine: Machine) {
         const output = encryptedCharacters.join('');
 
         return [output, machine, nodePositions];
+    };
+}
+
+export function getDailySettings(date: number = 0): Config {
+    const list = dailySettingsList as DailySettingData[];
+    const settingData = list[date];
+
+    return {
+        rotors: settingData.rotors.split(', '),
+        reflector: 'UKW-B',
+        ring: settingData.ring,
+        start: settingData.start,
+        plugboard: settingData.plugboard,
     };
 }

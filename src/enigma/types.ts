@@ -6,6 +6,14 @@ export type Config = {
     plugboard: string,
 };
 
+export type DailySettingData = {
+    date: number,
+    rotors: string,
+    ring: string,
+    start: string,
+    plugboard: string,
+};
+
 export type RotorData = {
     name: string,
     notch: string,

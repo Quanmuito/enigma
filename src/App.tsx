@@ -1,21 +1,28 @@
-import React from 'react';
-import Container from 'Container';
-import { assemble, Config } from 'enigma';
+import React, { useState } from 'react';
+import ConfiguredMachine from 'components/Enigma/ConfiguredMachine';
+import { assemble, getDailySettings } from 'enigma';
+import ConfigForm from 'components/Enigma/ConfigForm';
+import { getTodayDate } from 'utils';
+import { AppState } from 'types';
 
 export default function App() {
-    const config: Config = {
-        rotors: ['I', 'II', 'III'],
-        reflector: 'UKW-B',
-        ring: 'AAA',
-        start: 'AAA',
-        plugboard: '',
-    };
-    const configedMachine = assemble(config);
+    const [appState, setAppState] = useState<AppState>({
+        config: getDailySettings(getTodayDate()),
+        showMachine: false,
+    });
+
+    const configedMachine = assemble(appState.config);
 
     return (
         <div className="App">
             <div className="wrapper">
-                <Container configedMachine={ configedMachine } />
+                <div className="container">
+                    {
+                        appState.showMachine
+                            ? <ConfiguredMachine configedMachine={ configedMachine } setAppState={ setAppState } />
+                            :<ConfigForm config={ appState.config } setAppState={ setAppState } />
+                    }
+                </div>
             </div>
         </div>
     );
