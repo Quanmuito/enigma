@@ -2,225 +2,225 @@
     {
         "date": 0,
         "rotors": "I, II, III",
-        "rings": "AAA",
-        "starts": "AAA",
+        "ring": "AAA",
+        "start": "AAA",
         "plugboard": ""
     },
     {
         "date": 1,
         "rotors": "V, II, I",
-        "rings": "IHQ",
-        "starts": "UJJ",
+        "ring": "IHQ",
+        "start": "UJJ",
         "plugboard": "ET LD NP QS RA UW"
     },
     {
         "date": 2,
         "rotors": "II, I, V",
-        "rings": "NQC",
-        "starts": "ZJR",
+        "ring": "NQC",
+        "start": "ZJR",
         "plugboard": "AV KZ MS QP XF YU"
     },
     {
         "date": 3,
         "rotors": "IV, II, III",
-        "rings": "LIQ",
-        "starts": "KTR",
+        "ring": "LIQ",
+        "start": "KTR",
         "plugboard": "BJ HC PI RF UO ZQ"
     },
     {
         "date": 4,
         "rotors": "IV, V, III",
-        "rings": "WXE",
-        "starts": "OFP",
+        "ring": "WXE",
+        "start": "OFP",
         "plugboard": "DG IN JT UC VB WZ"
     },
     {
         "date": 5,
         "rotors": "V, I, III",
-        "rings": "MHY",
-        "starts": "XXJ",
+        "ring": "MHY",
+        "start": "XXJ",
         "plugboard": "BZ HS JF MW NG PV"
     },
     {
         "date": 6,
         "rotors": "V, I, III",
-        "rings": "ETT",
-        "starts": "HXA",
+        "ring": "ETT",
+        "start": "HXA",
         "plugboard": "FT HC KD PM YO ZB"
     },
     {
         "date": 7,
         "rotors": "I, II, III",
-        "rings": "WNM",
-        "starts": "RAO",
+        "ring": "WNM",
+        "start": "RAO",
         "plugboard": "HK CN I0 FY JM LW"
     },
     {
         "date": 8,
         "rotors": "V, IV, II",
-        "rings": "GDJ",
-        "starts": "PLE",
+        "ring": "GDJ",
+        "start": "PLE",
         "plugboard": "GT HR JI OK QE UZ"
     },
     {
         "date": 9,
         "rotors": "V, I, II",
-        "rings": "UTC",
-        "starts": "EQL",
+        "ring": "UTC",
+        "start": "EQL",
         "plugboard": "DE FT IP OB UC YL"
     },
     {
         "date": 10,
         "rotors": "I, V, II",
-        "rings": "QKP",
-        "starts": "MSW",
+        "ring": "QKP",
+        "start": "MSW",
         "plugboard": "AF HQ IJ OT PB YG"
     },
     {
         "date": 11,
         "rotors": "II, III, I",
-        "rings": "BHN",
-        "starts": "XIO",
+        "ring": "BHN",
+        "start": "XIO",
         "plugboard": "FR LY OX IT BM GJ"
     },
     {
         "date": 12,
         "rotors": "III, II, II",
-        "rings": "CKU",
-        "starts": "VQN",
+        "ring": "CKU",
+        "start": "VQN",
         "plugboard": "CK IZ QT NP JY GW"
     },
     {
         "date": 13,
         "rotors": "I, V, II",
-        "rings": "AOK",
-        "starts": "DMF",
+        "ring": "AOK",
+        "start": "DMF",
         "plugboard": "CA DZ HK LP RQ YV"
     },
     {
         "date": 14,
         "rotors": "II, V, IV",
-        "rings": "EAP",
-        "starts": "CCH",
+        "ring": "EAP",
+        "start": "CCH",
         "plugboard": "BT CO NE PK VY ZI"
     },
     {
         "date": 15,
         "rotors": "I, II, IV",
-        "rings": "BCG",
-        "starts": "KFQ",
+        "ring": "BCG",
+        "start": "KFQ",
         "plugboard": "ES GD IZ JF LN YA"
     },
     {
         "date": 16,
         "rotors": "II, I, IV",
-        "rings": "UBJ",
-        "starts": "PJU",
+        "ring": "UBJ",
+        "start": "PJU",
         "plugboard": "CO GV IH KD ML RB"
     },
     {
         "date": 17,
         "rotors": "II, IV, III",
-        "rings": "HFZ",
-        "starts": "GPZ",
+        "ring": "HFZ",
+        "start": "GPZ",
         "plugboard": "FE IB OQ VC YW ZM"
     },
     {
         "date": 18,
         "rotors": "IV, I, III",
-        "rings": "NWL",
-        "starts": "HSP",
+        "ring": "NWL",
+        "start": "HSP",
         "plugboard": "HV IM JB OT QA UF"
     },
     {
         "date": 19,
         "rotors": "IV, V, II",
-        "rings": "LDQ",
-        "starts": "IAH",
+        "ring": "LDQ",
+        "start": "IAH",
         "plugboard": "CR FO LI NM PD XH"
     },
     {
         "date": 20,
         "rotors": "I, V, III",
-        "rings": "XOM",
-        "starts": "DKV",
+        "ring": "XOM",
+        "start": "DKV",
         "plugboard": "BX IS LY NF QO WA"
     },
     {
         "date": 21,
         "rotors": "II, V, III",
-        "rings": "CTZ",
-        "starts": "TQO",
+        "ring": "CTZ",
+        "start": "TQO",
         "plugboard": "AF BK GJ VQ XH YT"
     },
     {
         "date": 22,
         "rotors": "IV, II, I",
-        "rings": "TRK",
-        "starts": "SFX",
+        "ring": "TRK",
+        "start": "SFX",
         "plugboard": "BN DU JI OK TF XC"
     },
     {
         "date": 23,
         "rotors": "II, V, IV",
-        "rings": "RWQ",
-        "starts": "IYM",
+        "ring": "RWQ",
+        "start": "IYM",
         "plugboard": "BN FK OS PW TA ZE"
     },
     {
         "date": 24,
         "rotors": "V, III, I",
-        "rings": "UCO",
-        "starts": "BDT",
+        "ring": "UCO",
+        "start": "BDT",
         "plugboard": "GC JU KE MF OD XY"
     },
     {
         "date": 25,
         "rotors": "V, III, I",
-        "rings": "MFO",
-        "starts": "ZBY",
+        "ring": "MFO",
+        "start": "ZBY",
         "plugboard": "DW GO HE UF YI ZJ"
     },
     {
         "date": 26,
         "rotors": "IV, II, III",
-        "rings": "ECW",
-        "starts": "GUB",
+        "ring": "ECW",
+        "start": "GUB",
         "plugboard": "GS JD MN OQ VF XH"
     },
     {
         "date": 27,
         "rotors": "III, I, IV",
-        "rings": "ICC",
-        "starts": "RXV",
+        "ring": "ICC",
+        "start": "RXV",
         "plugboard": "AX CW FZ KT PO SQ"
     },
     {
         "date": 28,
         "rotors": "IV, I, II",
-        "rings": "DIL",
-        "starts": "JJK",
+        "ring": "DIL",
+        "start": "JJK",
         "plugboard": "EM HL PZ RJ SV UQ"
     },
     {
         "date": 29,
         "rotors": "IV, III, V",
-        "rings": "JHS",
-        "starts": "OTO",
+        "ring": "JHS",
+        "start": "OTO",
         "plugboard": "LW RH UQ VP YM ZA"
     },
     {
         "date": 30,
         "rotors": "V, III, II",
-        "rings": "AKK",
-        "starts": "FDV",
+        "ring": "AKK",
+        "start": "FDV",
         "plugboard": "AO HI MU SN VX ZQ"
     },
     {
         "date": 31,
         "rotors": "I, II, III",
-        "rings": "TLM",
-        "starts": "QMT",
+        "ring": "TLM",
+        "start": "QMT",
         "plugboard": "AB CD EF GH IJ KL"
     }
 ]
