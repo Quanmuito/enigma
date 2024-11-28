@@ -5,21 +5,6 @@ type EndCord = {
     y: number, // cordinate on Y-axis
 }
 
-/**
- * Draw a line between 2 characters
- */
-export function connect(
-    leftCharRef: RefObject<HTMLSpanElement>,
-    rightCharRef: RefObject<HTMLSpanElement>,
-    lineRef: RefObject<HTMLDivElement>
-) {
-    if (leftCharRef.current !== null && rightCharRef.current !== null && lineRef.current !== null) {
-        const [leftEnd, rightEnd] = getEndsCord(leftCharRef.current, rightCharRef.current);
-        const drawLine = calculateLineAttribute(leftEnd, rightEnd);
-        drawLine(lineRef.current);
-    }
-}
-
 function getEndsCord(leftChar: HTMLSpanElement, rightChar: HTMLSpanElement): [EndCord, EndCord] {
     /** Get position of the left character */
     const leftCharRect = leftChar.getBoundingClientRect();
@@ -66,4 +51,23 @@ function getDistance(x: number, y: number): number {
 
 function getAngle(x: number, y: number): number {
     return (Math.atan2(x, y) + (Math.PI / 2.0)) * 180 / Math.PI;
+}
+
+/**
+ * Draw a line between 2 characters
+ */
+export function connect(
+    leftCharRef: RefObject<HTMLSpanElement>,
+    rightCharRef: RefObject<HTMLSpanElement>,
+    lineRef: RefObject<HTMLDivElement>
+) {
+    if (leftCharRef.current !== null && rightCharRef.current !== null && lineRef.current !== null) {
+        const [leftEnd, rightEnd] = getEndsCord(leftCharRef.current, rightCharRef.current);
+        const drawLine = calculateLineAttribute(leftEnd, rightEnd);
+        drawLine(lineRef.current);
+    }
+}
+
+export function getTodayDate(): number {
+    return (new Date()).getDate();
 }

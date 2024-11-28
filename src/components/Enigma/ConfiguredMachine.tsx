@@ -4,12 +4,14 @@ import Section, { SectionRefsType } from 'components/Enigma/Section';
 import { buildGenerator, getKeyboard, Machine } from 'enigma';
 import useCharacterRef from 'hooks/useCharacterRef';
 import useLineRef from 'hooks/useLineRef';
+import { AppState } from 'types';
 import { connect } from 'utils';
 
-type ContainerPropsType = {
-    configedMachine: Machine
+type ConfiguredMachinePropsType = {
+    configedMachine: Machine,
+    setAppState: React.Dispatch<React.SetStateAction<AppState>>
 }
-export default function Container({ configedMachine }: ContainerPropsType) {
+export default function ConfiguredMachine({ configedMachine, setAppState }: ConfiguredMachinePropsType) {
     const [message, setMessage] = useState<string>('ENIGMA');
 
     const generator = buildGenerator(configedMachine);
@@ -67,6 +69,13 @@ export default function Container({ configedMachine }: ContainerPropsType) {
 
     return (
         <div className="container" style={ { height: '100%' } }>
+            <button
+                className="return-button"
+                onClick={ () => setAppState((prevState) => ({ ...prevState, showMachine: false })) }
+            >
+                Return to settings
+            </button>
+
             <section className="output-container">
                 { encryptedMessage }
             </section>
