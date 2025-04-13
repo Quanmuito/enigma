@@ -5,6 +5,7 @@
         "plugin:react/recommended",
         "plugin:react-hooks/recommended",
         "plugin:jsx-a11y/recommended",
+        // "plugin:i18next/recommended",
         "plugin:import/errors",
         "plugin:import/warnings",
         "plugin:import/typescript"
@@ -101,6 +102,9 @@
         ],
         "jsx-a11y/no-autofocus": [
             0
+        ],
+        "import/no-named-as-default-member": [
+            0
         ]
     },
     "settings": {
@@ -111,12 +115,5 @@
                 ]
             }
         }
-    },
-    "globals": {
-        "Style": "writable",
-        "JSX": "writable",
-        "ErrorState": "writable",
-        "Id": "writable",
-        "IdAndName": "writable"
     }
 }

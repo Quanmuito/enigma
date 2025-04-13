@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   enigma-prod:
-    container_name: enigma-prod-container
+    container_name: enigma-container
     build:
       context: .
       dockerfile: Dockerfile
