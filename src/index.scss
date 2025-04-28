@@ -7,13 +7,16 @@ $font-med: 16px;
 $font-large: 18px;
 
 /**
+ * Position
  * Width
  * Height
  * Margin
  * Border
  * Padding
- * Rest of box
+ * Display
  * Content
+ * Background
+ * Transform
  */
 
 @mixin media-med {
@@ -42,14 +45,14 @@ html {
 }
 
 body {
-    background: url("./background.jpg") no-repeat;
+    background: url("https://projectpictures2024.s3.eu-north-1.amazonaws.com/enigma-background.jpg") no-repeat;
     background-position: center;
     background-size: cover;
 }
 
 .App {
     position: relative;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .wrapper {

@@ -1,7 +1,6 @@
 import React from 'react';
-import type { FormProps } from 'antd';
 import { Radio, Button, Form, Input } from 'antd';
-import { Config } from 'enigma';
+import { Config } from 'libs/enigma';
 import { validatePlugboardSetting, validateRotorSetting } from 'validation';
 import { AppState } from 'types';
 import { getTodayDate } from 'utils';
@@ -31,7 +30,7 @@ export default function ConfigForm({ config, setAppState }: ConfigFormPropsType)
         plugboard: config.plugboard,
     };
 
-    const onFinish: FormProps<FieldType>['onFinish'] = (values: FieldType) => {
+    function onFinish(values: FieldType) {
         const newConfig = {
             reflector: values.reflector,
             rotors: [values.rotor1, values.rotor2, values.rotor3],
@@ -43,11 +42,11 @@ export default function ConfigForm({ config, setAppState }: ConfigFormPropsType)
             config: { ...newConfig },
             showMachine: true,
         });
-    };
+    }
 
-    const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (_) => {
+    function onFinishFailed() {
         alert('Invalid input');
-    };
+    }
 
     return (
         <div className="form-container">

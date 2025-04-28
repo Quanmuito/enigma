@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ConfiguredMachine from 'components/Enigma/ConfiguredMachine';
-import { assemble, getDailySettings } from 'enigma';
+import { assemble, getDailySettings } from 'libs/enigma';
 import ConfigForm from 'components/Enigma/ConfigForm';
 import { getTodayDate } from 'utils';
 import { AppState } from 'types';
@@ -20,7 +20,7 @@ export default function App() {
                     {
                         appState.showMachine
                             ? <ConfiguredMachine configedMachine={ configedMachine } setAppState={ setAppState } />
-                            :<ConfigForm config={ appState.config } setAppState={ setAppState } />
+                            : <ConfigForm config={ appState.config } setAppState={ setAppState } />
                     }
                 </div>
             </div>

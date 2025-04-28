@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import CharacterColumn, { CharacterColumnRefObjectType } from 'components/Enigma/CharacterColumn';
 import Section, { SectionRefsType } from 'components/Enigma/Section';
-import { buildGenerator, getKeyboard, Machine } from 'enigma';
+import { buildGenerator, Machine, KEYBOARD } from 'libs/enigma';
 import useCharacterRef from 'hooks/useCharacterRef';
 import useLineRef from 'hooks/useLineRef';
 import { AppState } from 'types';
@@ -117,7 +117,7 @@ export default function ConfiguredMachine({ configedMachine, setAppState }: Conf
                         <h5>Keyboard/Lamb</h5>
                     </div>
                     <div className="character-container" style={ { justifyContent: 'center' } }>
-                        <CharacterColumn name="keyboard" characters={ getKeyboard() } refs={ keyboardRefs } />
+                        <CharacterColumn name="keyboard" characters={ KEYBOARD } refs={ keyboardRefs } />
                     </div>
                 </div>
             </section>
