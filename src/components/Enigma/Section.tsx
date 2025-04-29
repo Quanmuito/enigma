@@ -1,5 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useRef, useEffect } from 'react';
-import { connect } from 'utils';
+import { connect } from 'libs/utils';
 import { NodeRefObjectType } from 'types';
 import CharacterColumn from 'components/Enigma/CharacterColumn';
 

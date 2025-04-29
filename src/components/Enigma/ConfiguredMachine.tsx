@@ -5,7 +5,7 @@ import { buildGenerator, Machine, KEYBOARD } from 'libs/enigma';
 import useCharacterRef from 'hooks/useCharacterRef';
 import useLineRef from 'hooks/useLineRef';
 import { AppState } from 'types';
-import { connect } from 'utils';
+import { connect } from 'libs/utils';
 
 type ConfiguredMachinePropsType = {
     configedMachine: Machine,

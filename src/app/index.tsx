@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ConfiguredMachine from 'components/Enigma/ConfiguredMachine';
 import { assemble, getDailySettings } from 'libs/enigma';
 import ConfigForm from 'components/Enigma/ConfigForm';
-import { getTodayDate } from 'utils';
+import { getTodayDate } from 'libs/utils';
 import { AppState } from 'types';
 
 export default function App() {

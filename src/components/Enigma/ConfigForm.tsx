@@ -1,9 +1,9 @@
 import React from 'react';
 import { Radio, Button, Form, Input } from 'antd';
 import { Config } from 'libs/enigma';
-import { validatePlugboardSetting, validateRotorSetting } from 'validation';
+import { validatePlugboardSetting, validateRotorSetting } from 'libs/validation';
 import { AppState } from 'types';
-import { getTodayDate } from 'utils';
+import { getTodayDate } from 'libs/utils';
 
 type FieldType = {
     reflector: string,

@@ -1,0 +1,4 @@
+{
+    "welcomeMessage": "Welcome to React and react-i18next",
+    "welcomeUser": "Welcome, <1>user</1>! <3>lets go</3>"
+}
