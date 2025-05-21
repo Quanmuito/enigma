@@ -54,7 +54,7 @@ export function LocaleProvider({ children }: LocaleProviderPropsType) {
     );
 }
 
-export function useLocale() {
+export function useLocaleContext() {
     const context = useContext(LocaleContext);
     if (context === undefined) {
         throw new Error('useLocale must be used within a LocaleProvider');
