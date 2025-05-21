@@ -13,12 +13,12 @@ import {
     LOCALES
 } from 'constants/locales';
 
-interface LocaleContextType {
-    locale: Locale;
-    setLocale: (e: ChangeEvent<HTMLSelectElement>) => void;
+type LocaleContextType = {
+    locale: Locale,
+    setLocale: (e: ChangeEvent<HTMLSelectElement>) => void,
 }
 
-interface LocaleProviderPropsType {
+type LocaleProviderPropsType = {
     children: ReactNode;
 }
 

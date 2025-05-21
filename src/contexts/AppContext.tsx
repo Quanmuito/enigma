@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react';
 import { ThemeProvider } from './ThemeContext';
 import { LocaleProvider } from './LocaleContext';
-import { MenuProvider } from './MenuContext';
+import { UIProvider } from './UIContext';
 
-interface AppProviderPropsType {
+type AppProviderPropsType = {
     children: ReactNode;
 }
 
@@ -11,9 +11,9 @@ export function AppProvider({ children }: AppProviderPropsType) {
     return (
         <ThemeProvider>
             <LocaleProvider>
-                <MenuProvider>
+                <UIProvider>
                     { children }
-                </MenuProvider>
+                </UIProvider>
             </LocaleProvider>
         </ThemeProvider>
     );

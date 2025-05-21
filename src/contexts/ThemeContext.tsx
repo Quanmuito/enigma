@@ -11,12 +11,12 @@ import {
     THEME_DARK
 } from 'constants/themes';
 
-interface ThemeContextType {
-    theme: Theme;
-    toggleTheme: () => void;
+type ThemeContextType = {
+    theme: Theme,
+    toggleTheme: () => void,
 }
 
-interface ThemeProviderPropsType {
+type ThemeProviderPropsType = {
     children: ReactNode;
 }
 
