@@ -1,0 +1,51 @@
+.menuBtn {
+    position: relative;
+    width: 3rem;
+    height: 2rem;
+    padding-top: 1rem;
+    display: block;
+    cursor: pointer;
+}
+
+.menuBtnBurger,
+.menuBtnBurger::before,
+.menuBtnBurger::after {
+    position: absolute;
+    width: 3rem;
+    height: .25rem;
+    display: block;
+    content: "";
+    background-color: var(--secondary-color);
+    transition: var(--transition);
+}
+
+.menuBtnBurger {
+    &::before {
+        transform: translateY(-1rem);
+    }
+
+    &::after {
+        width: 1.5rem;
+        transform: translateY(1rem);
+    }
+}
+
+.menuBtnBurgerOpen {
+    transform: rotate(720deg);
+    background-color: transparent;
+
+    &::before {
+        transform: rotate(45deg) translate(0);
+    }
+
+    &::after {
+        width: 3rem;
+        transform: rotate(-45deg) translate(0);
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    .menuBtn {
+        display: none;
+    }
+}

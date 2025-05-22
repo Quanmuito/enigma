@@ -1,0 +1,32 @@
+.menuNavPages {
+    max-height: 65vh;
+    margin: 0;
+    padding: 1.5rem 0;
+    list-style: none;
+}
+
+.menuNavActions {
+    min-height: 20vh;
+    padding: 0.5rem 0;
+    list-style: none;
+    background-color: var(--secondary-color);
+}
+
+@media screen and (min-width: 1000px) {
+    .menuNavPages {
+        height: auto;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .menuNavActions {
+        min-height: auto;
+        padding: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: end;
+        background-color: transparent;
+    }
+}
