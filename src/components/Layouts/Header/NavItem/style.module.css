@@ -26,31 +26,6 @@
         text-decoration: underline;
     }
 
-    a {
-        width: 100%;
-        height: 100%;
-        font-size: 1rem;
-        margin-left: .5rem;
-    }
-
-    select {
-        margin-left: .3rem;
-        border: none;
-        font: inherit;
-        font-size: 1rem;
-        color: inherit;
-        cursor: pointer;
-        background-color: inherit;
-
-        &:hover {
-            text-decoration: underline;
-        }
-
-        option:checked {
-            background-color: var(--secondary-color);
-        }
-    }
-
     svg {
         width: 1.5rem;
         height: 1.5rem;
@@ -59,7 +34,21 @@
 }
 
 .navIcon {
+    padding: .8rem 2rem;
     text-align: center;
+
+    a {
+        width: 100%;
+        height: 100%;
+        font-size: 1rem;
+        margin-left: .5rem;
+    }
+
+    svg {
+        width: 1.5rem;
+        height: 1.5rem;
+        margin-right: 1rem;
+    }
 }
 
 @media screen and (min-width: 1000px) {

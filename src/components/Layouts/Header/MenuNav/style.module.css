@@ -8,6 +8,9 @@
 .menuNavActions {
     min-height: 20vh;
     padding: 0.5rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     list-style: none;
     background-color: var(--secondary-color);
 }
@@ -24,7 +27,6 @@
     .menuNavActions {
         min-height: auto;
         padding: 0;
-        display: flex;
         flex-direction: row;
         justify-content: end;
         background-color: transparent;

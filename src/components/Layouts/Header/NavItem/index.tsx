@@ -1,14 +1,12 @@
 import React, { ReactNode } from 'react';
 import style from './style.module.css';
-import { useUIContext } from 'contexts/UIContext';
 
 type NavPageItemPropsType = {
     route: string;
     text: string;
+    toggleMenu: () => void;
 }
-export function NavPageItem({ route, text }: NavPageItemPropsType) {
-    const { toggleMenu } = useUIContext();
-
+export function NavPageItem({ route, text, toggleMenu }: NavPageItemPropsType) {
     return (
         <li className={ `${style.menuNavPagesItem} ${style.menuNavPagesItemActive}` }>
             <a href={ route } onClick={ toggleMenu }>{ text }</a>
@@ -35,7 +33,7 @@ type NavIconPropsType = {
 }
 export function NavIcon({ href, icon }: NavIconPropsType) {
     return (
-        <li className={ `${style.menuNavActionsItem} ${style.navIcon}` }>
+        <li className={ style.navIcon }>
             <a target="_blank" href={ href } rel="noreferrer">{ icon }</a>
         </li>
     );
