@@ -12,8 +12,8 @@ import {
 } from 'constants/themes';
 
 type ThemeContextType = {
-    theme: Theme,
-    toggleTheme: () => void,
+    theme: Theme;
+    toggleTheme: () => void;
 }
 
 type ThemeProviderPropsType = {

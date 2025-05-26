@@ -14,8 +14,8 @@ import {
 } from 'constants/locales';
 
 type LocaleContextType = {
-    locale: Locale,
-    setLocale: (e: ChangeEvent<HTMLSelectElement>) => void,
+    locale: Locale;
+    setLocale: (e: ChangeEvent<HTMLSelectElement>) => void;
 }
 
 type LocaleProviderPropsType = {
