@@ -1,22 +1,25 @@
-.menuNavPages {
-    max-height: 65vh;
+.menuNavPage,
+.menuNavAction {
     margin: 0;
-    padding: 1.5rem 0;
     list-style: none;
-}
-
-.menuNavActions {
-    min-height: 20vh;
-    padding: 0.5rem 0;
     display: flex;
     flex-direction: column;
+}
+
+.menuNavPage {
+    max-height: 65vh;
+    justify-content: start;
+    background-color: var(--primary-color);
+}
+
+.menuNavAction {
+    min-height: 20vh;
     justify-content: space-between;
-    list-style: none;
     background-color: var(--secondary-color);
 }
 
-@media screen and (min-width: 1000px) {
-    .menuNavPages {
+/* @media screen and (min-width: 1000px) {
+    .menuNavPage {
         height: auto;
         margin: 0;
         padding: 0;
@@ -24,11 +27,11 @@
         flex-direction: row;
     }
 
-    .menuNavActions {
+    .menuNavAction {
         min-height: auto;
         padding: 0;
         flex-direction: row;
         justify-content: end;
         background-color: transparent;
     }
-}
+} */

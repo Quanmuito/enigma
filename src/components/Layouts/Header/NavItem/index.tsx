@@ -8,7 +8,7 @@ type NavPageItemPropsType = {
 }
 export function NavPageItem({ route, text, toggleMenu }: NavPageItemPropsType) {
     return (
-        <li className={ `${style.menuNavPagesItem} ${style.menuNavPagesItemActive}` }>
+        <li className={ `${style.menuNavPageItem} ${style.menuNavPageItemActive}` }>
             <a href={ route } onClick={ toggleMenu }>{ text }</a>
         </li>
     );
@@ -20,21 +20,30 @@ type NavActionItemPropsType = {
 }
 export function NavActionItem({ icon, action }: NavActionItemPropsType) {
     return (
-        <li className={ style.menuNavActionsItem }>
+        <li className={ style.menuNavActionItem }>
             { icon }
             { action }
         </li>
     );
 }
 
-type NavIconPropsType = {
+type NavActionIconsPropsType = {
+    children: ReactNode;
+}
+export function NavActionIcons({ children }: NavActionIconsPropsType) {
+    return (
+        <li className={ style.menuNavActionIcons }>
+            { children }
+        </li>
+    );
+}
+
+type NavActionIconPropsType = {
     href: string;
     icon: ReactNode;
 }
-export function NavIcon({ href, icon }: NavIconPropsType) {
+export function NavActionIcon({ href, icon }: NavActionIconPropsType) {
     return (
-        <li className={ style.navIcon }>
-            <a target="_blank" href={ href } rel="noreferrer">{ icon }</a>
-        </li>
+        <a href={ href } target="_blank" rel="noreferrer">{ icon }</a>
     );
 }

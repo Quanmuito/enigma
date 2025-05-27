@@ -3,17 +3,18 @@ import React, {
     useContext,
     useState,
     useEffect,
-    ReactNode
+    ReactNode,
+    ChangeEvent
 } from 'react';
 import {
     Theme,
     THEME_LIGHT,
-    THEME_DARK
+    THEMES
 } from 'constants/themes';
 
 type ThemeContextType = {
     theme: Theme;
-    toggleTheme: () => void;
+    setTheme: (e: ChangeEvent<HTMLSelectElement>) => void;
 }
 
 type ThemeProviderPropsType = {
@@ -24,23 +25,24 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 const THEME_KEY = 'app-theme';
 
 export function ThemeProvider({ children }: ThemeProviderPropsType) {
-    const [theme, setTheme] = useState<Theme>(THEME_LIGHT);
+    const [theme, setThemeState] = useState<Theme>(THEME_LIGHT);
 
     useEffect(() => {
         const storedTheme = localStorage.getItem(THEME_KEY) as Theme | null;
-        if (storedTheme) setTheme(storedTheme);
+        if (storedTheme) setThemeState(storedTheme);
     }, []);
 
     useEffect(() => {
         localStorage.setItem(THEME_KEY, theme);
     }, [theme]);
 
-    function toggleTheme() {
-        setTheme((prev) => (prev === THEME_LIGHT ? THEME_DARK : THEME_LIGHT));
+    function setTheme(e: ChangeEvent<HTMLSelectElement>) {
+        const theme = e.target.value;
+        if (THEMES.includes(theme as Theme)) setThemeState(theme as Theme);
     }
 
     return (
-        <ThemeContext.Provider value={ { theme, toggleTheme } }>
+        <ThemeContext.Provider value={ { theme, setTheme } }>
             { children }
         </ThemeContext.Provider>
     );

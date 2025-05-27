@@ -1,10 +1,16 @@
-.menuNavPagesItem {
-    margin: .5rem 0;
-    padding: 0 2rem;
+.menuNavPageItem,
+.menuNavActionItem,
+.menuNavActionIcons {
+    padding: 1rem 2rem;
+    display: flex;
 
     &:hover {
-        background-color: var(--secondary-color-dark);
+        text-decoration: underline;
     }
+}
+
+.menuNavPageItem {
+    background-color: var(--secondary-color);
 
     a {
         width: 100%;
@@ -12,47 +18,29 @@
         display: block;
         line-height: 4rem;
         font-size: 1.5rem;
+        text-transform: uppercase;
     }
 }
 
-.menuNavPagesItemActive {
-    background-color: var(--secondary-color-dark);
+.menuNavPageItemActive {
+    text-decoration: underline;
 }
 
-.menuNavActionsItem {
-    padding: .8rem 2rem;
-
-    &:hover {
-        text-decoration: underline;
-    }
-
+.menuNavActionItem,
+.menuNavActionIcons {
     svg {
-        width: 1.5rem;
-        height: 1.5rem;
-        margin-right: 1rem;
+        width: 2rem;
+        height: 2rem;
+        line-height: 2rem;
     }
 }
 
-.navIcon {
-    padding: .8rem 2rem;
-    text-align: center;
-
-    a {
-        width: 100%;
-        height: 100%;
-        font-size: 1rem;
-        margin-left: .5rem;
-    }
-
-    svg {
-        width: 1.5rem;
-        height: 1.5rem;
-        margin-right: 1rem;
-    }
+.menuNavActionIcons {
+    justify-content: space-around;
 }
 
-@media screen and (min-width: 1000px) {
-    .menuNavPagesItem {
+/* @media screen and (min-width: 1000px) {
+    .menuNavPageItem {
         margin: 0;
         padding: 0;
 
@@ -64,11 +52,11 @@
         }
     }
 
-    .menuNavPagesItemActive {
+    .menuNavPageItemActive {
         background-color: transparent;
     }
 
-    .menuNavActions {
+    .menuNavAction {
         min-height: auto;
         padding: 0;
         display: flex;
@@ -77,7 +65,7 @@
         background-color: transparent;
     }
 
-    .menuNavActionsItem {
+    .menuNavActionItem {
         border: 1px solid var(--secondary-color);
         border-radius: 5%;
         margin: .5rem;
@@ -107,4 +95,4 @@
     .navIcon {
         display: none;
     }
-}
+} */

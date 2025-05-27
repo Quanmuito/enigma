@@ -7,7 +7,7 @@ type MenuNavPropsType = {
 
 export function MenuNavPages({ children }: MenuNavPropsType) {
     return (
-        <ul className={ style.menuNavPages }>
+        <ul className={ style.menuNavPage }>
             { children }
         </ul>
     );
@@ -15,7 +15,7 @@ export function MenuNavPages({ children }: MenuNavPropsType) {
 
 export function MenuNavActions({ children }: MenuNavPropsType) {
     return (
-        <ul className={ style.menuNavActions }>
+        <ul className={ style.menuNavAction }>
             { children }
         </ul>
     );

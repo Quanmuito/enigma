@@ -30,9 +30,7 @@ export function LocaleProvider({ children }: LocaleProviderPropsType) {
 
     useEffect(() => {
         const storedLocale = localStorage.getItem(LOCALE_KEY) as Locale | null;
-        if (storedLocale) {
-            setLocaleState(storedLocale);
-        }
+        if (storedLocale) setLocaleState(storedLocale);
     }, []);
 
     useEffect(() => {
