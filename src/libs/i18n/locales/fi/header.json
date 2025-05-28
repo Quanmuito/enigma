@@ -2,5 +2,7 @@
     "labelChangeLanguage": "Vaihda kieltä",
     "en": "English",
     "fi": "Suomi",
-    "vi": "Tiếng Việt"
+    "vi": "Tiếng Việt",
+    "light": "Vaalea teema",
+    "dark": "Tumma teema"
 }

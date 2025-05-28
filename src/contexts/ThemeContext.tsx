@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import {
     Theme,
+    THEME_KEY,
     THEME_LIGHT,
     THEMES
 } from 'constants/themes';
@@ -22,7 +23,6 @@ type ThemeProviderPropsType = {
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
-const THEME_KEY = 'app-theme';
 
 export function ThemeProvider({ children }: ThemeProviderPropsType) {
     const [theme, setThemeState] = useState<Theme>(THEME_LIGHT);
@@ -37,8 +37,11 @@ export function ThemeProvider({ children }: ThemeProviderPropsType) {
     }, [theme]);
 
     function setTheme(e: ChangeEvent<HTMLSelectElement>) {
-        const theme = e.target.value;
-        if (THEMES.includes(theme as Theme)) setThemeState(theme as Theme);
+        const newTheme = e.target.value;
+
+        if (THEMES.includes(newTheme as Theme)) {
+            setThemeState(newTheme as Theme);
+        }
     }
 
     return (

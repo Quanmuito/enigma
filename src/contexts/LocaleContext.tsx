@@ -10,6 +10,7 @@ import i18n from 'libs/i18n';
 import {
     Locale,
     LOCALE_EN,
+    LOCALE_KEY,
     LOCALES
 } from 'constants/locales';
 
@@ -23,7 +24,6 @@ type LocaleProviderPropsType = {
 }
 
 const LocaleContext = createContext<LocaleContextType | undefined>(undefined);
-const LOCALE_KEY = 'app-locale';
 
 export function LocaleProvider({ children }: LocaleProviderPropsType) {
     const [locale, setLocaleState] = useState<Locale>(LOCALE_EN);
@@ -39,9 +39,10 @@ export function LocaleProvider({ children }: LocaleProviderPropsType) {
 
     function setLocale(e: ChangeEvent<HTMLSelectElement>) {
         const lang = e.target.value;
+
         if (LOCALES.includes(lang as Locale)) {
-            i18n.changeLanguage(lang);
             setLocaleState(lang as Locale);
+            i18n.changeLanguage(lang);
         }
     }
 
