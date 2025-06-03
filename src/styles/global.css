@@ -6,9 +6,11 @@
     --font-1300: 16px;
     --font-1600: 18px;
     --font-1900: 20px;
-    --text-color: 0, 0, 0;
-    --background-light: 230, 230, 230;
-    --background-dark: 230, 230, 230;
+    --text-color: #fff;
+    --primary-color: #ddd0c8;
+    --secondary-color: #323232;
+    --highlight-color: #e9a319;
+    --transition: all .2s ease;
 }
 
 /**
@@ -53,7 +55,7 @@ html {
 body {
     min-height: 100vh;
     width: 100%;
-    color: rgb(var(--text-color));
+    color: var(--text-color);
     font-weight: 300;
     font-family: 'Sriracha', 'Poppins', 'Open Sans', sans-serif;
     background: url("https://projectpictures2024.s3.eu-north-1.amazonaws.com/enigma-background.jpg") no-repeat;
@@ -64,6 +66,13 @@ body {
 a {
     color: rgb(255, 255, 255);
     text-decoration: none;
+}
+
+ul,
+ol,
+dl {
+    margin: 0;
+    padding: 0;
 }
 
 #root,

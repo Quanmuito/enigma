@@ -1,0 +1,6 @@
+.select {
+    border: none;
+    border-radius: 5%;
+}
+
+@media screen and (min-width: 1000px) {}

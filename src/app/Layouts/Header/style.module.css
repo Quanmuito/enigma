@@ -1,0 +1,117 @@
+header {
+    position: fixed;
+    z-index: 999;
+    width: 100vw;
+    height: 15vh;
+    padding: .3rem 2rem;
+    color: var(--text-color);
+    display: grid;
+    grid-template-areas: "navigation logo buttons";
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: center;
+    background-color: var(--primary-color);
+}
+
+.headerLogo {
+    grid-area: logo;
+    justify-self: center;
+
+    img {
+        width: 80%;
+        margin: auto;
+        display: block;
+    }
+}
+
+.headerNavigation {
+    grid-area: navigation;
+    width: 100%;
+    justify-self: start;
+}
+
+.headerButtons {
+    grid-area: buttons;
+    justify-self: end;
+
+    svg {
+        width: 2.5rem;
+        height: 2.5rem;
+        color: var(--secondary-color);
+    }
+}
+
+.nav {
+    position: fixed;
+    top: 15vh;
+    left: 0;
+    width: 100vw;
+    visibility: hidden;
+    background-color: var(--primary-color);
+}
+
+.navOpen {
+    visibility: visible;
+}
+
+.menuNav {
+    height: 85vh;
+    transform: translateX(-100%);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.menuNavOpen {
+    transform: translateY(0);
+}
+
+.navIconContainer {
+    display: flex;
+    justify-content: space-around;
+}
+
+.changeLanguage {
+    border: none;
+    border-radius: 5%;
+    margin: 0 0 0 1.5rem;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    a {
+        width: auto;
+        height: auto;
+        margin: 0;
+        padding: .25rem 1rem;
+        line-height: 2rem;
+        font-size: 1.5rem;
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    header {
+        padding: .5rem 10rem;
+        grid-template-columns: 1fr 5fr .5fr;
+        grid-template-areas: "logo navigation buttons";
+    }
+
+    .headerLogo {
+        justify-self: end;
+
+        img {
+            width: auto;
+            height: 13vh;
+            margin-right: 1rem;
+        }
+    }
+
+    .headerNavigation {
+        justify-self: end;
+    }
+
+    .headerButtons {
+        justify-self: end;
+    }
+}
