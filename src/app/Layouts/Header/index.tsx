@@ -43,7 +43,7 @@ export default function Header() {
 
     const { t } = useTranslation(['header']);
     const SelectLocale = Select('selectLanguage', t);
-    const SelectTheme = Select('select-theme', t);
+    const SelectTheme = Select('selectTheme', t);
 
     return (
         <header>
