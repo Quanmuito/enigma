@@ -1,36 +1,63 @@
 import React from 'react';
-import { TFunction } from 'i18next';
-import style from './style.module.css';
+import styles from './style.module.css';
 
-type SelectPropsType = {
-    list: string[];
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-    customStyle?: { readonly [key: string]: string };
-}
+type SelectProps = React.SelectHTMLAttributes<HTMLSelectElement> & {
+    label?: string;
+    error?: string;
+    helperText?: string;
+};
 
-export default function Select(name: string, t: TFunction) {
-    const key = name.charAt(0).toUpperCase() + name.slice(1);
+type OptionProps = React.OptionHTMLAttributes<HTMLOptionElement>;
 
-    return function Select({ list, value, onChange, customStyle = undefined }: SelectPropsType) {
+export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
+    ({ label, error, helperText, className, name, id, children, ...props }, ref) => {
+        const selectId = id || name;
+        const errorId = error && selectId ? `${selectId}-error` : undefined;
+        const helperId = helperText && !error && selectId ? `${selectId}-helper` : undefined;
+
+        const selectClassName = [
+            styles.select,
+            error && styles.selectError,
+            className,
+        ].filter(Boolean).join(' ');
+
         return (
-            <select
-                id={ name }
-                name={ name }
-                className={ style.select }
-                style={ customStyle }
-                aria-label={ t(`label${key}`) }
-                value={ value }
-                onChange={ onChange }
-            >
-                { list.map(Option(t)) }
-            </select>
+            <div className={ styles.selectWrapper }>
+                { label && (
+                    <label htmlFor={ selectId } className={ styles.label }>
+                        { label }
+                    </label>
+                ) }
+                <select
+                    ref={ ref }
+                    id={ selectId }
+                    name={ name }
+                    className={ selectClassName }
+                    aria-invalid={ !!error }
+                    aria-describedby={ errorId || helperId }
+                    { ...props }
+                >
+                    { children }
+                </select>
+                { error && (
+                    <span id={ errorId } className={ styles.errorMessage }>
+                        { error }
+                    </span>
+                ) }
+                { helperText && !error && (
+                    <span id={ helperId } className={ styles.helperText }>
+                        { helperText }
+                    </span>
+                ) }
+            </div>
         );
-    };
-}
+    }
+);
 
-function Option(t: TFunction) {
-    return function Option(value: string, index: number) {
-        return <option key={ value + index } value={ value }>{ t(value) }</option>;
-    };
-}
+Select.displayName = 'Select';
+
+export const Option: React.FC<OptionProps> = ({ children, ...props }) => {
+    return <option { ...props }>{ children }</option>;
+};
+
+Option.displayName = 'Option';
