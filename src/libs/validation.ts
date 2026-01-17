@@ -1,11 +1,11 @@
-export const KEYBOARD = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+import { KEYBOARD_STRING } from 'libs/enigma/constants';
 
 const isEmpty = (string: string): boolean => {
     return (string === '') || (string === ' ');
 };
 
 const isEncryptable = (char: string): boolean => {
-    return KEYBOARD.includes(char);
+    return KEYBOARD_STRING.includes(char);
 };
 
 const getInvalidCharacterForSetting = (input: string): string[] => {

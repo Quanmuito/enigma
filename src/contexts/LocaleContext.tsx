@@ -3,20 +3,16 @@ import React, {
     useContext,
     useState,
     useEffect,
-    ReactNode,
-    ChangeEvent
+    ReactNode
 } from 'react';
-import i18n from 'libs/i18n';
-import {
+import i18n, {
     Locale,
-    LOCALE_EN,
-    LOCALE_KEY,
     LOCALES
-} from 'constants/locales';
+} from 'libs/i18n';
 
 type LocaleContextType = {
     locale: Locale;
-    setLocale: (e: ChangeEvent<HTMLSelectElement>) => void;
+    setLocale: (locale: Locale) => void;
 }
 
 type LocaleProviderPropsType = {
@@ -26,23 +22,22 @@ type LocaleProviderPropsType = {
 const LocaleContext = createContext<LocaleContextType | undefined>(undefined);
 
 export function LocaleProvider({ children }: LocaleProviderPropsType) {
-    const [locale, setLocaleState] = useState<Locale>(LOCALE_EN);
+    const [locale, setLocaleState] = useState<Locale>(i18n.language as Locale);
 
     useEffect(() => {
-        const storedLocale = localStorage.getItem(LOCALE_KEY) as Locale | null;
-        if (storedLocale) setLocaleState(storedLocale);
+        const handleLanguageChanged = (lang: string) => {
+            setLocaleState(lang as Locale);
+        };
+
+        i18n.on('languageChanged', handleLanguageChanged);
+        return () => {
+            i18n.off('languageChanged', handleLanguageChanged);
+        };
     }, []);
 
-    useEffect(() => {
-        localStorage.setItem(LOCALE_KEY, locale);
-    }, [locale]);
-
-    function setLocale(e: ChangeEvent<HTMLSelectElement>) {
-        const lang = e.target.value;
-
-        if (LOCALES.includes(lang as Locale)) {
-            setLocaleState(lang as Locale);
-            i18n.changeLanguage(lang);
+    function setLocale(newLocale: Locale) {
+        if (LOCALES.includes(newLocale)) {
+            i18n.changeLanguage(newLocale);
         }
     }
 

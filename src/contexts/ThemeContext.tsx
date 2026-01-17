@@ -3,8 +3,7 @@ import React, {
     useContext,
     useState,
     useEffect,
-    ReactNode,
-    ChangeEvent
+    ReactNode
 } from 'react';
 import {
     Theme,
@@ -15,7 +14,7 @@ import {
 
 type ThemeContextType = {
     theme: Theme;
-    setTheme: (e: ChangeEvent<HTMLSelectElement>) => void;
+    setTheme: (theme: Theme) => void;
 }
 
 type ThemeProviderPropsType = {
@@ -25,22 +24,18 @@ type ThemeProviderPropsType = {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: ThemeProviderPropsType) {
-    const [theme, setThemeState] = useState<Theme>(THEME_LIGHT);
-
-    useEffect(() => {
+    const [theme, setThemeState] = useState<Theme>(() => {
         const storedTheme = localStorage.getItem(THEME_KEY) as Theme | null;
-        if (storedTheme) setThemeState(storedTheme);
-    }, []);
+        return storedTheme || THEME_LIGHT;
+    });
 
     useEffect(() => {
         localStorage.setItem(THEME_KEY, theme);
     }, [theme]);
 
-    function setTheme(e: ChangeEvent<HTMLSelectElement>) {
-        const newTheme = e.target.value;
-
-        if (THEMES.includes(newTheme as Theme)) {
-            setThemeState(newTheme as Theme);
+    function setTheme(newTheme: Theme) {
+        if (THEMES.includes(newTheme)) {
+            setThemeState(newTheme);
         }
     }
 

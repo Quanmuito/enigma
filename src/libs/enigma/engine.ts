@@ -12,11 +12,9 @@ import rotorDataList from './data/rotors.json';
 import reflectorDataList from './data/reflectors.json';
 import dailySettingsList from './data/dailySettings.json';
 import { isLastItem, isString } from './utils';
-
-
-// ---- Constants ------------------------------------------------------------------------------------------------------
-
-export const KEYBOARD = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+import { KEYBOARD } from './constants';
+import { RotorNotFoundError, ReflectorNotFoundError, InvalidDateError } from './errors';
+import { validateConfig } from './validation';
 
 
 // ---- Utilities ------------------------------------------------------------------------------------------------------
@@ -53,8 +51,18 @@ function rotateRotor(steps: number = 1) {
 
 // ---- Rotor Configuration --------------------------------------------------------------------------------------------
 
+/**
+ * Get rotor configuration by name
+ * @param name - The name of the rotor (e.g., "I", "II", "III")
+ * @returns Rotor configuration object
+ * @throws {RotorNotFoundError} If rotor name is not found in rotor data
+ */
 function getRotorByName(name: string): Rotor {
-    const data = (rotorDataList as RotorData[]).find((r) => r.name === name)!;
+    const data = (rotorDataList as RotorData[]).find((r) => r.name === name);
+
+    if (!data) {
+        throw new RotorNotFoundError(name);
+    }
 
     return {
         notch: data.notch,
@@ -99,9 +107,19 @@ function getConfiguredRotors(config: Config): Rotor[] {
 
 // ---- Reflector & Plugboard ------------------------------------------------------------------------------------------
 
-/** Get reflector based on config */
+/**
+ * Get reflector configuration by name
+ * @param name - The name of the reflector (e.g., "UKW-A", "UKW-B", "UKW-C")
+ * @returns Reflector configuration object
+ * @throws {ReflectorNotFoundError} If reflector name is not found in reflector data
+ */
 function getReflector(name: string): Reflector {
-    const data = (reflectorDataList as ReflectorData[]).find((r) => r.name === name)!;
+    const data = (reflectorDataList as ReflectorData[]).find((r) => r.name === name);
+
+    if (!data) {
+        throw new ReflectorNotFoundError(name);
+    }
+
     return {
         ingang: KEYBOARD,
         engang: data.wiring.split(''),
@@ -194,19 +212,38 @@ function getSignalSequence(machine: Machine): GetSignalFunction[] {
 
 // ---- Main Assembly --------------------------------------------------------------------------------------------------
 
-export function getDailySettings(date: number = 0): Config {
-    const setting = (dailySettingsList as DailySettingData[])[date];
+/**
+ * Get daily settings configuration for a specific date
+ * @param date - Date index (0-based) for daily settings
+ * @param defaultReflector - Optional reflector name (defaults to "UKW-B")
+ * @returns Configuration object for the specified date
+ * @throws {InvalidDateError} If date index is out of bounds
+ */
+export function getDailySettings(date: number = 0, defaultReflector: string = 'UKW-B'): Config {
+    const settings = dailySettingsList as DailySettingData[];
+    
+    if (date < 0 || date >= settings.length) {
+        throw new InvalidDateError(date, settings.length - 1);
+    }
+
+    const setting = settings[date];
     return {
         rotors: setting.rotors.split(', '),
-        reflector: 'UKW-B',
+        reflector: defaultReflector,
         ring: setting.ring,
         start: setting.start,
         plugboard: setting.plugboard,
     };
 }
 
-/** Get the configured machine */
+/**
+ * Assemble a configured Enigma machine from configuration
+ * @param config - Configuration object with rotors, reflector, ring, start, and plugboard settings
+ * @returns Configured Machine object ready for encryption
+ * @throws {InvalidConfigError} If configuration is invalid
+ */
 export function assemble(config: Config): Machine {
+    validateConfig(config);
     const [rotor1, rotor2, rotor3] = getConfiguredRotors(config);
 
     return {
@@ -218,45 +255,77 @@ export function assemble(config: Config): Machine {
     };
 }
 
-/** Build the generator which wait for user input and encrypt the message */
-export function buildGenerator(machine: Machine) {
-    const nodePositions: number[] = [];
-
+/**
+ * Build a generator function that encrypts messages using the provided machine
+ * @param initialMachine - The initial state of the Enigma machine
+ * @returns Generator function that takes a message and returns encrypted message, machine state, and node positions
+ */
+export function buildGenerator(initialMachine: Machine) {
     function letterToSignal(letter: string): string | number {
         if (letter === ' ') return ' ';
         if (!KEYBOARD.includes(letter)) return letter;
         return KEYBOARD.indexOf(letter);
     }
 
-    /** Get the output letter */
-    function encryptLetter(letter: string, index: number, array: string[]): string {
+    /**
+     * Encrypt a single letter through the machine
+     * @param letter - The letter to encrypt
+     * @param index - Current index in the message array
+     * @param array - The full message array
+     * @param machine - Current machine state (mutated during encryption)
+     * @param nodePositions - Array to collect signal positions for UI visualization
+     * @returns Encrypted letter
+     */
+    function encryptLetter(
+        letter: string,
+        index: number,
+        array: string[],
+        machine: Machine,
+        nodePositions: number[]
+    ): string {
         const inputSignal = letterToSignal(letter);
         if (isString(inputSignal)) return inputSignal;
-        if (isLastItem(index, array)) nodePositions.push(inputSignal); // collect input of last letter for UI
+        if (isLastItem(index, array)) nodePositions.push(inputSignal);
 
-        machine = { ...getMachineState(machine) };
-        const sequence = getSignalSequence(machine);
+        const updatedMachine = getMachineState(machine);
+        const sequence = getSignalSequence(updatedMachine);
         const outputSignal = sequence.reduce(
             (value, getSignalFunction) => {
                 const signal = getSignalFunction(value);
-                isLastItem(index, array) && nodePositions.push(signal); // collect the sequence of last letter for UI
+                if (isLastItem(index, array)) {
+                    nodePositions.push(signal);
+                }
                 return signal;
             },
             inputSignal
         );
 
+        Object.assign(machine, updatedMachine);
         return KEYBOARD[outputSignal];
     }
 
     /**
-     * Take the message and return:
-     * - output: the encrypted message
-     * - machine: the current state of the machine
-     * - nodePositions: output signal of each component when encrypt the last letter
+     * Encrypt a message using the Enigma machine
+     * @param message - The message to encrypt
+     * @returns Tuple containing:
+     *   - encrypted message string
+     *   - final machine state after encryption
+     *   - node positions array for UI visualization (signals from last letter)
      */
     return function generator(message: string): [string, Machine, number[]] {
+        const nodePositions: number[] = [];
+        const machine: Machine = {
+            reflector: { ...initialMachine.reflector },
+            rotor1: { ...initialMachine.rotor1 },
+            rotor2: { ...initialMachine.rotor2 },
+            rotor3: { ...initialMachine.rotor3 },
+            plugboard: { ...initialMachine.plugboard },
+        };
+
         const input = message.trim().split('');
-        const output = input.map(encryptLetter);
+        const output = input.map((letter, index, array) =>
+            encryptLetter(letter, index, array, machine, nodePositions)
+        );
         return [output.join(''), machine, nodePositions];
     };
 }
