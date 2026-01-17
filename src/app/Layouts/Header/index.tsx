@@ -9,7 +9,7 @@ import { useLocaleContext } from 'contexts/LocaleContext';
 import { LOCALES, Locale } from 'libs/i18n';
 import { THEMES, THEME_LIGHT, Theme } from 'constants/themes';
 
-import Select from 'components/Forms/Select';
+import { Select, Option } from 'components/Forms/Select';
 import {
     LanguageIcon,
     FacebookIcon,
@@ -41,8 +41,6 @@ export default function Header() {
     const { theme, setTheme } = useThemeContext();
 
     const { t } = useTranslation(['header']);
-    const SelectLocale = Select('selectLanguage', t);
-    const SelectTheme = Select('selectTheme', t);
 
     const handleLocaleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setLocale(e.target.value as Locale);
@@ -70,24 +68,38 @@ export default function Header() {
                             <NavActionItem
                                 icon={ <LanguageIcon /> }
                                 action={
-                                    <SelectLocale
-                                        list={ LOCALES }
+                                    <Select
+                                        name="selectLanguage"
                                         value={ locale }
                                         onChange={ handleLocaleChange }
-                                        customStyle={ CustomStyle.select }
-                                    />
+                                        aria-label={ t('labelChangeLanguage') }
+                                        style={ CustomStyle.select }
+                                    >
+                                        {LOCALES.map((loc) => (
+                                            <Option key={loc} value={loc}>
+                                                {t(loc)}
+                                            </Option>
+                                        ))}
+                                    </Select>
                                 }
                             />
 
                             <NavActionItem
                                 icon={ theme === THEME_LIGHT ? <LightIcon /> : <DarkIcon /> }
                                 action={
-                                    <SelectTheme
-                                        list={ THEMES }
+                                    <Select
+                                        name="selectTheme"
                                         value={ theme }
                                         onChange={ handleThemeChange }
-                                        customStyle={ CustomStyle.select }
-                                    />
+                                        aria-label={ t(theme) }
+                                        style={ CustomStyle.select }
+                                    >
+                                        {THEMES.map((th) => (
+                                            <Option key={th} value={th}>
+                                                {t(th)}
+                                            </Option>
+                                        ))}
+                                    </Select>
                                 }
                             />
 

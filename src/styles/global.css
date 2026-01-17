@@ -1,16 +1,20 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
 
 :root {
-    --font-700: 12px;
-    --font-1000: 14px;
-    --font-1300: 16px;
-    --font-1600: 18px;
-    --font-1900: 20px;
+    --font-xs: 12px;
+    --font-sm: 14px;
+    --font-base: 16px;
+    --font-lg: 18px;
+    --font-xl: 20px;
     --text-color: #fff;
     --primary-color: #ddd0c8;
     --secondary-color: #323232;
     --highlight-color: #e9a319;
-    --transition: all .2s ease;
+    --primary-color-rgb: 221, 208, 200;
+    --secondary-color-rgb: 50, 50, 50;
+    --transition: all 0.2s ease;
+    --transition-fast: all 0.1s ease;
+    --transition-slow: all 0.3s ease;
 }
 
 /**
@@ -33,22 +37,22 @@
 }
 
 html {
-    font-size: var(--font-700);
+    font-size: var(--font-xs);
 
     @media screen and (min-width: 1000px) {
-        font-size: var(--font-1000);
+        font-size: var(--font-sm);
     }
 
     @media screen and (min-width: 1300px) {
-        font-size: var(--font-1300);
+        font-size: var(--font-base);
     }
 
     @media screen and (min-width: 1600px) {
-        font-size: var(--font-1600);
+        font-size: var(--font-lg);
     }
 
     @media screen and (min-width: 1900px) {
-        font-size: var(--font-1900);
+        font-size: var(--font-xl);
     }
 }
 
@@ -57,14 +61,16 @@ body {
     width: 100%;
     color: var(--text-color);
     font-weight: 300;
-    font-family: 'Sriracha', 'Poppins', 'Open Sans', sans-serif;
-    background: url("https://projectpictures2024.s3.eu-north-1.amazonaws.com/enigma-background.jpg") no-repeat;
+    font-family: 'Poppins', 'Open Sans', sans-serif;
+    background-color: var(--secondary-color);
+    background-image: url("https://projectpictures2024.s3.eu-north-1.amazonaws.com/enigma-background.jpg");
     background-position: center;
     background-size: cover;
+    background-repeat: no-repeat;
 }
 
 a {
-    color: rgb(255, 255, 255);
+    color: inherit;
     text-decoration: none;
 }
 
@@ -73,6 +79,26 @@ ol,
 dl {
     margin: 0;
     padding: 0;
+    list-style: none;
+}
+
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+    font-size: inherit;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+img {
+    max-width: 100%;
+    display: block;
 }
 
 #root,

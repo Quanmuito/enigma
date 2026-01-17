@@ -1,17 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
-import CharacterColumn, { CharacterColumnRefObjectType } from 'components/Enigma/CharacterColumn';
-import Section, { SectionRefsType } from 'components/Enigma/Section';
+import CharacterColumn, { CharacterColumnRefObjectType } from './CharacterColumn';
+import Section, { SectionRefsType } from './Section';
 import { buildGenerator, Machine, KEYBOARD } from 'libs/enigma';
 import useCharacterRef from 'hooks/useCharacterRef';
 import useLineRef from 'hooks/useLineRef';
-import { AppState } from 'types';
 import { connect } from 'libs/utils';
 
 type ConfiguredMachinePropsType = {
     configedMachine: Machine,
-    setAppState: React.Dispatch<React.SetStateAction<AppState>>
 }
-export default function ConfiguredMachine({ configedMachine, setAppState }: ConfiguredMachinePropsType) {
+export default function ConfiguredMachine({ configedMachine }: ConfiguredMachinePropsType) {
     const [message, setMessage] = useState<string>('ENIGMA');
 
     const generator = buildGenerator(configedMachine);
@@ -69,13 +67,6 @@ export default function ConfiguredMachine({ configedMachine, setAppState }: Conf
 
     return (
         <div className="container" style={ { height: '100%' } }>
-            <button
-                className="return-button"
-                onClick={ () => setAppState((prevState) => ({ ...prevState, showMachine: false })) }
-            >
-                Return to settings
-            </button>
-
             <section className="output-container">
                 { encryptedMessage }
             </section>
@@ -114,7 +105,7 @@ export default function ConfiguredMachine({ configedMachine, setAppState }: Conf
 
                 <div className="section">
                     <div className="name-container">
-                        <h5>Keyboard/Lamb</h5>
+                        <h5>K</h5>
                     </div>
                     <div className="character-container" style={ { justifyContent: 'center' } }>
                         <CharacterColumn name="keyboard" characters={ KEYBOARD } refs={ keyboardRefs } />

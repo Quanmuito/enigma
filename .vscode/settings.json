@@ -1,6 +1,31 @@
 {
     "editor.rulers": [
-        {"column": 80, "color": "#FFFF00"}, 
-        {"column": 120, "color": "#FF0000"}
-    ]
+        {
+            "column": 80,
+            "color": "#FFFF00"
+        },
+        {
+            "column": 120,
+            "color": "#FF0000"
+        }
+    ],
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact"
+    ],
+    "eslint.options": {
+        "overrideConfigFile": "${workspaceFolder}/.eslintrc.json"
+    },
+    "eslint.workingDirectories": [
+        {
+            "mode": "auto"
+        }
+    ],
+    "eslint.experimental.useFlatConfig": false
 }
