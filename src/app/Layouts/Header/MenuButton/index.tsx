@@ -7,8 +7,14 @@ type MenuButtonPropsType = {
 }
 export default function MenuButton({ menuOpen, toggleMenu }: MenuButtonPropsType) {
     return (
-        <div className={ style.menuBtn } onClick={ toggleMenu } aria-hidden="true">
+        <button
+            type="button"
+            className={ style.menuBtn }
+            onClick={ toggleMenu }
+            aria-label="Toggle menu"
+            aria-expanded={ menuOpen }
+        >
             <span className={ `${style.menuBtnBurger} ${menuOpen && style.menuBtnBurgerOpen}` }></span>
-        </div>
+        </button>
     );
 }

@@ -6,8 +6,8 @@ import { useUIContext } from 'contexts/UIContext';
 import { useThemeContext } from 'contexts/ThemeContext';
 import { useLocaleContext } from 'contexts/LocaleContext';
 
-import { LOCALES } from 'constants/locales';
-import { THEMES, THEME_LIGHT } from 'constants/themes';
+import { LOCALES, Locale } from 'libs/i18n';
+import { THEMES, THEME_LIGHT, Theme } from 'constants/themes';
 
 import Select from 'components/Forms/Select';
 import {
@@ -31,9 +31,8 @@ import {
     NavActionIcons
 } from 'app/Layouts/Header/NavItem';
 
-// TODO: Get this into .env file
-const S3_BUCKET_NAME = 'projectpictures2024';
-const S3_REGION = 'eu-north-1';
+const S3_BUCKET_NAME = process.env.REACT_APP_S3_BUCKET_NAME || 'projectpictures2024';
+const S3_REGION = process.env.REACT_APP_S3_REGION || 'eu-north-1';
 const S3_DOMAIN = `https://${S3_BUCKET_NAME}.s3.${S3_REGION}.amazonaws.com`;
 
 export default function Header() {
@@ -44,6 +43,14 @@ export default function Header() {
     const { t } = useTranslation(['header']);
     const SelectLocale = Select('selectLanguage', t);
     const SelectTheme = Select('selectTheme', t);
+
+    const handleLocaleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setLocale(e.target.value as Locale);
+    };
+
+    const handleThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setTheme(e.target.value as Theme);
+    };
 
     return (
         <header>
@@ -66,7 +73,7 @@ export default function Header() {
                                     <SelectLocale
                                         list={ LOCALES }
                                         value={ locale }
-                                        onChange={ setLocale }
+                                        onChange={ handleLocaleChange }
                                         customStyle={ CustomStyle.select }
                                     />
                                 }
@@ -78,7 +85,7 @@ export default function Header() {
                                     <SelectTheme
                                         list={ THEMES }
                                         value={ theme }
-                                        onChange={ setTheme }
+                                        onChange={ handleThemeChange }
                                         customStyle={ CustomStyle.select }
                                     />
                                 }

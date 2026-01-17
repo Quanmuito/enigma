@@ -63,7 +63,7 @@ header {
 }
 
 .menuNavOpen {
-    transform: translateY(0);
+    transform: translateX(0);
 }
 
 .navIconContainer {
