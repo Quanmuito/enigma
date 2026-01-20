@@ -1,18 +1,22 @@
 .container {
     position: relative;
     top: 15vh;
+    width: 100%;
     height: 85vh;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    background: rgba(var(--secondary-color-rgb), .9);
+    background: rgba(var(--secondary-color-rgb), 0.9);
 }
 
 .outputContainer,
 .inputContainer {
     width: 95%;
     min-height: 5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: 1.5rem;
     font-weight: 500;
     color: var(--secondary-color);
@@ -20,16 +24,89 @@
 }
 
 .outputContainer {
-    display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    overflow: scroll;
 }
 
 .inputContainer {
+    flex-direction: column;
+}
+
+.rotorStepContainer {
+    min-height: 5vh;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rotorStep {
+    width: 5rem;
+    height: 5vh;
+    border: 1px solid var(--text-color);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    font-size: 2rem;
+    background-color: rgba(255, 255, 255, 0.125);
+}
+
+.visualContainer {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.section {
+    width: 15%;
+}
+
+.nameContainer {
+    text-align: center;
+}
+
+.characterContainer {
+    width: 100%;
+    border: 1px solid var(--text-color);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.characterColumn {
+    width: 10%;
+    display: flex;
+    flex-direction: column;
+}
+
+.characterColumn span {
+    width: 1rem;
+    border: 1px solid transparent;
+    text-align: center;
+    line-height: 1.05;
+}
+
+.characterColumn .top {
+    color: var(--secondary-color);
+    background-color: var(--text-color);
+}
+
+.characterColumn .notch {
+    border: 1px dashed var(--text-color);
+}
+
+.forwardLine {
+    position: fixed;
+    border-top: 2px solid var(--forward-line-color);
+    transform-origin: 0 0;
+}
+
+.backwardLine {
+    position: fixed;
+    border-top: 2px solid var(--backward-line-color);
+    transform-origin: 0 0;
+}
+
+.messageInput {
+    text-align: center;
 }

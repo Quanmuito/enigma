@@ -1,7 +1,9 @@
-import React, { forwardRef, useImperativeHandle, useRef, useEffect } from 'react';
+import React, { forwardRef, useImperativeHandle, useRef, useEffect, useCallback } from 'react';
+import useLineRedraw from 'hooks/useLineRedraw';
 import { connect } from 'libs/utils';
 import { NodeRefObjectType } from 'types';
 import CharacterColumn from './CharacterColumn';
+import style from './style.module.css';
 
 export type SectionRefsType = {
     lNode1: NodeRefObjectType
@@ -39,21 +41,27 @@ const Section = forwardRef<SectionRefsType, SectionPropsType>(
         const lineRef1 = useRef<HTMLDivElement>(null);
         const lineRef2 = useRef<HTMLDivElement>(null);
 
-        useEffect(() => {
+        const redrawLines = useCallback(() => {
             connect(leftColumnRefs.node1.ref, rightColumnRefs.node1.ref, lineRef1);
             connect(leftColumnRefs.node2.ref, rightColumnRefs.node2.ref, lineRef2);
-        });
+        }, [leftColumnRefs.node1.ref, leftColumnRefs.node2.ref, rightColumnRefs.node1.ref, rightColumnRefs.node2.ref]);
+
+        useLineRedraw(redrawLines);
+
+        useEffect(() => {
+            redrawLines();
+        }, [redrawLines, leftColumnRefs.node1.id, leftColumnRefs.node2.id, rightColumnRefs.node1.id, rightColumnRefs.node2.id]);
 
         return (
-            <div className="section">
-                <div className="name-container">
+            <div className={ style.section }>
+                <div className={ style.nameContainer }>
                     <h5>{ name.toUpperCase() }</h5>
                 </div>
-                <div className="character-container">
+                <div className={ style.characterContainer }>
                     <CharacterColumn name={ name } characters={ leftColumn } refs={ leftColumnRefs } notch={ notch } />
                     <CharacterColumn name={ name } characters={ rightColumn } refs={ rightColumnRefs } />
-                    <div id={ `${name}-forward-line` } className="forward-line" ref={ lineRef1 }></div>
-                    <div id={ `${name}-backward-line` } className="backward-line" ref={ lineRef2 }></div>
+                    <div id={ `${name}-forward-line` } className={ style.forwardLine } ref={ lineRef1 }></div>
+                    <div id={ `${name}-backward-line` } className={ style.backwardLine } ref={ lineRef2 }></div>
                 </div>
             </div>
         );

@@ -27,11 +27,12 @@ function getEndsCord(leftChar: HTMLSpanElement, rightChar: HTMLSpanElement): [En
  * Calculate attribute of the line
  */
 function calculateLineAttribute(leftEnd: EndCord, rightEnd: EndCord) {
+    const left = leftEnd.x + 'px';
+    const top = leftEnd.y + 'px';
+
     const xDiff = leftEnd.x - rightEnd.x;
     const yDiff = leftEnd.y - rightEnd.y;
     const width = getDistance(xDiff, yDiff) + 'px';
-    const left = leftEnd.x + 'px';
-    const top = leftEnd.y + 'px';
     const angle = getAngle(xDiff, yDiff);
 
     /**

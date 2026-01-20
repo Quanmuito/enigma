@@ -1,4 +1,26 @@
 {
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": null
+    },
+    "[javascriptreact]": {
+        "editor.defaultFormatter": null
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": null
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": null
+    },
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact"
+    ],
     "editor.rulers": [
         {
             "column": 80,
@@ -9,23 +31,4 @@
             "color": "#FF0000"
         }
     ],
-    "editor.formatOnSave": false,
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": "explicit"
-    },
-    "eslint.validate": [
-        "javascript",
-        "javascriptreact",
-        "typescript",
-        "typescriptreact"
-    ],
-    "eslint.options": {
-        "overrideConfigFile": "${workspaceFolder}/.eslintrc.json"
-    },
-    "eslint.workingDirectories": [
-        {
-            "mode": "auto"
-        }
-    ],
-    "eslint.experimental.useFlatConfig": false
 }

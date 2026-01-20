@@ -1,5 +1,6 @@
 import React, { RefObject, forwardRef, useImperativeHandle } from 'react';
 import { NodeRefObjectType } from 'types';
+import style from './style.module.css';
 
 export type CharacterColumnRefObjectType = {
     node1: NodeRefObjectType
@@ -28,7 +29,10 @@ const CharacterColumn = forwardRef<CharacterColumnRefObjectType, CharacterColumn
                 <span
                     key={ key }
                     ref={ getRef(index) }
-                    className={ (char === notch ? 'notch' : '') + ((!!notch && index === 0) ? ' top' : '') }
+                    className={ [
+                        char === notch && style.notch,
+                        !!notch && index === 0 && style.top,
+                    ].filter(Boolean).join(' ') }
                 >
                     { char }
                 </span>
@@ -36,7 +40,7 @@ const CharacterColumn = forwardRef<CharacterColumnRefObjectType, CharacterColumn
         }
 
         return (
-            <div className="character-column">
+            <div className={ style.characterColumn }>
                 { characters.map(renderCharacter) }
             </div>
         );
