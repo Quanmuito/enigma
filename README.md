@@ -44,12 +44,19 @@ Merge them back => ['A', 'B', 'C', 'D', 'E', 'F']
 
 ##### Shifted letters
 
-Below is my visually exlaination on how ring setting and shifting work.
-Each character on the alphabet ring has a ordinal number, start with **A|0** (in programming language today) all the way to **Z|25** (C1).
-The 'wiring' is simply a set of rules which define amount of steps will be added to the ordinal number in order to point to a different character (C2). If the new ordinal number is higher than 26, the remaining will be taken.
-The **EnigmaI - rotor I** when the ring setting is set to **A**, the 'scrambled output' is displayed in (C3).
-If the ring setting is set to **B**, we just simply move the ring up by 1, do the math and the output is **EnigmaI - rotor I - ring B** (C4, C5, C6).
-Rotate backward till letter **A** reach the begining of the list (C7, C8, C9).
+Below is my visual explanation on how ring setting and shifting work.
+
+The table below shows how ring settings affect rotor wiring. Each column group represents a different ring setting:
+- **C1, C2, C3**: Ring setting **A** (input position, wiring offset, output position)
+- **C4, C5, C6**: Ring setting **B** (input position, wiring offset, output position)
+- **C7, C8, C9**: Ring setting **A** after backward rotation (input position, wiring offset, output position)
+
+**How it works:**
+Each character on the alphabet ring has an ordinal number, starting with **A|0** (in programming language today) all the way to **Z|25** (shown in C1, C4, C7).
+The 'wiring' is a set of rules which define how many steps will be added to the ordinal number to point to a different character (C2, C5, C8). If the new ordinal number exceeds 25, we use modulo 26 (wraps around), shown as "X->Y" (e.g., `E|30->4` means 30 mod 26 = 4).
+The **EnigmaI - rotor I** with ring setting **A** produces the scrambled output shown in C3.
+When the ring setting is **B**, the ring moves up by 1 position, the calculation is performed, and the output is shown in C6.
+Rotating backward until letter **A** reaches the beginning of the list produces the mapping shown in C9.
 
 ```
 C1      C2     C3                          C4      C5     C6                                C7      C8     C9

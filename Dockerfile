@@ -30,5 +30,8 @@ RUN rm -rf /usr/share/nginx/html/*
 COPY --from=builder /app/build /usr/share/nginx/html/enigma
 COPY docker/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
+# Expose port 80 for HTTP traffic
+EXPOSE 80
+
 # Give instructions to run the application inside the container
 ENTRYPOINT [ "nginx", "-g", "daemon off;" ]

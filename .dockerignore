@@ -20,5 +20,8 @@
 **/obj
 **/secrets.dev.yaml
 **/values.dev.yaml
+**/build
+**/coverage
 LICENSE
 README.md
+docs

@@ -2,8 +2,8 @@
     "compilerOptions": {
         // General Settings
         "target": "ES2022",
-        "module": "NodeNext",
-        "moduleResolution": "NodeNext",
+        "module": "esnext",
+        "moduleResolution": "bundler",
         "resolveJsonModule": true,
         "baseUrl": "./src",
         "jsx": "react-jsx",
@@ -13,10 +13,6 @@
 
         // Type Checking & Strictness
         "strict": true,
-        "strictNullChecks": true,
-        "strictBindCallApply": true,
-        "strictFunctionTypes": true,
-        "noImplicitAny": true,
         "noImplicitThis": true,
         "noImplicitOverride": true,
         "useUnknownInCatchVariables": true,
@@ -24,8 +20,6 @@
         // Code Quality
         "forceConsistentCasingInFileNames": true,
         "noFallthroughCasesInSwitch": true,
-        // "noUnusedParameters": true,
-        "experimentalDecorators": true,
 
         // Build & Compilation
         "noEmit": true,
