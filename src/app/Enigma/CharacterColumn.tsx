@@ -12,37 +12,48 @@ type CharacterColumnPropsType = {
     notch?: string
     refs: CharacterColumnRefObjectType,
 }
-const CharacterColumn = forwardRef<CharacterColumnRefObjectType, CharacterColumnPropsType>(
-    ({ name, characters, notch, refs }, ref) => {
-        useImperativeHandle(ref, () => refs);
-        const { node1, node2 } = refs;
+const CharacterColumn = React.memo(
+    forwardRef<CharacterColumnRefObjectType, CharacterColumnPropsType>(
+        ({ name, characters, notch, refs }, ref) => {
+            useImperativeHandle(ref, () => refs);
+            const { node1, node2 } = refs;
 
-        function getRef(index: number): RefObject<HTMLSpanElement>|null {
-            if (index === node1.id) return node1.ref;
-            if (index === node2.id) return node2.ref;
-            return null;
-        }
+            function getRef(index: number): RefObject<HTMLSpanElement>|null {
+                if (index === node1.id) return node1.ref;
+                if (index === node2.id) return node2.ref;
+                return null;
+            }
 
-        function renderCharacter(char: string, index: number) {
-            const key: string = `${name}-${char}`;
+            function renderCharacter(char: string, index: number) {
+                const key: string = `${name}-${char}`;
+                return (
+                    <span
+                        key={ key }
+                        ref={ getRef(index) }
+                        className={ [
+                            char === notch && style.notch,
+                            !!notch && index === 0 && style.top,
+                        ].filter(Boolean).join(' ') }
+                    >
+                        { char }
+                    </span>
+                );
+            }
+
             return (
-                <span
-                    key={ key }
-                    ref={ getRef(index) }
-                    className={ [
-                        char === notch && style.notch,
-                        !!notch && index === 0 && style.top,
-                    ].filter(Boolean).join(' ') }
-                >
-                    { char }
-                </span>
+                <div className={ style.characterColumn }>
+                    { characters.map(renderCharacter) }
+                </div>
             );
         }
-
+    ),
+    (prevProps, nextProps) => {
         return (
-            <div className={ style.characterColumn }>
-                { characters.map(renderCharacter) }
-            </div>
+            prevProps.name === nextProps.name &&
+            prevProps.characters === nextProps.characters &&
+            prevProps.notch === nextProps.notch &&
+            prevProps.refs.node1.id === nextProps.refs.node1.id &&
+            prevProps.refs.node2.id === nextProps.refs.node2.id
         );
     }
 );

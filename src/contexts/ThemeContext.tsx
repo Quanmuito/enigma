@@ -3,6 +3,8 @@ import React, {
     useContext,
     useState,
     useEffect,
+    useMemo,
+    useCallback,
     ReactNode
 } from 'react';
 import {
@@ -33,14 +35,16 @@ export function ThemeProvider({ children }: ThemeProviderPropsType) {
         localStorage.setItem(THEME_KEY, theme);
     }, [theme]);
 
-    function setTheme(newTheme: Theme) {
+    const setTheme = useCallback((newTheme: Theme) => {
         if (THEMES.includes(newTheme)) {
             setThemeState(newTheme);
         }
-    }
+    }, []);
+
+    const value = useMemo(() => ({ theme, setTheme }), [theme, setTheme]);
 
     return (
-        <ThemeContext.Provider value={ { theme, setTheme } }>
+        <ThemeContext.Provider value={ value }>
             { children }
         </ThemeContext.Provider>
     );

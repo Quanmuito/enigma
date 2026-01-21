@@ -3,6 +3,8 @@ import React, {
     useContext,
     useState,
     useEffect,
+    useMemo,
+    useCallback,
     ReactNode
 } from 'react';
 import i18n, {
@@ -35,14 +37,16 @@ export function LocaleProvider({ children }: LocaleProviderPropsType) {
         };
     }, []);
 
-    function setLocale(newLocale: Locale) {
+    const setLocale = useCallback((newLocale: Locale) => {
         if (LOCALES.includes(newLocale)) {
             i18n.changeLanguage(newLocale);
         }
-    }
+    }, []);
+
+    const value = useMemo(() => ({ locale, setLocale }), [locale, setLocale]);
 
     return (
-        <LocaleContext.Provider value={ { locale, setLocale } }>
+        <LocaleContext.Provider value={ value }>
             { children }
         </LocaleContext.Provider>
     );

@@ -1,23 +1,26 @@
 import { RefObject } from 'react';
 
-type EndCord = {
-    x: number, // cordinate on X-axis
-    y: number, // cordinate on Y-axis
+const HORIZONTAL_OFFSET = 1;
+const VERTICAL_RATIO = 1 / 3;
+
+type EndCoord = {
+    x: number;
+    y: number;
 }
 
-function getEndsCord(leftChar: HTMLSpanElement, rightChar: HTMLSpanElement): [EndCord, EndCord] {
+function getEndsCoord(leftChar: HTMLSpanElement, rightChar: HTMLSpanElement): [EndCoord, EndCoord] {
     /** Get position of the left character */
     const leftCharRect = leftChar.getBoundingClientRect();
-    const leftEnd: EndCord = {
-        x: leftCharRect.right - 1, // Move 1px away from the character horizontally
-        y: leftCharRect.top + leftCharRect.height / 3, // Make the line in the middle of the character vertically
+    const leftEnd: EndCoord = {
+        x: leftCharRect.right - HORIZONTAL_OFFSET,
+        y: leftCharRect.top + leftCharRect.height * VERTICAL_RATIO,
     };
 
     /** Get position of the right character */
     const rightCharRect = rightChar.getBoundingClientRect();
-    const rightEnd: EndCord = {
-        x: rightCharRect.left - 1, // Move 1px away from the character horizontally
-        y: rightCharRect.top + rightCharRect.height / 3, // Make the line in the middle of the character vertically
+    const rightEnd: EndCoord = {
+        x: rightCharRect.left - HORIZONTAL_OFFSET,
+        y: rightCharRect.top + rightCharRect.height * VERTICAL_RATIO,
     };
 
     return [leftEnd, rightEnd];
@@ -26,7 +29,7 @@ function getEndsCord(leftChar: HTMLSpanElement, rightChar: HTMLSpanElement): [En
 /**
  * Calculate attribute of the line
  */
-function calculateLineAttribute(leftEnd: EndCord, rightEnd: EndCord) {
+function calculateLineAttribute(leftEnd: EndCoord, rightEnd: EndCoord) {
     const left = leftEnd.x + 'px';
     const top = leftEnd.y + 'px';
 
@@ -63,7 +66,7 @@ export function connect(
     lineRef: RefObject<HTMLDivElement>
 ) {
     if (leftCharRef.current !== null && rightCharRef.current !== null && lineRef.current !== null) {
-        const [leftEnd, rightEnd] = getEndsCord(leftCharRef.current, rightCharRef.current);
+        const [leftEnd, rightEnd] = getEndsCoord(leftCharRef.current, rightCharRef.current);
         const drawLine = calculateLineAttribute(leftEnd, rightEnd);
         drawLine(lineRef.current);
     }

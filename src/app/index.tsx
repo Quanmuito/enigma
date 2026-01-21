@@ -1,23 +1,38 @@
-import React, { useState } from 'react';
-import { assemble, Config } from 'libs/enigma';
+import React, { useState, useMemo } from 'react';
+import { assemble, getDailySettings } from 'libs/enigma';
+import { AppState } from 'types';
 import Header from './Layouts/Header';
 import Enigma from './Enigma';
+import ConfigForm from './Enigma/ConfigForm';
+
+function getInitialConfig() {
+    const today = new Date().getDate();
+    try {
+        return getDailySettings(today);
+    } catch {
+        return getDailySettings(0);
+    }
+}
 
 export default function App() {
-    const [config] = useState<Config>({
-        rotors: ['I', 'II', 'III'],
-        reflector: 'UKW-B',
-        ring: 'AAA',
-        start: 'AAA',
-        plugboard: '',
-    });
+    const [appState, setAppState] = useState<AppState>(() => ({
+        config: getInitialConfig(),
+        showMachine: false,
+    }));
 
-    const configedMachine = assemble(config);
+    const configedMachine = useMemo(
+        () => assemble(appState.config),
+        [appState.config]
+    );
 
     return (
         <div className="App">
             <Header />
-            <Enigma configedMachine={ configedMachine } />
+            { appState.showMachine ? (
+                <Enigma configedMachine={ configedMachine } />
+            ) : (
+                <ConfigForm config={ appState.config } setAppState={ setAppState } />
+            ) }
         </div>
     );
 }

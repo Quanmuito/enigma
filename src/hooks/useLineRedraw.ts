@@ -19,7 +19,7 @@ export default function useLineRedraw(redrawCallback: () => void) {
         };
 
         window.addEventListener('resize', debouncedRedraw);
-        window.addEventListener('scroll', debouncedRedraw);
+        window.addEventListener('scroll', debouncedRedraw, { passive: true });
 
         return () => {
             window.removeEventListener('resize', debouncedRedraw);

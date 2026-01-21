@@ -2,6 +2,8 @@ import React, {
     createContext,
     useContext,
     useState,
+    useMemo,
+    useCallback,
     ReactNode
 } from 'react';
 
@@ -19,12 +21,14 @@ const UIContext = createContext<UIContextType | undefined>(undefined);
 export function UIProvider({ children }: UIProviderPropsType) {
     const [menuOpen, setOpen] = useState<boolean>(false);
 
-    function toggleMenu() {
+    const toggleMenu = useCallback(() => {
         setOpen((prev) => (!prev));
-    }
+    }, []);
+
+    const value = useMemo(() => ({ menuOpen, toggleMenu }), [menuOpen, toggleMenu]);
 
     return (
-        <UIContext.Provider value={ { menuOpen, toggleMenu } }>
+        <UIContext.Provider value={ value }>
             { children }
         </UIContext.Provider>
     );

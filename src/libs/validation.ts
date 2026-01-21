@@ -1,32 +1,40 @@
 import { KEYBOARD_STRING } from 'libs/enigma/constants';
 
-const isEmpty = (string: string): boolean => {
-    return (string === '') || (string === ' ');
-};
-
 const isEncryptable = (char: string): boolean => {
     return KEYBOARD_STRING.includes(char);
 };
 
 const getInvalidCharacterForSetting = (input: string): string[] => {
-    return input.split('').filter((char) => !isEmpty(char) && !isEncryptable(char));
+    const uniqueInvalidChars = new Set<string>();
+    for (const char of input) {
+        if (char !== ' ' && !isEncryptable(char)) {
+            uniqueInvalidChars.add(char);
+        }
+    }
+    return Array.from(uniqueInvalidChars);
 };
 
 const getDuplicatedCharacter = (input: string): string[] => {
-    return input.split('').filter((char, index) => {
-        if (!isEncryptable(char)) {
-            return false;
+    const seen = new Set<string>();
+    const duplicates = new Set<string>();
+    for (const char of input) {
+        if (isEncryptable(char)) {
+            if (seen.has(char)) {
+                duplicates.add(char);
+            } else {
+                seen.add(char);
+            }
         }
-        return input.indexOf(char) !== index;
-    });
+    }
+    return Array.from(duplicates);
 };
 
 export function validatePlugboardSetting(input: string): string {
-    if (isEmpty(input)) {
+    input = input.trim();
+    if (input === '') {
         return '';
     }
 
-    input.trim();
     const invalidChar = getInvalidCharacterForSetting(input);
     if (invalidChar.length > 0) {
         return 'Contain invalid character(s): ' + invalidChar.join(' ');
@@ -37,7 +45,8 @@ export function validatePlugboardSetting(input: string): string {
         return 'A character cannot be swapped twice: ' + duplicateChar.join(' ');
     }
 
-    if (!input.split(' ').every((pair) => isEmpty(pair) || pair.length === 2)) {
+    const pairs = input.split(' ');
+    if (!pairs.every((pair) => pair === '' || pair.length === 2)) {
         return 'A letter pair should have 2 characters';
     }
 
@@ -45,7 +54,7 @@ export function validatePlugboardSetting(input: string): string {
 }
 
 export function validateRotorSetting(input: string): string {
-    input.trim();
+    input = input.trim();
     const invalidChar = getInvalidCharacterForSetting(input);
     if (invalidChar.length > 0) {
         return 'Contain invalid character(s): ' + invalidChar.join(' ');

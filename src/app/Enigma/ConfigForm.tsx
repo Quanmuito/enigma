@@ -1,70 +1,148 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useConfigForm } from 'hooks/useConfigForm';
+import { useEnigmaOptions } from 'hooks/useEnigmaOptions';
 import { Config } from 'libs/enigma';
-import { validatePlugboardSetting, validateRotorSetting } from 'libs/validation';
 import { AppState } from 'types';
-import { getTodayDate } from 'libs/utils';
+import { Input } from 'components/Forms/Input';
+import { Select, Option } from 'components/Forms/Select';
+import styles from './style.module.css';
 
-type FieldType = {
-    reflector: string,
-    rotor1: string,
-    rotor2: string,
-    rotor3: string,
-    ring: string,
-    start: string,
-    plugboard: string,
-}
+const ROTOR_SETTING_LENGTH = 3;
 
 type ConfigFormPropsType = {
     config: Config,
     setAppState: React.Dispatch<React.SetStateAction<AppState>>
 }
+
 export default function ConfigForm({ config, setAppState }: ConfigFormPropsType) {
-    const initialValues: FieldType = {
-        reflector: config.reflector,
-        rotor1: config.rotors[0],
-        rotor2: config.rotors[1],
-        rotor3: config.rotors[2],
-        ring: config.ring,
-        start: config.start,
-        plugboard: config.plugboard,
-    };
+    const { t } = useTranslation();
+    const { rotorOptions, reflectorOptions } = useEnigmaOptions();
+    const { values, errors, handleChange, handleSubmit, handleReset } = useConfigForm(config, setAppState);
+    const [imageError, setImageError] = useState(false);
 
-    function onFinish(values: FieldType) {
-        const newConfig = {
-            reflector: values.reflector,
-            rotors: [values.rotor1, values.rotor2, values.rotor3],
-            ring: values.ring,
-            start: values.start,
-            plugboard: values.plugboard,
-        };
-        setAppState({
-            config: { ...newConfig },
-            showMachine: true,
-        });
-    }
+    const handleUppercaseChange = useCallback((field: 'ring' | 'start' | 'plugboard', e: React.ChangeEvent<HTMLInputElement>) => {
+        const upper = e.target.value.toUpperCase();
+        handleChange(field, upper);
+    }, [handleChange]);
 
-    function onFinishFailed() {
-        alert('Invalid input');
-    }
+    const handleReflectorChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+        handleChange('reflector', e.target.value);
+    }, [handleChange]);
+
+    const handleRotor1Change = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+        handleChange('rotor1', e.target.value);
+    }, [handleChange]);
+
+    const handleRotor2Change = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+        handleChange('rotor2', e.target.value);
+    }, [handleChange]);
+
+    const handleRotor3Change = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+        handleChange('rotor3', e.target.value);
+    }, [handleChange]);
 
     return (
         <div className="form-container">
-            <img alt="config-sheet" src="https://www.101computing.net/wp/wp-content/uploads/enigma-code-book.png" />
+            <form
+                onSubmit={ handleSubmit }
+                autoComplete="off"
+                aria-label="Enigma machine configuration form"
+            >
+                <Select
+                    label="Reflector"
+                    name="reflector"
+                    value={ values.reflector }
+                    onChange={ handleReflectorChange }
+                >
+                    { reflectorOptions.map((option) => (
+                        <Option key={ option } value={ option }>
+                            { option }
+                        </Option>
+                    )) }
+                </Select>
+
+                <Select
+                    label="Rotor 1"
+                    name="rotor1"
+                    value={ values.rotor1 }
+                    onChange={ handleRotor1Change }
+                >
+                    { rotorOptions.map((option) => (
+                        <Option key={ option } value={ option }>
+                            { option }
+                        </Option>
+                    )) }
+                </Select>
+
+                <Select
+                    label="Rotor 2"
+                    name="rotor2"
+                    value={ values.rotor2 }
+                    onChange={ handleRotor2Change }
+                >
+                    { rotorOptions.map((option) => (
+                        <Option key={ option } value={ option }>
+                            { option }
+                        </Option>
+                    )) }
+                </Select>
+
+                <Select
+                    label="Rotor 3"
+                    name="rotor3"
+                    value={ values.rotor3 }
+                    onChange={ handleRotor3Change }
+                >
+                    { rotorOptions.map((option) => (
+                        <Option key={ option } value={ option }>
+                            { option }
+                        </Option>
+                    )) }
+                </Select>
+
+                <Input
+                    label="Ring Setting (3 letters)"
+                    name="ring"
+                    value={ values.ring }
+                    onChange={ (e) => handleUppercaseChange('ring', e) }
+                    error={ errors.ring }
+                    helperText="Example: AAA"
+                    maxLength={ ROTOR_SETTING_LENGTH }
+                />
+
+                <Input
+                    label="Start Position (3 letters)"
+                    name="start"
+                    value={ values.start }
+                    onChange={ (e) => handleUppercaseChange('start', e) }
+                    error={ errors.start }
+                    helperText="Example: AAA"
+                    maxLength={ ROTOR_SETTING_LENGTH }
+                />
+
+                <Input
+                    label="Plugboard Pairs"
+                    name="plugboard"
+                    value={ values.plugboard }
+                    onChange={ (e) => handleUppercaseChange('plugboard', e) }
+                    error={ errors.plugboard }
+                    helperText="Example: AB CD EF (space-separated pairs)"
+                />
+
+                <button type="submit">{ t('applyConfiguration') }</button>
+                <button type="button" onClick={ handleReset }>{ t('reset') }</button>
+            </form>
+
+            { !imageError && (
+                <img
+                    alt="config-sheet"
+                    src="https://www.101computing.net/wp/wp-content/uploads/enigma-code-book.png"
+                    className={ styles.configSheetImage }
+                    onError={ () => setImageError(true) }
+                />
+            ) }
         </div>
     );
-}
-
-function valueToUpperCase(event: React.ChangeEvent<HTMLInputElement>) {
-    event.target.value = event.target.value.toUpperCase();
-}
-
-function renderButton(name: string) {
-    return function _renderButton(option: string) {
-        const key = `${name}-${option}`;
-
-        return (
-            <></>
-        );
-    };
 }
 
