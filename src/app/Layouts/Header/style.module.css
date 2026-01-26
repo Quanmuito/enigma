@@ -100,12 +100,12 @@ header {
     }
 
     .headerLogo {
-        justify-self: end;
+        justify-self: center;
 
         img {
             width: auto;
             height: 13vh;
-            margin-right: 1rem;
+            margin: 0;
         }
     }
 

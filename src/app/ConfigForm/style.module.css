@@ -51,12 +51,6 @@
     flex: 0 0 calc(50% - 0.5rem);
 }
 
-@media screen and (min-width: 1000px) {
-    .selectWrapper {
-        flex: 0 0 calc(25% - 0.75rem);
-    }
-}
-
 .imageContainer {
     flex: 0 0 30%;
     text-align: center;
@@ -79,4 +73,14 @@
         calc(50 * 1.5),
         0.95
     );
+}
+
+@media screen and (min-width: 1000px) {
+    .selectWrapper {
+        flex: 0 0 calc(25% - 0.75rem);
+    }
+
+    .layout {
+        flex-direction: row;
+    }
 }

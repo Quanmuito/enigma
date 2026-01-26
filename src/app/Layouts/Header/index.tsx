@@ -91,7 +91,7 @@ export default function Header() {
                                         value={ theme }
                                         onChange={ handleThemeChange }
                                         aria-label={ t(theme) }
-                                        style={ CustomStyle.select }
+                                        style={ CustomStyle.hide }
                                     >
                                         { THEMES.map((th) => (
                                             <Option key={ th } value={ th }>
@@ -123,5 +123,8 @@ const CustomStyle = {
     select: {
         width: '30vw',
         margin: '0 0 0 1.5rem',
+    },
+    hide: {
+        display: 'none',
     },
 };
