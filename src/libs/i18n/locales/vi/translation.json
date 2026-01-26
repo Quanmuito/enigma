@@ -1,6 +1,9 @@
 {
     "welcomeMessage": "Welcome to React and react-i18next (in VI)",
     "welcomeUser": "Welcome, <1>user</1>! <3>lets go</3> (in VI)",
+    "enigmaMachineConfiguration": "Cấu hình máy Enigma",
+    "todaysDate": "Ngày hôm nay:",
+    "back": "Quay lại cấu hình",
     "applyConfiguration": "Áp dụng cấu hình",
     "reset": "Đặt lại"
 }

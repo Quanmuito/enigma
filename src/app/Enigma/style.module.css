@@ -111,7 +111,14 @@
     text-align: center;
 }
 
-.configSheetImage {
-    margin-top: 20px;
-    max-width: 100%;
+.button {
+    border: 1px solid white;
+    margin: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: rgba(
+        calc(50 * 1.5),
+        calc(50 * 1.5),
+        calc(50 * 1.5),
+        0.95
+    );
 }

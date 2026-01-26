@@ -15,7 +15,6 @@ import {
     FacebookIcon,
     GithubIcon,
     LinkedInIcon,
-    SearchIcon,
     LightIcon,
     DarkIcon
 } from 'components/Icons';
@@ -75,11 +74,11 @@ export default function Header() {
                                         aria-label={ t('labelChangeLanguage') }
                                         style={ CustomStyle.select }
                                     >
-                                        {LOCALES.map((loc) => (
-                                            <Option key={loc} value={loc}>
-                                                {t(loc)}
+                                        { LOCALES.map((loc) => (
+                                            <Option key={ loc } value={ loc }>
+                                                { t(loc) }
                                             </Option>
-                                        ))}
+                                        )) }
                                     </Select>
                                 }
                             />
@@ -94,19 +93,19 @@ export default function Header() {
                                         aria-label={ t(theme) }
                                         style={ CustomStyle.select }
                                     >
-                                        {THEMES.map((th) => (
-                                            <Option key={th} value={th}>
-                                                {t(th)}
+                                        { THEMES.map((th) => (
+                                            <Option key={ th } value={ th }>
+                                                { t(th) }
                                             </Option>
-                                        ))}
+                                        )) }
                                     </Select>
                                 }
                             />
 
                             <NavActionIcons >
-                                <NavActionIcon href="#!" icon={ <FacebookIcon /> } />
-                                <NavActionIcon href="#!" icon={ <GithubIcon /> } />
-                                <NavActionIcon href="#!" icon={ <LinkedInIcon /> } />
+                                <NavActionIcon href="https://www.facebook.com/quanmuito" icon={ <FacebookIcon /> } />
+                                <NavActionIcon href="https://github.com/quanmuito" icon={ <GithubIcon /> } />
+                                <NavActionIcon href="https://www.linkedin.com/in/quanmuito" icon={ <LinkedInIcon /> } />
                             </NavActionIcons>
                         </MenuNavActions>
                     </div>
@@ -114,7 +113,7 @@ export default function Header() {
             </div>
 
             <div className={ style.headerButtons }>
-                <SearchIcon />
+
             </div>
         </header>
     );

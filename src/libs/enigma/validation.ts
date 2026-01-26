@@ -1,8 +1,7 @@
-import { Config } from './types';
+import { Config, RotorData, ReflectorData } from './types';
 import { KEYBOARD } from './constants';
 import rotorDataList from './data/rotors.json';
 import reflectorDataList from './data/reflectors.json';
-import { RotorData, ReflectorData } from './types';
 import { InvalidConfigError } from './errors';
 
 export function validateRotorName(name: string): boolean {

@@ -3,7 +3,7 @@ import { assemble, getDailySettings } from 'libs/enigma';
 import { AppState } from 'types';
 import Header from './Layouts/Header';
 import Enigma from './Enigma';
-import ConfigForm from './Enigma/ConfigForm';
+import ConfigForm from './ConfigForm/ConfigForm';
 
 function getInitialConfig() {
     const today = new Date().getDate();
@@ -29,7 +29,7 @@ export default function App() {
         <div className="App">
             <Header />
             { appState.showMachine ? (
-                <Enigma configedMachine={ configedMachine } />
+                <Enigma configedMachine={ configedMachine } setAppState={ setAppState } appState={ appState } />
             ) : (
                 <ConfigForm config={ appState.config } setAppState={ setAppState } />
             ) }

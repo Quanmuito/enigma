@@ -6,11 +6,14 @@ import useLineRedraw from 'hooks/useLineRedraw';
 import { buildGenerator, Machine, KEYBOARD } from 'libs/enigma';
 import { connect } from 'libs/utils';
 import { Input } from 'components/Forms/Input';
+import { AppState } from 'types';
 import Section, { SectionRefsType } from './Section';
 import style from './style.module.css';
 
 type EnigmaPropsType = {
-    configedMachine: Machine
+    configedMachine: Machine;
+    setAppState: React.Dispatch<React.SetStateAction<AppState>>;
+    appState: AppState;
 }
 
 const REFLECTOR_NODE_POSITIONS = [5, 4, 5, 5];
@@ -20,7 +23,7 @@ const ROTOR3_NODE_POSITIONS = [2, 1, 7, 8];
 const PLUGBOARD_NODE_POSITIONS = [1, 0, 8, 9];
 const KEYBOARD_NODE_POSITIONS = [0, 0, 9, 9];
 
-export default function Enigma({ configedMachine }: EnigmaPropsType) {
+export default function Enigma({ configedMachine, setAppState, appState }: EnigmaPropsType) {
     const [message, setMessage] = useState<string>('ENIGMA');
 
     const generator = useMemo(() => buildGenerator(configedMachine), [configedMachine]);
@@ -79,6 +82,10 @@ export default function Enigma({ configedMachine }: EnigmaPropsType) {
 
     return (
         <div className={ style.container }>
+            <div className={ style.backButton }>
+                <button type="button" className={ style.button } onClick={ () => setAppState({ ...appState, showMachine: false }) }>{ t('back') }</button>
+            </div>
+
             <div className={ style.outputContainer }>
                 { encryptedMessage }
             </div>

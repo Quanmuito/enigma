@@ -221,7 +221,7 @@ function getSignalSequence(machine: Machine): GetSignalFunction[] {
  */
 export function getDailySettings(date: number = 0, defaultReflector: string = 'UKW-B'): Config {
     const settings = dailySettingsList as DailySettingData[];
-    
+
     if (date < 0 || date >= settings.length) {
         throw new InvalidDateError(date, settings.length - 1);
     }

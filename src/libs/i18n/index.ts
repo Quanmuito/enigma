@@ -49,5 +49,5 @@ export {
     LOCALE_FI,
     LOCALE_VI,
     LOCALES,
-    type Locale,
+    type Locale
 } from './constants';
