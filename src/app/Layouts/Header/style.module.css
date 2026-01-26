@@ -95,7 +95,7 @@ header {
 @media screen and (min-width: 1000px) {
     header {
         padding: .5rem 10rem;
-        grid-template-columns: 1fr 5fr .5fr;
+        grid-template-columns: auto 1fr auto;
         grid-template-areas: "logo navigation buttons";
     }
 
@@ -115,5 +115,23 @@ header {
 
     .headerButtons {
         justify-self: end;
+    }
+}
+
+@media screen and (min-width: 1300px) {
+    header {
+        grid-template-columns: auto 1fr auto;
+    }
+}
+
+@media screen and (min-width: 1600px) {
+    header {
+        grid-template-columns: auto 1fr auto;
+    }
+}
+
+@media screen and (min-width: 1900px) {
+    header {
+        grid-template-columns: auto 1fr auto;
     }
 }
