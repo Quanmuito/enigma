@@ -6,8 +6,10 @@ import { useUIContext } from 'contexts/UIContext';
 import { useThemeContext } from 'contexts/ThemeContext';
 import { useLocaleContext } from 'contexts/LocaleContext';
 
-import { LOCALES, Locale } from 'libs/i18n';
-import { THEMES, THEME_LIGHT, Theme } from 'constants/themes';
+import { LOCALES } from 'libs/i18n';
+import type { Locale } from 'libs/i18n';
+import { THEMES, THEME_LIGHT } from 'constants/themes';
+import type { Theme } from 'constants/themes';
 
 import { Select, Option } from 'components/Forms/Select';
 import {
@@ -30,8 +32,8 @@ import {
     NavActionIcons
 } from 'app/Layouts/Header/NavItem';
 
-const S3_BUCKET_NAME = process.env.REACT_APP_S3_BUCKET_NAME || 'projectpictures2024';
-const S3_REGION = process.env.REACT_APP_S3_REGION || 'eu-north-1';
+const S3_BUCKET_NAME = 'projectpictures2024';
+const S3_REGION = 'eu-north-1';
 const S3_DOMAIN = `https://${S3_BUCKET_NAME}.s3.${S3_REGION}.amazonaws.com`;
 
 export default function Header() {

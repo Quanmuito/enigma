@@ -1,7 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useRef, useEffect, useCallback, useMemo } from 'react';
 import useLineRedraw from 'hooks/useLineRedraw';
 import { connect } from 'libs/utils';
-import { NodeRefObjectType } from 'types';
+import type { NodeRefObjectType } from 'types';
 import CharacterColumn from './CharacterColumn';
 import style from './style.module.css';
 

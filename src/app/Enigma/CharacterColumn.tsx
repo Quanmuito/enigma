@@ -1,5 +1,6 @@
-import React, { RefObject, forwardRef, useImperativeHandle } from 'react';
-import { NodeRefObjectType } from 'types';
+import React, { forwardRef, useImperativeHandle } from 'react';
+import type { RefObject } from 'react';
+import type { NodeRefObjectType } from 'types';
 import style from './style.module.css';
 
 export type CharacterColumnRefObjectType = {

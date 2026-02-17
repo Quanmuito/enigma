@@ -1,11 +1,11 @@
-import React, {
+import {
     createContext,
     useContext,
     useState,
     useMemo,
-    useCallback,
-    ReactNode
+    useCallback
 } from 'react';
+import type { ReactNode } from 'react';
 
 type UIContextType = {
     menuOpen: boolean;

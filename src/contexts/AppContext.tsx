@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { ThemeProvider } from './ThemeContext';
 import { LocaleProvider } from './LocaleContext';
 import { UIProvider } from './UIContext';

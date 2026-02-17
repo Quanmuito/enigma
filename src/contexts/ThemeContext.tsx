@@ -1,18 +1,18 @@
-import React, {
+import {
     createContext,
     useContext,
     useState,
     useEffect,
     useMemo,
     useCallback,
-    ReactNode
 } from 'react';
+import type { ReactNode } from 'react';
 import {
-    Theme,
     THEME_KEY,
     THEME_LIGHT,
     THEMES
 } from 'constants/themes';
+import type { Theme } from 'constants/themes';
 
 type ThemeContextType = {
     theme: Theme;

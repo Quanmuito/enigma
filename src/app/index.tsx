@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { assemble, getDailySettings } from 'libs/enigma';
-import { AppState } from 'types';
+import type { AppState } from 'types';
 import Header from './Layouts/Header';
 import Enigma from './Enigma';
 import ConfigForm from './ConfigForm/ConfigForm';

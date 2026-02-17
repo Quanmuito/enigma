@@ -1,4 +1,4 @@
-import { RefObject } from 'react';
+import type { RefObject } from 'react';
 
 const HORIZONTAL_OFFSET = 1;
 const VERTICAL_RATIO = 1 / 3;

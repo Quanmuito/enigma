@@ -3,11 +3,13 @@ import { useTranslation } from 'react-i18next';
 import useCharacterRef from 'hooks/useCharacterRef';
 import useLineRef from 'hooks/useLineRef';
 import useLineRedraw from 'hooks/useLineRedraw';
-import { buildGenerator, Machine, KEYBOARD } from 'libs/enigma';
+import { buildGenerator, KEYBOARD } from 'libs/enigma';
+import type { Machine } from 'libs/enigma';
 import { connect } from 'libs/utils';
 import { Input } from 'components/Forms/Input';
-import { AppState } from 'types';
-import Section, { SectionRefsType } from './Section';
+import type { AppState } from 'types';
+import Section from './Section';
+import type { SectionRefsType } from './Section';
 import style from './style.module.css';
 
 type EnigmaPropsType = {

@@ -1,5 +1,5 @@
-import { RefObject } from 'react';
-import { Config } from 'libs/enigma';
+import type { RefObject } from 'react';
+import type { Config } from 'libs/enigma';
 
 export type AppState = {
     config: Config,

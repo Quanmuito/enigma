@@ -1,4 +1,4 @@
-import { Config, RotorData, ReflectorData } from './types';
+import type { Config, RotorData, ReflectorData } from './types';
 import { KEYBOARD } from './constants';
 import rotorDataList from './data/rotors.json';
 import reflectorDataList from './data/reflectors.json';

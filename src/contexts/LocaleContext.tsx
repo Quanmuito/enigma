@@ -1,16 +1,16 @@
-import React, {
+import {
     createContext,
     useContext,
     useState,
     useEffect,
     useMemo,
     useCallback,
-    ReactNode
 } from 'react';
+import type { ReactNode } from 'react';
 import i18n, {
-    Locale,
     LOCALES
 } from 'libs/i18n';
+import type { Locale } from 'libs/i18n';
 
 type LocaleContextType = {
     locale: Locale;

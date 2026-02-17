@@ -1,0 +1,18 @@
+---
+name: rules-for-react-projects
+description: Rule to apply to all react projects
+---
+
+## Rules
+
+- When run command, use *yarn run <command>* as command. DO NOT use *npm run <command>*.
+- Always use *yarn* as package manager.
+- Always use *vite* as build tool.
+- Always use *react* as framework.
+- Always use *typescript* as programming language.
+- Always use *eslint* as linter.
+- Always use *jest* as testing framework.
+- Always use *react-testing-library* as testing library.
+- Always use *react-dom* as testing library.
+- Always use *react-router* as routing library.
+- Always use *react-i18next* as internationalization library.

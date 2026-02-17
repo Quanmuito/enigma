@@ -1,7 +1,8 @@
-import React, { useState, useRef, useCallback } from 'react';
-import { Config } from 'libs/enigma';
+import { useState, useRef, useCallback } from 'react';
+import type { Dispatch, FormEvent, SetStateAction } from 'react';
+import type { Config } from 'libs/enigma';
 import { validatePlugboardSetting, validateRotorSetting } from 'libs/validation';
-import { AppState } from 'types';
+import type { AppState } from 'types';
 
 type FieldType = {
     reflector: string,
@@ -19,7 +20,7 @@ type ErrorsType = {
     plugboard?: string,
 }
 
-export function useConfigForm(config: Config, setAppState: React.Dispatch<React.SetStateAction<AppState>>) {
+export function useConfigForm(config: Config, setAppState: Dispatch<SetStateAction<AppState>>) {
     const initialValues = useRef<FieldType>({
         reflector: config.reflector,
         rotor1: config.rotors[0],
@@ -46,7 +47,7 @@ export function useConfigForm(config: Config, setAppState: React.Dispatch<React.
         }
     }, []);
 
-    const handleSubmit = useCallback((e: React.FormEvent) => {
+    const handleSubmit = useCallback((e: FormEvent) => {
         e.preventDefault();
 
         const ringError = validateRotorSetting(values.ring);
