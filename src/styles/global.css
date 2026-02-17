@@ -3,7 +3,7 @@
 :root {
     --font-xs: 12px;
     --font-sm: 14px;
-    --font-base: 16px;
+    --font-md: 16px;
     --font-lg: 18px;
     --font-xl: 20px;
     --text-color: #fff;
@@ -48,7 +48,7 @@ html {
     }
 
     @media screen and (min-width: 1300px) {
-        font-size: var(--font-base);
+        font-size: var(--font-md);
     }
 
     @media screen and (min-width: 1600px) {
