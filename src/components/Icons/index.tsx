@@ -1,5 +1,3 @@
-import React from 'react';
-
 export function SearchIcon() {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">

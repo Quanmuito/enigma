@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { assemble, getDailySettings } from 'libs/enigma';
 import type { AppState } from 'types';
 import Header from './Layouts/Header';
